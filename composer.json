@@ -25,9 +25,7 @@
 	],
 	"minimum-stability" : "stable",
 	"require" : {
-		"php" : ">=5.5.0",
-		"yiisoft/yii2" : "~2.0",
-		"yiisoft/yii2-imagine" : "*"
+		"php" : ">=5.5.0"
 	},
 	"autoload" : {
 		"psr-4" : {
