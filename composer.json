@@ -1,36 +1,36 @@
 {
-    "name": "schallschlucker/yii2-simple-cms",
-    "description": "a basic yii2 content managment extension for easily creating and maintaining a page structure for frontend use",
-    "keywords": ["yii2", "yii2-cms", "content management", "pagetree", "schallschlucker"],
-    "type": "yii2-extension",
+	"name": "schallschlucker/yii2-simple-cms",
+	"description": "a basic yii2 content managment extension for easily creating and maintaining a page structure for frontend use",
+	"keywords": ["yii2", "yii2-cms", "content management", "pagetree", "schallschlucker"],
+	"type": "yii2-extension",
 	"homepage": "https://github.com/pkerspe/yii2-simple-cms/wiki",
-    "license": "APACHE 2.0",
-    "support": {
-        "issues": "https://github.com/pkerspe/yii2-simple-cms/issues",
-        "wiki": "https://github.com/pkerspe/yii2-simple-cms/wiki",
-        "source": "https://github.com/pkerspe/yii2-simple-cms"
-    },
-    "authors": [
-        {
-            "name": "Paul Kerspe",
-            "email": "info@schallschlucker.de",
-            "homepage": "http://www.schallschlucker.de"
+	"license": "APACHE 2.0",
+	"support": {
+		"issues": "https://github.com/pkerspe/yii2-simple-cms/issues",
+		"wiki": "https://github.com/pkerspe/yii2-simple-cms/wiki",
+		"source": "https://github.com/pkerspe/yii2-simple-cms"
+	},
+	"authors": [
+		{
+			"name": "Paul Kerspe",
+			"email": "info@schallschlucker.de",
+			"homepage": "http://www.schallschlucker.de"
 			"role": "Developer, Manager"
-        }
-    ],
-    "minimum-stability": "dev",
-    "require": {
+		}
+	],
+	"minimum-stability": "dev",
+	"require": {
 		"php": ">=5.5.0",
-        "yiisoft/yii2": "~2.0",
-        "yiisoft/yii2-imagine": "*"
-    },
-    "require-dev": {
-    },
-    "autoload": {
-        "psr-4": {
-            "schallschlucker\\simplecms\\": ""
-        }
-    },
-    "extra": {
-    }
+		"yiisoft/yii2": "~2.0",
+		"yiisoft/yii2-imagine": "*"
+	},
+	"require-dev": {
+	},
+	"autoload": {
+		"psr-4": {
+			"schallschlucker\\simplecms\\": ""
+		}
+	},
+	"extra": {
+	}
 }
