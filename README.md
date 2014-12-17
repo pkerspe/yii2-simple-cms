@@ -9,8 +9,8 @@ The extensions supports site structures in multiple languages for international 
 
 Yii2-simple-cms documentation is available online: 
 
-    [Project page] (https://github.com/pkerspe/yii2-simple-cms)
-    [Project wiki] (https://github.com/pkerspe/yii2-simple-cms/wiki)
+    [Project page](https://github.com/pkerspe/yii2-simple-cms)
+    [Project wiki](https://github.com/pkerspe/yii2-simple-cms/wiki)
 
 Installation instructions are located in [installation guide](https://github.com/pkerspe/yii2-simple-cms/wiki)
 
