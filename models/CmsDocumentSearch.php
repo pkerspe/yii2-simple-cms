@@ -75,12 +75,12 @@ class CmsDocumentSearch extends CmsDocument {
 		
 		$query->andFilterWhere ( [ 
 			'like',
-			'filename',
-			$this->filename 
+			'file_name',
+			$this->file_name 
 		] )->andFilterWhere ( [ 
 			'like',
-			'filename_path',
-			$this->filename_path 
+			'file_path',
+			$this->file_path 
 		] )->andFilterWhere ( [ 
 			'like',
 			'mime_type',

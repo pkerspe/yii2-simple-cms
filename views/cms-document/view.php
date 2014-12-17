@@ -23,6 +23,6 @@ $this->params ['breadcrumbs'] [] = $this->title;
         <?=Html::a ( Yii::t ( 'app/cms', 'Delete' ), [ 'delete','id' => $model->id ], [ 'class' => 'btn btn-danger','data' => [ 'confirm' => Yii::t ( 'app/cms', 'Are you sure you want to delete this item?' ),'method' => 'post' ] ] )?>
     </p>
 
-    <?=DetailView::widget ( [ 'model' => $model,'attributes' => [ 'id','language','filename','filename_path','mime_type' ] ] )?>
+    <?=DetailView::widget ( [ 'model' => $model,'attributes' => [ 'id','language','file_name','file_path','mime_type' ] ] )?>
 
 </div>

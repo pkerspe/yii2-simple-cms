@@ -23,9 +23,9 @@ $form = ActiveForm::begin ( [
 
     <?= $form->field($model, 'language')?>
 
-    <?= $form->field($model, 'filename')?>
+    <?= $form->field($model, 'file_name')?>
 
-    <?= $form->field($model, 'filename_path')?>
+    <?= $form->field($model, 'file_path')?>
 
     <?= $form->field($model, 'mime_type')?>
 

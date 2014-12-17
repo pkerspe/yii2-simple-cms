@@ -3,14 +3,18 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\View;
+use schallschlucker\simplecms\assets\FancytreeAsset;
+use schallschlucker\simplecms\assets\SimpleCmsAsset;
 use schallschlucker\simplecms\models\CmsHierarchyItem;
 use schallschlucker\simplecms\models\MenuItemAndContentForm;
 
-use schallschlucker\simplecms\assets\FancytreeAsset;
-use schallschlucker\simplecms\assets\SimpleCmsAsset;
+/* @var $this yii\web\View */
+/* @var $model schallschlucker\simplecms\models\CmsAdministrationMainTreeViewForm */
+/* @var $model_wrapperform schallschlucker\simplecms\models\MenuItemAndContentForm */
 
-SimpleCmsAsset::register ( $this );
 FancytreeAsset::register ( $this );
+SimpleCmsAsset::register ( $this );
+
 $this->title = Yii::t ( 'app/cms', 'CMS Administration' );
 $this->params ['breadcrumbs'] [] = $this->title;
 ?>
@@ -170,6 +174,9 @@ function fillNewMenuFormAnd(parentNode,newItemPosition){
 	$("#parentHierarchyItemId").val(parentNode.data.id);
 	$("#language").val(parentNode.data.languageId);
 	$("#position").val(newItemPosition);
+	
+	console.log('fillNewMenuFormAnd(parentNode,newItemPosition) called');
+	console.log([parentNode,newItemPosition]);
 }
 
 function performAjaxCallForNewMenu(){
@@ -181,7 +188,7 @@ function performAjaxCallForNewMenu(){
 	language = $("#language").val();
 	contentType = $( "#newMenuDialogForm input:radio:checked" ).val();
 	
-	//alert("sending ajax request for values: parent="+parentHierarchyItemId+", name="+newMenuName+", position= "+position+", lang="+language+", content="+contentType);
+	console.log("sending ajax request for values: parent="+parentHierarchyItemId+", name="+newMenuName+", position= "+position+", lang="+language+", content="+contentType);
 	
 	jQuery.ajax({
 		url: ajaxCreateNewHierarchyItemAndMenuUrl,
@@ -195,6 +202,7 @@ function performAjaxCallForNewMenu(){
 		dataType: 'json',
 		success: function(result){
 			console.log(result);
+		
 			if(result.result == 'success'){
 				//add child
 				fancyTreeInstance = $("#menuHierarchyTree").fancytree("getTree");
@@ -210,17 +218,16 @@ function performAjaxCallForNewMenu(){
 		}
 	});
 	form.trigger('reset');
-//add sibling
-//refNode = node.getParent().addChildren({
-//	title: "New node",
-//	isNew: true
-//}, node.getNextSibling());
+
 	dialog.dialog("close");
 }
 
 function setPosition(treeNodeKey,direction){
 	fancyTreeInstance = $("#menuHierarchyTree").fancytree("getTree");
 	itemNode = fancyTreeInstance.getNodeByKey(''+treeNodeKey);
+		
+	console.log('setPosition(treeNodeKey,direction)');
+	console.log([treeNodeKey,direction]);
 	
 	if(direction == 'up'){
 		newPosition = itemNode.getIndex(); //index is 0 based
@@ -239,6 +246,7 @@ function setPosition(treeNodeKey,direction){
 		},
 		dataType: 'json',
 		success: function(result){
+			console.log(result);
 			if(result.result == 'success'){
 				$('#moveDownLink'+itemNode.key).removeClass('invisible');
 				$('#moveUpLink'+itemNode.key).removeClass('invisible');
@@ -288,7 +296,8 @@ function setPosition(treeNodeKey,direction){
 
 
 function updateHierarchyItemDisplayState(itemId,newState){
-	//alert('updating item display state of item '+itemId+' to '+newState);
+	console.log('updateHierarchyItemDisplayState('+itemId+','+newState+') called');
+		
 	if(isNaN(itemId)){
 		alert('number required as first parameter of updateHierarchyItemDisplayState(...)');
 	}
@@ -301,6 +310,7 @@ function updateHierarchyItemDisplayState(itemId,newState){
 		},
 		dataType: 'json',
 		success: function(result){
+			console.log(result);
 			if(result.result == 'success'){
 				$('#adminSetVisibleLink'+itemId).removeClass('icon-inactive');
 				$('#adminSetHiddenLink'+itemId).removeClass('icon-inactive');
@@ -324,7 +334,6 @@ function updateHierarchyItemDisplayState(itemId,newState){
 }
 
 $(function(){
-
   $("#menuHierarchyTree").fancytree({
     checkbox: false,
     titlesTabbable: true,     // Add all node titles to TAB chain
@@ -410,9 +419,6 @@ $(function(){
 		if(data.node.data.isFallbackLanguage){
 			$trList.addClass('fallbackLanguage warning');
 		}
-
-		//column 0 is handled by table setting nodeColumnIdx: 0 to display nodes
-		//$tdList.eq(1).html("<input type='input' value='" + node.key + "'>");
 		
 		contentTypeHtml = '<span class="glyphicon glyphicon-question-sign" title="no content type set yet"></span>';
 		if(data.node.data.content_id != null){
@@ -510,7 +516,6 @@ $(function(){
   
   $("#menuHierarchyTree").contextmenu({
       delegate: "span.fancytree-title",
-//      menu: "#options",
       menu: [
           {title: "new page below", cmd: "addChild", uiIcon: "ui-icon-pencil", disabled: false},
           {title: "new page after", cmd: "addSibling", uiIcon: "ui-icon-pencil", disabled: false},

@@ -13,16 +13,14 @@ namespace schallschlucker\simplecms\assets;
 use yii\web\AssetBundle;
 
 class SimpleCmsAsset extends AssetBundle {
-	public $css = [ 
-		'css/cms.css' 
-	];
+	public $css = ['css/cms.css'];
 	public $js = [ ];
 	
 	// remove this in production once forum development is done
 	public $publishOptions = ['forceCopy' => true];
-	public $depends = [ 
-		'yii\web\JqueryAsset' 
-	];
+
+	public $depends = ['yii\web\JqueryAsset'];
+	
 	public function init() {
 		$this->sourcePath = ( __DIR__ . '/simplecms' );
 		parent::init ();
