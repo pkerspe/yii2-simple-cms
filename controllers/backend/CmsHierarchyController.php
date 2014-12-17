@@ -103,7 +103,7 @@ class CmsHierarchyController extends Controller {
 				$parent->addChild ( $child );
 				// sort children by position
 				usort ( $parent->children, array (
-					"common\modules\pn_cms\controllers\SimpleHierarchyItem",
+					get_class($child) ,
 					"compare" 
 				) );
 			}
@@ -500,17 +500,17 @@ class SimpleHierarchyItem {
 		$this->document_id = $cmsHierarchyItemDetailsArray ['menu_item'] ['document_id'];
 		$this->direct_url = $cmsHierarchyItemDetailsArray ['menu_item'] ['direct_url'];
 		$this->languageId = $cmsHierarchyItemDetailsArray ['menu_item'] ['language'];
-		$this->languageCode = Yii::$app->controller->module->getMappingForIdResolveAlias ( $cmsHierarchyItemDetailsArray ['menu_item'] ['language'] )['code'];
+		$this->languageCode = Yii::$app->controller->module->getLanguageManager()->getMappingForIdResolveAlias ( $cmsHierarchyItemDetailsArray ['menu_item'] ['language'] )['code'];
 		$this->expanded = $displayExpanded;
 		$this->displayState = $cmsHierarchyItemDetailsArray ['display_state'];
 		$this->isFallbackLanguage = (isset ( $cmsHierarchyItemDetailsArray ['displaying_fallback_language'] ) && $cmsHierarchyItemDetailsArray ['displaying_fallback_language']);
 		
 		foreach ( $cmsHierarchyItemDetailsArray ['available_menu_items_all_languages'] as $menuItem ) {
-			$this->addAvailableLanguageCodes ( Yii::$app->controller->module->getMappingForIdResolveAlias ( $menuItem ['language'] )['code'], $menuItem ['id'] );
+			$this->addAvailableLanguageCodes ( Yii::$app->controller->module->getLanguageManager()->getMappingForIdResolveAlias ( $menuItem ['language'] )['code'], $menuItem ['id'] );
 		}
 		
 		// create an array with all languages, where the available languages are marked explicitly (this is used to display the existing and non existing language versions in the frontend
-		foreach ( Yii::$app->controller->module->getAllConfiguredLanguageCodes () as $languageId => $languageCode ) {
+		foreach ( Yii::$app->controller->module->getLanguageManager()->getAllConfiguredLanguageCodes () as $languageId => $languageCode ) {
 			$this->allLanguagesWithMarker [] = [ 
 				'code' => $languageCode,
 				'language_id' => $languageId,

@@ -4,10 +4,10 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\View;
 use schallschlucker\simplecms\models\MenuItemAndContentForm;
-use schallschlucker\simplecms\assets\CmsAsset;
+use schallschlucker\simplecms\assets\SimpleCmsAsset;
 use schallschlucker\simplecms\assets\CkeditorAsset;
 
-CmsAsset::register ( $this );
+SimpleCmsAsset::register ( $this );
 CkeditorAsset::register ( $this );
 $this->title = Yii::t ( 'app/cms', 'Edit language version' );
 $this->params ['breadcrumbs'] [] = [ 

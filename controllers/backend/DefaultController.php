@@ -49,7 +49,7 @@ class DefaultController extends Controller {
 		] )->with ( 'cmsHierarchyItem' )->one ();
 		
 		$hierarchyItem = $model_menu->cmsHierarchyItem;
-		$languageCode = $this->module->getMappingForIdResolveAlias ( $model_menu->language );
+		$languageCode = $this->module->getLanguageManager()->getMappingForIdResolveAlias ( $model_menu->language );
 		$model_wrapperform = new MenuItemAndContentForm ();
 		if ($useget) {
 			$model_wrapperform->load ( Yii::$app->request->get () );
@@ -184,7 +184,7 @@ class DefaultController extends Controller {
 		$hierarchyItemId = intval ( $hierarchyItemId );
 		$hierarchyItem = CmsHierarchyItem::findOne ( $hierarchyItemId );
 		$languageId = intval ( $languageId );
-		$languageCode = $this->module->getMappingForIdResolveAlias ( $languageId );
+		$languageCode = $this->module->getLanguageManager()->getMappingForIdResolveAlias ( $languageId );
 		
 		$model_menu = null;
 		$model_content = null;

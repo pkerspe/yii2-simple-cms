@@ -14,19 +14,23 @@ namespace schallschlucker\simplecms\assets;
 use yii\web\AssetBundle;
 
 class CkeditorAsset extends AssetBundle {
-	public $sourcePath = __DIR__ . '/ckeditor';
-	public $css = [ ];
-	public $js = [ 
-		'js/ckeditor/ckeditor.js' 
-	];
+	public $css = [];
+	
+	public $js = ['ckeditor.js'];
 	
 	// remove this in production once forum development is done
-	public $publishOptions = [ 
-		true 
-	];
+	public $publishOptions = ['forceCopy' => true];
+	
 	public $depends = [ 
 		'yii\web\JqueryAsset',
 		'yii\jui\JuiAsset' 
 	];
+	
+	public function init()
+	{
+		$this->sourcePath = (__DIR__ . '/ckeditor');
+		parent::init();
+	}
+	
 }
 ?>

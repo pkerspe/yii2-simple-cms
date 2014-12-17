@@ -6,9 +6,11 @@ use yii\web\View;
 use schallschlucker\simplecms\models\CmsHierarchyItem;
 use schallschlucker\simplecms\models\MenuItemAndContentForm;
 
-use schallschlucker\simplecms\assets\CmsAsset;
+use schallschlucker\simplecms\assets\FancytreeAsset;
+use schallschlucker\simplecms\assets\SimpleCmsAsset;
 
-CmsAsset::register ( $this );
+SimpleCmsAsset::register ( $this );
+FancytreeAsset::register ( $this );
 $this->title = Yii::t ( 'app/cms', 'CMS Administration' );
 $this->params ['breadcrumbs'] [] = $this->title;
 ?>
@@ -20,7 +22,7 @@ $this->params ['breadcrumbs'] [] = $this->title;
 			<div class="cms-administration-main-tree-view-form">
 				<?php $form = ActiveForm::begin(['options' => ['class'=>'form-inline']]); ?>
 
-				<?= $field = $form->field($model, 'treeDisplayLanguageId')->dropDownList($this->context->module->getConfiguredIdLanguagesMappingTranslated(\Yii::$app->language),['class'=>'input-small']); ?>
+				<?= $field = $form->field($model, 'treeDisplayLanguageId')->dropDownList($this->context->module->getLanguageManager()->getConfiguredIdLanguagesMappingTranslated(\Yii::$app->language),['class'=>'input-small']); ?>
 
 				<?= $form->field($model, 'expandFolderDepth')->dropDownList([9999=>'all',1=>Yii::t('app/cms','expand folders until {0,ordinal} level',1),2=>Yii::t('app/cms', 'expand folders until {0,ordinal} level',2),3=>Yii::t('app/cms', 'expand folders until {0,ordinal} level',3),4=>Yii::t('app/cms', 'expand folders until {0,ordinal} level',4),5=>Yii::t('app/cms', 'expand folders until {0,ordinal} level',5)],['class'=>'input-small'])?>
 
@@ -91,7 +93,7 @@ ActiveForm::end ();
 ?>
 </div>
 <?php
-$jsonLangMapping = json_encode ( $this->context->module->getConfiguredLanguageIdToCodeMapping () );
+$jsonLangMapping = json_encode ( $this->context->module->getLanguageManager()->getConfiguredLanguageIdToCodeMapping () );
 $jsonTreeSourceUrl = Url::to ( [ 
 		'cms-hierarchy/page-tree-json',
 		'language' => $model->treeDisplayLanguageId,

@@ -14,7 +14,6 @@ namespace schallschlucker\simplecms\assets;
 use yii\web\AssetBundle;
 
 class FancytreeAsset extends AssetBundle {
-	public $sourcePath = __DIR__ . '/jequery_fancytree';
 	public $css = [ 
 		'css/skin-lion/ui.fancytree.min.css' 
 	];
@@ -24,12 +23,14 @@ class FancytreeAsset extends AssetBundle {
 	];
 	
 	// remove this in production once forum development is done
-	public $publishOptions = [ 
-		true 
-	];
+	public $publishOptions = ['forceCopy' => true];
 	public $depends = [ 
 		'yii\web\JqueryAsset',
 		'yii\jui\JuiAsset' 
 	];
+	public function init() {
+		$this->sourcePath = ( __DIR__ . '/jquery_fancytree' );
+		parent::init ();
+	}
 }
 ?>
