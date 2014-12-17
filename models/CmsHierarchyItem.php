@@ -42,28 +42,10 @@ class CmsHierarchyItem extends \yii\db\ActiveRecord {
 	 * @inheritdoc
 	 */
 	public function rules() {
-		return [ 
-			[ 
-				[ 
-					'parent_id',
-					'position' 
-				],
-				'integer' 
-			],
-			[ 
-				[ 
-					'display_state' 
-				],
-				'integer',
-				'min' => CmsHierarchyItem::DISPLAYSTATE_MIN_VALUE,
-				'max' => CmsHierarchyItem::DISPLAYSTATE_MAX_VALUE 
-			],
-			[ 
-				[ 
-					'position' 
-				],
-				'required' 
-			] 
+		return [
+			[['parent_id','position'],'integer'],
+			[['display_state'],'integer','min' => CmsHierarchyItem::DISPLAYSTATE_MIN_VALUE,'max' => CmsHierarchyItem::DISPLAYSTATE_MAX_VALUE],
+			[['position'],'required'] 
 		];
 	}
 	
