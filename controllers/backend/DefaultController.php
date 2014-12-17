@@ -34,7 +34,7 @@ class DefaultController extends Controller {
 		$model = new CmsAdministrationMainTreeViewForm ();
 		$model_wrapperform = new MenuItemAndContentForm ();
 		if (! $model->load ( Yii::$app->request->post () )) {
-			$model->treeDisplayLanguageId = $this->module->getDefaultLanguageId ();
+			$model->treeDisplayLanguageId = $this->module->getLanguageManager()->getDefaultLanguageId ();
 		}
 		
 		return $this->render ( 'index', [ 

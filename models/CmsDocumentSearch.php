@@ -33,8 +33,8 @@ class CmsDocumentSearch extends CmsDocument {
 			],
 			[ 
 				[ 
-					'filename',
-					'filename_path',
+					'file_name',
+					'file_path',
 					'mime_type' 
 				],
 				'safe' 

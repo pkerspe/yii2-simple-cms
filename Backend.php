@@ -59,4 +59,12 @@ class Backend extends \yii\base\Module {
 				] 
 		];
 	}
+	
+	public function getLanguageManager(){
+		if($this->languageManager == null || $this->languageManager == '' ){
+			throw new InvalidConfigException("Module is not condfigured correctly, need to provide name of a configured languageManager compoenent");
+		}
+		$configuredLangManager = $this->languageManager;
+		return Yii::$app->$configuredLangManager;
+	}
 }
