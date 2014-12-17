@@ -23,7 +23,7 @@
 			"role" : "Developer, Manager"
 		}
 	],
-	"minimum-stability" : "alpha",
+	"minimum-stability" : "stable",
 	"require" : {
 		"php" : ">=5.5.0",
 		"yiisoft/yii2" : "~2.0",
