@@ -7,14 +7,41 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace schallschlucker\simplecms\migrations;
+
 use yii\db\Schema;
+use yii\base\InvalidConfigException;
 use schallschlucker\simplecms\migrations\Migration;
 
 /**
  *
  * @author Paul Kerspe
  */
-class simplecms_init extends Migration {
+class m141217_232437_simplecms_init extends Migration {
+	
+	
+	/**
+	 *
+	 * @var string
+	 */
+	protected $tableOptions;
+	
+	/**
+	 * @inheritdoc
+	 */
+	public function init() {
+		parent::init ();
+	
+		switch (\Yii::$app->db->driverName) {
+			case 'mysql' :
+				$this->tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
+				break;
+			default :
+				throw new \RuntimeException ( 'Your database is not yet supported!' );
+		}
+	}
+	
+	
 	public function up() {
 		// mysql create sql (suing this approach over createTable call, since ENUM Types where missing in Schema from Yii2
 		$this->execute ( "CREATE TABLE `cms_content_media` (
@@ -115,6 +142,7 @@ class simplecms_init extends Migration {
 			'createdby_userid' => Schema::TYPE_INT . "(11) unsigned NOT NULL COMMENT 'user id of the user who created the page content element'" 
 		], $this->tableOptions );
 	}
+	
 	public function down() {
 		$this->dropTable ( '{{%cms_content_media}}' );
 		$this->dropTable ( '{{%cms_content_media_variation}}' );
@@ -124,3 +152,4 @@ class simplecms_init extends Migration {
 		$this->dropTable ( '{{%cms_page_content}' );
 	}
 }
+?>

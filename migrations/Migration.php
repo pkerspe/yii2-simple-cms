@@ -36,3 +36,5 @@ class Migration extends \yii\db\Migration {
 		}
 	}
 }
+
+?>

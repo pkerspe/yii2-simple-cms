@@ -20,6 +20,11 @@ Prefered way is by using composer:
         "schallschlucker/yii2-simple-cms": ">=0.1",
     }
 
+
+After installation run migration for database table creation:
+
+	php yii migrate --migrationPath=@schallschlucker/simplecms/migrations
+
 ## License
 
 yii2-simple-cms is released under the Apache License 2.0. See the bundled [LICENSE.md](LICENSE.md) for details.
