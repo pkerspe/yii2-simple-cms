@@ -187,8 +187,6 @@ class DefaultController extends Controller {
 		$languageCode = $this->module->getLanguageManager()->getMappingForIdResolveAlias ( $languageId );
 		
 		$model_menu = null;
-		$model_content = null;
-		$model_document = null;
 		
 		$model_wrapperform = new MenuItemAndContentForm ();
 		$model_wrapperform->scenario = 'createMenuLanguageVersion';
@@ -197,6 +195,8 @@ class DefaultController extends Controller {
 			$model_menu->name = $model_wrapperform->newMenuName;
 			$model_menu->language = $languageId;
 			$model_menu->cms_hierarchy_item_id = $hierarchyItem->id;
+			$model_menu->created_datetime = new Expression ( 'NOW()' );
+			$model_menu->createdby_userid = Yii::$app->user->id;
 			if ($model_menu->save ()) {
 				$message .= 'Menu for language created successfully<br/>';
 				$redirectUrl = Url::toRoute ( [ 
@@ -206,6 +206,8 @@ class DefaultController extends Controller {
 					'MenuItemAndContentForm' => $model_wrapperform 
 				] );
 				return $this->redirect ( $redirectUrl );
+			} else {
+				$message .= '<span class="error">' . Yii::t ( 'app/cms', 'Error while trying to save new menu item: ' ) . implode ( $model_menu->getFirstErrors (), ' ' ) . '</span>';
 			}
 		}
 		

@@ -18,6 +18,15 @@ $this->params ['breadcrumbs'] [] = $this->title;
         <?=Html::a ( Yii::t ( 'app/cms', 'Create {modelClass}', [ 'modelClass' => 'Cms Page Content' ] ), [ 'create' ], [ 'class' => 'btn btn-success' ] )?>
     </p>
 
-    <?=GridView::widget ( [ 'dataProvider' => $dataProvider,'filterModel' => $searchModel,'columns' => [ [ 'class' => 'yii\grid\SerialColumn' ],'id','language','meta_tags','description',// 'content:ntext',// 'javascript:ntext',// 'css:ntext',[ 'class' => 'yii\grid\ActionColumn' ] ] ] );?>
+    <?=GridView::widget ( 
+    [ 
+    	'dataProvider' => $dataProvider,
+    	'filterModel' => $searchModel,
+    	'columns' => [
+    			[ 'class' => 'yii\grid\SerialColumn' ],
+    			'id','language','description',
+    			//'content:ntext',// 'javascript:ntext',// 'css:ntext','meta_tags',
+    			[ 'class' => 'yii\grid\ActionColumn' ] ] ] ); 
+    ?>
 
 </div>

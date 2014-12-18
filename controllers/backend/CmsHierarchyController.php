@@ -38,6 +38,20 @@ class CmsHierarchyController extends Controller {
 		];
 	}
 	
+	//counter for profiling iterations
+	public static $iterationCounter = 0;
+	
+	public function actionProfiling() {
+		CmsHierarchyController::$iterationCounter = 0;
+		Yii::beginProfile(__METHOD__,'simplecms');
+		$results = $this->getMenuTree(1, 999, false);
+		Yii::endProfile(__METHOD__,'simplecms');
+		
+		return $this->render ( 'profiling', [
+			'counter' => CmsHierarchyController::$iterationCounter,
+		] );
+	}
+	
 	/**
 	 * get the complete menu / hierarchy tree for the cms navigation structure
 	 * @language integer the language id to get the cms menu items for
@@ -48,12 +62,12 @@ class CmsHierarchyController extends Controller {
 	 *        	@filterDisplayState array an array if integers indicating which displayStates should be filtered from the results (@see CmsHierarchyItem::DISPLAYSTATE_PUBLISHED_VISIBLE_IN_NAVIGATION)
 	 * @return array an SimpleHierarchyItem instance, containing all subnodes in a node-tree structure (children property holds children of each node)
 	 */
-	public static function getMenuTree($language, $expandLevel, $hideMissingLanguages, $filterDisplayState = []) {
+	public static function getMenuTree($language, $expandLevel, $hideMissingLanguages, $removeHierarchyItemsWithNoContent = false, $filterDisplayState = []) {
 		$language = intval ( $language );
 		$expandLevel = intval ( $expandLevel );
 		
 		// query all hierarchy items (including hidden, etc.)
-		$hierarchyQuery = CmsHierarchyItem::find ()->orderby ( 'id ASC' )->asarray ( true );
+		$hierarchyQuery = CmsHierarchyItem::find ()->orderby ( 'parent_id ASC, position DESC' )->asarray ( true ); //****** IMPORTANT ******* do not modify the order by clause, since it is required by the recursive subroutine to work properly
 		if (count ( $filterDisplayState ) > 0)
 			$hierarchyQuery->where ( [ 
 				'display_state' => $filterDisplayState 
@@ -72,22 +86,28 @@ class CmsHierarchyController extends Controller {
 		$itemIndex = [ ];
 		foreach ( $hierarchyItems as $hierarchyItem ) {
 			// check if menu is available in current language, skip if not
-			if (isset ( $menuItemIndex [$hierarchyItem ['id']] )) {
+			if (isset ( $menuItemIndex [$hierarchyItem ['id']] ) || !$removeHierarchyItemsWithNoContent) {
 				if (isset ( $menuItemIndex [$hierarchyItem ['id']] [$language] )) {
 					$hierarchyItem ['menu_item'] = $menuItemIndex [$hierarchyItem ['id']] [$language];
 				} else if (! $hideMissingLanguages) {
 					// get fallback language as menu item if primary requested language not available (and missing items should not be hidden)
-					$hierarchyItem ['menu_item'] = reset ( $menuItemIndex [$hierarchyItem ['id']] ); // return first language item found
+					if(isset($menuItemIndex [$hierarchyItem ['id']]) && $menuItemIndex [$hierarchyItem ['id']] != null)
+						$hierarchyItem ['menu_item'] = reset ( $menuItemIndex [$hierarchyItem ['id']] ); // return first language item found
 					$hierarchyItem ['displaying_fallback_language'] = true;
 				}
-				$hierarchyItem ['available_menu_items_all_languages'] = $menuItemIndex [$hierarchyItem ['id']];
+				if(isset($menuItemIndex [$hierarchyItem ['id']]) && $menuItemIndex [$hierarchyItem ['id']] != null){
+					$hierarchyItem ['available_menu_items_all_languages'] = $menuItemIndex [$hierarchyItem ['id']];
+				} else {
+					$hierarchyItem ['available_menu_items_all_languages'] = [];
+				}
 				
-				if (isset ( $hierarchyItem ['menu_item'] ))
+				if (isset ( $hierarchyItem ['menu_item'] ) ||  !$removeHierarchyItemsWithNoContent)
 					$itemIndex [$hierarchyItem ['id']] = $hierarchyItem;
 			}
 		}
-		
+	
 		$rootItem = new SimpleHierarchyItem ( $itemIndex [0], ($expandLevel > 0), 0 );
+		unset($itemIndex [0]);
 		CmsHierarchyController::populateChildrenRecursive ( $rootItem, $itemIndex, $expandLevel, 1 );
 		return $rootItem;
 	}
@@ -96,16 +116,22 @@ class CmsHierarchyController extends Controller {
 	 * private helper function go into recursion while building hierarchy tree
 	 */
 	private static function populateChildrenRecursive($parent, $allItems, $expandLevel, $levelDepth) {
+		$foundChild = false;
 		foreach ( $allItems as $itemId => $item ) {
+			CmsHierarchyController::$iterationCounter++;
 			if ($item ['parent_id'] == $parent->id) {
+				$foundChild = true;
 				$child = new SimpleHierarchyItem ( $item, ($expandLevel > $levelDepth), $levelDepth );
+				//save iteration steps in child iterations by removing current index
+				unset($allItems[$itemId]);
+				
 				CmsHierarchyController::populateChildrenRecursive ( $child, $allItems, $expandLevel, $levelDepth + 1 );
 				$parent->addChild ( $child );
-				// sort children by position
-				usort ( $parent->children, array (
-					get_class($child) ,
-					"compare" 
-				) );
+			} else if($foundChild){
+				// since we found a child before and the result set is ordered by parent_id, 
+				// if this item is not a child it means, we found all child nodes for this parent node
+				// so we can break out of the foreach loop 
+				break;
 			}
 		}
 	}
@@ -494,13 +520,15 @@ class SimpleHierarchyItem {
 		$this->key = $cmsHierarchyItemDetailsArray ['id'];
 		$this->parent_id = $cmsHierarchyItemDetailsArray ['parent_id'];
 		$this->position = $cmsHierarchyItemDetailsArray ['position'];
-		$this->title = $cmsHierarchyItemDetailsArray ['menu_item'] ['name'];
-		$this->menu_id = $cmsHierarchyItemDetailsArray ['menu_item'] ['id'];
-		$this->content_id = $cmsHierarchyItemDetailsArray ['menu_item'] ['page_content_id'];
-		$this->document_id = $cmsHierarchyItemDetailsArray ['menu_item'] ['document_id'];
-		$this->direct_url = $cmsHierarchyItemDetailsArray ['menu_item'] ['direct_url'];
-		$this->languageId = $cmsHierarchyItemDetailsArray ['menu_item'] ['language'];
-		$this->languageCode = Yii::$app->controller->module->getLanguageManager()->getMappingForIdResolveAlias ( $cmsHierarchyItemDetailsArray ['menu_item'] ['language'] )['code'];
+		if(isset($cmsHierarchyItemDetailsArray ['menu_item']) && $cmsHierarchyItemDetailsArray ['menu_item'] != null){
+			$this->title = $cmsHierarchyItemDetailsArray ['menu_item'] ['name'];
+			$this->menu_id = $cmsHierarchyItemDetailsArray ['menu_item'] ['id'];
+			$this->content_id = $cmsHierarchyItemDetailsArray ['menu_item'] ['page_content_id'];
+			$this->document_id = $cmsHierarchyItemDetailsArray ['menu_item'] ['document_id'];
+			$this->direct_url = $cmsHierarchyItemDetailsArray ['menu_item'] ['direct_url'];
+			$this->languageId = $cmsHierarchyItemDetailsArray ['menu_item'] ['language'];
+			$this->languageCode = Yii::$app->controller->module->getLanguageManager()->getMappingForIdResolveAlias ( $cmsHierarchyItemDetailsArray ['menu_item'] ['language'] )['code'];
+		}
 		$this->expanded = $displayExpanded;
 		$this->displayState = $cmsHierarchyItemDetailsArray ['display_state'];
 		$this->isFallbackLanguage = (isset ( $cmsHierarchyItemDetailsArray ['displaying_fallback_language'] ) && $cmsHierarchyItemDetailsArray ['displaying_fallback_language']);
@@ -529,16 +557,18 @@ class SimpleHierarchyItem {
 			throw new Exception ( 'Wrong object type given as child element.' );
 		}
 	}
+	/**
+	 * set final valies and order children by position for beforeoutput as json encoded string to client
+	 */
 	public function finalizeForOutput() {
-		$childCounter = count ( $this->children );
-		if ($childCounter > 0) {
+		if (count ( $this->children ) > 0) {
 			$this->children [0]->firstSibling = true;
-			if ($childCounter >= 1) {
-				$this->children [$childCounter - 1]->lastSibling = true;
+			end ($this->children)->lastSibling = true; 
+			// sort children by position
+			usort ( $this->children, array (get_class($this->children [0]) ,"compare") );
+			foreach ( $this->children as $child ) {
+				$child->finalizeForOutput ();
 			}
-		}
-		foreach ( $this->children as $child ) {
-			$child->finalizeForOutput ();
 		}
 	}
 	public function getAllChildren() {
