@@ -198,7 +198,7 @@ class DefaultController extends Controller {
 			$model_menu->created_datetime = new Expression ( 'NOW()' );
 			$model_menu->createdby_userid = Yii::$app->user->id;
 			if ($model_menu->save ()) {
-				$message .= 'Menu for language created successfully<br/>';
+				$message .= 'Menu for language created successfully<br/>'; //FIXME: this is useless st the moment, since not beeing displayed. Make it display somewhere
 				$redirectUrl = Url::toRoute ( [ 
 					'edit-menu-language-version',
 					'menuItemId' => $model_menu->id,
