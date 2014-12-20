@@ -41,6 +41,15 @@ class CmsHierarchyController extends Controller {
 	//counter for profiling iterations
 	public static $iterationCounter = 0;
 	
+	/**
+	 * basically a test action for development puposes only
+	 * 
+	 * @menuLabel Profiling test page
+	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @functionalRight cmsBackendRead
+	 * 
+	 * @return \yii\web\Response|string
+	 */
 	public function actionProfiling() {
 		CmsHierarchyController::$iterationCounter = 0;
 		Yii::beginProfile(__METHOD__,'simplecms');
@@ -48,18 +57,104 @@ class CmsHierarchyController extends Controller {
 		Yii::endProfile(__METHOD__,'simplecms');
 		
 		return $this->render ( 'profiling', [
-			'counter' => CmsHierarchyController::$iterationCounter,
+			'data' => CmsHierarchyController::$iterationCounter,
 		] );
 	}
 	
 	/**
+	 * create a random page structure for testing
+	 * 
+	 * @menuLabel __HIDDEN__
+	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @functionalRight cmsBackendWrite
+	 * 
+	 * @param unknown $startItemId the item id where to create the dummy structure below
+	 * @param unknown $languageId the language id for which to create the new menu items
+	 * @param unknown $maxdepth the maximum directory/acnestors depth to create new items for (this is a maximum level depth, due to the fact that a random function is used to either create children or siblings, it cannot be guaranteed if the level depth is reached) 
+	 * @param unknown $maxitemCount the number of items to create
+	 * @return \yii\web\Response|string
+	 */
+	public function actionCreateDummyTreeStructure($startItemId, $languageId, $maxdepth, $maxitemCount){
+		$currentItemCount = 0;
+		while($currentItemCount < $maxitemCount){
+			$currentItemCount = $this->generateRandomChildOrSibling($startItemId, $startItemId, $languageId, $maxdepth, $maxitemCount, 0, $currentItemCount);
+		}
+		//tree generation does not set proper position values, so we fix all positions values recursive after creation.
+		$updateCounter = 0;
+		$failedUpdateCounter = 0;
+		$checkedItems = 0;
+		$this->fixItemPositionsForChildren($startItemId,$updateCounter,$failedUpdateCounter,$checkedItems,true);
+		
+		return $this->render ( 'profiling', [
+			'data' => $currentItemCount,
+		]);
+	}
+	
+	/**
+	 * internal helper method to generate a dummy tree for testing.
+	 * After this function is called, a call to fixItemPositionsForChildren() should be performed to ensure the position values are integer for the generated subtree
+	 * @param integer $parentItemId
+	 * @param integer $currentItemId
+	 * @param integer $languageId
+	 * @param integer $maxdepth
+	 * @param integer $maxitemCount
+	 * @param integer $currentDepth
+	 * @param integer $currentItemCount
+	 * @return integer number of generated items
+	 */
+	private function generateRandomChildOrSibling($parentItemId, $currentItemId, $languageId, $maxdepth, $maxitemCount, $currentDepth, $currentItemCount){
+		if($currentItemCount < $maxitemCount){
+			if($currentDepth == $maxdepth){
+				//create sibling / or nothing since max depth already reached
+				if(rand(0,1)){
+					$name = 'auto generated test menu '.$currentItemCount;
+					$result = $this->actionCreateHierarchyItemJson($parentItemId, $name, 1 , 1, 1,false);
+					$simpleHierarchyItem = $result['item'];
+					return $currentItemCount+1;		
+				}
+			} else if($currentDepth == 0) { 
+				//only create child nodes when depth == 0
+				$name = 'auto generated test menu '.$currentItemCount;
+				$result = $this->actionCreateHierarchyItemJson($currentItemId, $name, 1 , 1, 1,false);
+				if(isset($result['item'])){
+					$simpleHierarchyItem = $result['item'];
+					$currentItemCount = $this->generateRandomChildOrSibling($currentItemId, $simpleHierarchyItem->id, $languageId, $maxdepth, $maxitemCount, $currentDepth+1, $currentItemCount+1);
+				} else {
+					print_r($result);
+				}
+				return $currentItemCount+1;
+			} else {
+				//random decission if a sibling or child should be created
+				if(rand(0,1)){
+					//create sibling
+					$name = 'auto generated test menu '.$currentItemCount;
+					$result = $this->actionCreateHierarchyItemJson($parentItemId, $name, 1 , 1, 1,false);
+					$simpleHierarchyItem = $result['item'];
+					//go into recursion
+					$currentItemCount = $this->generateRandomChildOrSibling($currentItemId, $simpleHierarchyItem->id , $languageId, $maxdepth, $maxitemCount, $currentDepth, $currentItemCount+1);
+					return $currentItemCount+1;
+				} else {
+					//create child
+					$name = 'auto generated test menu '.$currentItemCount;
+					$result = $this->actionCreateHierarchyItemJson($currentItemId, $name, 1 , 1, 1,false);
+					$simpleHierarchyItem = $result['item'];
+					$currentItemCount = $this->generateRandomChildOrSibling($currentItemId, $simpleHierarchyItem->id, $languageId, $maxdepth, $maxitemCount, $currentDepth+1, $currentItemCount+1);
+					return $currentItemCount+1;
+				}
+			}
+		}
+		return $currentItemCount;
+	}
+	
+	/**
 	 * get the complete menu / hierarchy tree for the cms navigation structure
-	 * @language integer the language id to get the cms menu items for
-	 *
-	 * @param
-	 *        	expandLevel integer the level depth, until which the folders should be marked as expanded ($expanded = true)
-	 *        	@hideMissingLanguages boolean hide or show hierarchy items that do not have a translation (cms menu item) in the requested language
-	 *        	@filterDisplayState array an array if integers indicating which displayStates should be filtered from the results (@see CmsHierarchyItem::DISPLAYSTATE_PUBLISHED_VISIBLE_IN_NAVIGATION)
+	 * 
+	 * @functionalRight cmsBackendRead
+	 * 
+	 * @param language integer the language id to get the cms menu items for
+	 * @param expandLevel integer the level depth, until which the folders should be marked as expanded ($expanded = true)
+	 * @param hideMissingLanguages boolean hide or show hierarchy items that do not have a translation (cms menu item) in the requested language
+	 * @param filterDisplayState array an array if integers indicating which displayStates should be filtered from the results (@see CmsHierarchyItem::DISPLAYSTATE_PUBLISHED_VISIBLE_IN_NAVIGATION)
 	 * @return array an SimpleHierarchyItem instance, containing all subnodes in a node-tree structure (children property holds children of each node)
 	 */
 	public static function getMenuTree($language, $expandLevel, $hideMissingLanguages, $removeHierarchyItemsWithNoContent = false, $filterDisplayState = []) {
@@ -113,6 +208,7 @@ class CmsHierarchyController extends Controller {
 	}
 	
 	/**
+	 * 
 	 * private helper function go into recursion while building hierarchy tree
 	 */
 	private static function populateChildrenRecursive($parent, $allItems, $expandLevel, $levelDepth) {
@@ -138,13 +234,14 @@ class CmsHierarchyController extends Controller {
 	
 	/**
 	 * change parent id and position of an hierarchy item and reset following sibling positions accordingly
-	 *
-	 * @param
-	 *        	hierarchyItemId integer the item id of the hierarchy item position to set the new position value for
-	 * @param
-	 *        	newParentHierarchyItemId integer the item id of the new parent hierarchy item to append the item below
-	 * @param
-	 *        	newPosition integer the position value. Values must equal or larger than 1 (0 is not allowed)
+	 * @menuLabel __HIDDEN__
+	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @functionalRight cmsBackendWrite
+	 * 
+	 * @param integer $hierarchyItemId  the item id of the hierarchy item position to set the new position value for
+	 * @param integer $newParentHierarchyItemId the item id of the new parent hierarchy item to append the item below
+	 * @param integer $newPosition the position value. Values must equal or larger than 1 (0 is not allowed)
+	 * @return string json encoded result array
 	 */
 	public function actionSetItemParentAndPositionJson($hierarchyItemId = -1, $newParentHierarchyItemId = -1, $newPosition = 0) {
 		$result = [ ];
@@ -188,12 +285,56 @@ class CmsHierarchyController extends Controller {
 	}
 	
 	/**
+	 * Fix the position values of all child items for the given parent id.
+	 * This should be called once a new item is inserted amongst other siblings or just to perform an integrity check and avoid duplicate position values amongst siblings.
+	 * This function is quite expensive due to the sql calls (espcially in recusrion mode) so it must not be used in often called functions.
+	 * @param unknown $parentItemId the item id to get the children for an set the position values
+	 * @param boolean $recurseTree recurse into the subtree structure
+	 * @return string
+	 */
+	public function actionFixPositionsForChildren($parentItemId,$recurseTree=false){
+		$result = [];
+		$updateCounter = 0;
+		$failedUpdateCounter = 0;
+		$checkedItems = 0;
+		$this->fixItemPositionsForChildren($parentItemId,$updateCounter,$failedUpdateCounter,$checkedItems,$recurseTree);
+		$result['updateCounter'] = $updateCounter;
+		$result['failedUpdateCounter'] = $failedUpdateCounter;
+		$result['checkedItems'] = $checkedItems;
+		
+		return $this->render ( 'profiling', [
+			'data' => $result,
+		] );
+	}
+	
+	private function fixItemPositionsForChildren($parentItemId,&$updateCounter,&$failedUpdateCounter,&$checkedItems,$recurseTree=false){
+		$childItems = CmsHierarchyItem::find()->where(['parent_id' => $parentItemId])->orderby('position ASC')->all();
+		foreach($childItems as $arrayIndex => $item){
+			$checkedItems++;
+			$positionValue = $arrayIndex+1;
+			if($item->position != $positionValue){
+				$item->position = $positionValue;
+				if($item->save()){
+					$updateCounter++;
+				} else {
+					$failedUpdateCounter++;
+				}
+			}
+			if($recurseTree){
+				$this->fixItemPositionsForChildren($item->id,$updateCounter,$failedUpdateCounter,$checkedItems, true);
+			}
+		}
+	}
+	
+	/**
 	 * change position of an hierarchy item and reset following sibling positions accordingly
-	 *
-	 * @param
-	 *        	hierarchyItemId integer the item id of the hierarchy item position to set the new position value for
-	 * @param
-	 *        	newPosition integer the position value. Values must equal or larger than 1 (0 is not allowed)
+	 * @menuLabel __HIDDEN__
+	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @functionalRight cmsBackendWrite
+	 * 
+	 * @param integer $hierarchyItemId the item id of the hierarchy item position to set the new position value for
+	 * @param integer $newPosition  the position value. Values must equal or larger than 1 (0 is not allowed)
+	 * @return string json encoded, associcative result array
 	 */
 	public function actionSetItemPositionWithinSiblingsJson($hierarchyItemId = -1, $newPosition = 0, $overwritePosition = false) {
 		$result = [ ];
@@ -258,11 +399,29 @@ class CmsHierarchyController extends Controller {
 		Yii::$app->response->charset = 'UTF-8';
 		return json_encode ( $result, JSON_PRETTY_PRINT );
 	}
-	public function actionCreateHierarchyItemJson($parentHierarchyItemId = -1, $newMenuName = null, $position = -1, $language = -1, $contentType = -1) {
+	
+	/**
+	 * Create a new hierarchy item and return the result as json encoded object
+	 * 
+	 * @menuLabel __HIDDEN__
+	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @functionalRight cmsBackendWrite
+	 * 
+	 * @param integer $parentHierarchyItemId the parent item id to create the new element below
+	 * @param string $newMenuName the language sepcific display name of the menu item
+	 * @param integer $position the position (for specifiying the display order amongst all siblings) within the other siblings of the newly created item
+	 * @param integer $language the language id of the menu to create
+	 * @param integer $contentType the content type of the newly created item. Use the constants of CmsHierarchyItem class. 
+	 * @see CmsHierarchyItem::DISPLAYSTATE_PUBLISHED_VISIBLE_IN_NAVIGATION
+	 * @see CmsHierarchyItem::DISPLAYSTATE_PUBLISHED_HIDDEN_IN_NAVIGATION
+	 * @see CmsHierarchyItem::DISPLAYSTATE_UNPUBLISHED
+	 * @return string
+	 */
+	public function actionCreateHierarchyItemJson($parentHierarchyItemId = -1, $newMenuName = null, $position = -1, $language = -1, $contentType = -1, $jsonEncode = true) {
 		$parentHierarchyItemId = intval ( $parentHierarchyItemId );
 		$position = intval ( $position );
 		$language = intval ( $language );
-		$contentType = intval ( $contentType );
+		$contentType = intval ( $contentType ); //FIXME: variable is never used at the moment, so it could just as well be omitted
 		
 		$result = [ ];
 		$result ['message'] = '';
@@ -300,27 +459,36 @@ class CmsHierarchyController extends Controller {
 					$result ['success'] = false;
 					$result ['message'] .= 'error, hierarchy item created, but creation of language version for menu failed: ' . implode ( $newMenuItem->getFirstErrors () );
 				}
+				$updateCounter = 0;
+				$failedUpdateCounter = 0;
+				$checkedItems = 0;
+				$this->fixItemPositionsForChildren($parentHierarchyItemId,$updateCounter,$failedUpdateCounter,$checkedItems,false);
 			} else {
 				$result ['result'] = 'failed';
 				$result ['success'] = false;
 				$result ['message'] .= 'error while trying to validate and save the hierarchy item: ' . implode ( $newHierarchyItem->getFirstErrors () );
 			}
 		}
-		
-		Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
-		$headers = Yii::$app->response->headers;
-		$headers->add ( 'Content-Type', 'application/json; charset=utf-8' );
-		Yii::$app->response->charset = 'UTF-8';
-		return json_encode ( $result, JSON_PRETTY_PRINT );
+		if($jsonEncode){
+			Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+			$headers = Yii::$app->response->headers;
+			$headers->add ( 'Content-Type', 'application/json; charset=utf-8' );
+			Yii::$app->response->charset = 'UTF-8';
+			return json_encode ( $result, JSON_PRETTY_PRINT );
+		} else 
+			return $result;
 	}
 	
 	/**
-	 * generate a menu (page) tree of all menus (for admin reasons only, since all items will be displayed including fallback language and all display types, even hidden ones)
-	 *
-	 * @param
-	 *        	language the language id for which to display the page tree (as primary language)
-	 * @param
-	 *        	expandLevel integer the level depth, until which the folders should be marked as expanded ($expanded = true)
+	 * generate a menu (page) tree of all menus (for admin reasons only, since all items will be displayed including fallback language and all display types, even hidden ones).
+	 * The result is returned as a json encoded hierarchy
+	 * 
+	 * @menuLabel __HIDDEN__
+	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @functionalRight cmsBackendRead
+	 * 
+	 * @param integer language the language id for which to display the page tree (as primary language)
+	 * @param integer expandLevel the level depth, until which the folders should be marked as expanded ($expanded = true)
 	 */
 	public function actionPageTreeJson($language, $hideMissingLanguages = false, $expandLevel = 9999) {
 		$rootItem = CmsHierarchyController::getMenuTree ( $language, $expandLevel, $hideMissingLanguages, [ ] );
@@ -334,6 +502,18 @@ class CmsHierarchyController extends Controller {
 			$rootItem 
 		], JSON_PRETTY_PRINT );
 	}
+	/**
+	 * Set the display state of the hierarchy item with the given id to the given displayState value.
+	 * The result is returned as a json encoded object.
+	 * 
+	 * @menuLabel __HIDDEN__
+	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @functionalRight cmsBackendWrite
+	 * 
+	 * @param $hierarchyItemId integer
+	 * @param $displayState integer
+	 * @return string
+	 */
 	public function actionSetDisplayStateJson($hierarchyItemId = -1, $displayState = -1) {
 		$result = [ ];
 		
@@ -373,10 +553,12 @@ class CmsHierarchyController extends Controller {
 	
 	/**
 	 * Lists all CmsHierarchyItem models.
-	 *
-	 * @return mixed @menuLabel list all cms hierarchy items
-	 *         @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
-	 *         @functionalRight cmsBackendRead
+	 * 
+	 * @menuLabel List all hierarchy items
+	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @functionalRight cmsBackendRead
+	 * 
+	 * @return mixed rendered view
 	 */
 	public function actionIndex() {
 		$searchModel = new CmsHierarchyItemSearch ();
@@ -390,11 +572,13 @@ class CmsHierarchyController extends Controller {
 	
 	/**
 	 * Displays a single CmsHierarchyItem model.
-	 *
-	 * @param integer $id        	
-	 * @return mixed @menuLabel __HIDDEN__
-	 *         @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
-	 *         @functionalRight cmsBackendRead
+	 * 
+	 * @menuLabel __HIDDEN__
+	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @functionalRight cmsBackendRead
+	 * 
+	 * @param integer id the id of the hierarchy item to display  	
+	 * @return mixed
 	 */
 	public function actionView($id) {
 		return $this->render ( 'view', [ 
@@ -406,9 +590,11 @@ class CmsHierarchyController extends Controller {
 	 * Creates a new CmsHierarchyItem model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 *
-	 * @return mixed @menuLabel __HIDDEN__
-	 *         @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
-	 *         @functionalRight cmsBackendWrite
+	 * @menuLabel Create new hierarchy item
+	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @functionalRight cmsBackendWrite
+	 * 
+	 * @return mixed
 	 */
 	public function actionCreate() {
 		$model = new CmsHierarchyItem ();
@@ -429,10 +615,12 @@ class CmsHierarchyController extends Controller {
 	 * Updates an existing CmsHierarchyItem model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 *
-	 * @param integer $id        	
-	 * @return mixed @menuLabel __HIDDEN__
-	 *         @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
-	 *         @functionalRight cmsBackendWrite
+	 * @menuLabel __HIDDEN__
+	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @functionalRight cmsBackendWrite
+	 * 
+	 * @param integer $id the id of the hierarchy item to update   	
+	 * @return \yii\web\Response|string
 	 */
 	public function actionUpdate($id) {
 		$model = $this->findModel ( $id );
@@ -450,13 +638,15 @@ class CmsHierarchyController extends Controller {
 	}
 	
 	/**
-	 * Deletes an existing CmsHierarchyItem model.
+	 * Deletes the CmsHierarchyItem, specified by the id parameter.
 	 * If deletion is successful, the browser will be redirected to the 'index' page.
+	 * 
+	 * @menuLabel __HIDDEN__
+	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @functionalRight cmsBackendWrite
 	 *
-	 * @param integer $id        	
-	 * @return mixed @menuLabel __HIDDEN__
-	 *         @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
-	 *         @functionalRight cmsBackendWrite
+	 * @param integer $id the id of the hierarchy item to delete 	
+	 * @return \yii\web\Response|string
 	 */
 	public function actionDelete($id) {
 		$this->findModel ( $id )->delete ();
@@ -482,6 +672,11 @@ class CmsHierarchyController extends Controller {
 		}
 	}
 }
+/**
+ * internal helper class for slim representation of an hierarhcy item
+ * @author Paul Kerspe
+ *
+ */
 class BasicHierarchyItem {
 	public $parent_id;
 	public $id;
@@ -493,6 +688,12 @@ class BasicHierarchyItem {
 		$this->parent_id = $cmsHierarchyItem->parent_id;
 	}
 }
+
+/**
+ * internal helper class for less memory consuming representation of an hierarhcy item with capability of representing a tree structure (parent/child relations)
+ * @author Paul Kerspe
+ *
+ */
 class SimpleHierarchyItem {
 	public $children = [ ];
 	public $parent_id;
@@ -562,13 +763,13 @@ class SimpleHierarchyItem {
 	 */
 	public function finalizeForOutput() {
 		if (count ( $this->children ) > 0) {
-			$this->children [0]->firstSibling = true;
-			end ($this->children)->lastSibling = true; 
 			// sort children by position
 			usort ( $this->children, array (get_class($this->children [0]) ,"compare") );
 			foreach ( $this->children as $child ) {
 				$child->finalizeForOutput ();
 			}
+			$this->children [0]->firstSibling = true;
+			end ($this->children)->lastSibling = true;
 		}
 	}
 	public function getAllChildren() {
