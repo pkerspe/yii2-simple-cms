@@ -453,18 +453,18 @@ $(function(){
 			'<a id="adminSetUnpublishedLink'+data.node.data.id+'" 	onclick="updateHierarchyItemDisplayState('+data.node.data.id+',displayStatusUnpublished);; return false;" 	class="'+ ((data.node.data.displayState == displayStatusUnpublished)? '' : 'icon-inactive') +' glyphicon glyphicon-eye-close" 	title="display-state: unpublished" id="adminSetUnpublishedLink'+data.node.data.id+'"></a>';
 		
 		//move item up (reduce position value by 1)
-		if(data.node.data.id != 0 && !data.node.data.firstSibling && !(data.node.data.lastSibling && data.node.data.firstSibling)){
-			hiddenClass = ''
-		} else {
+		if(data.node.data.id == 0 || data.node.data.firstSibling){
 			hiddenClass = 'invisible'
+		} else {
+			hiddenClass = ''
 		}
 		statusHtml += '<a id="moveUpLink'+data.node.key+'" onclick="setPosition( '+data.node.key +' , \'up\')" class="glyphicon glyphicon-arrow-up '+hiddenClass+'" title="move item up"></a>';
 
 		//move item down (increase position value by 1)
-		if(data.node.data.id != 0 && !data.node.data.lastSibling && !(data.node.data.lastSibling && data.node.data.firstSibling)){
-			hiddenClass = ''
-		} else {
+		if(data.node.data.id == 0 || data.node.data.lastSibling){
 			hiddenClass = 'invisible'
+		} else {
+			hiddenClass = ''
 		}
 		statusHtml += '<a id="moveDownLink'+data.node.key+'" onclick="setPosition( '+data.node.key +' , \'down\' )" class="glyphicon glyphicon-arrow-down '+hiddenClass+'" title="move item down"></a>';
 		statusHtml += '</span>'

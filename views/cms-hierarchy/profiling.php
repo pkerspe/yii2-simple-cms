@@ -10,5 +10,5 @@ $this->title = Yii::t ( 'app/cms', 'Profiling dummy page' );
 $this->params ['breadcrumbs'] [] = $this->title;
 ?>
 <div class="cms-hierarchy-item-index">
-<div><?= $counter ?></div>
+<pre><?php print_r($data) ?></pre>
 </div>

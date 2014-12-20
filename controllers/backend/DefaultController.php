@@ -22,7 +22,9 @@ use schallschlucker\simplecms\models\CmsHierarchyItem;
 use yii\db\Expression;
 
 /**
- * @menuLabel CMS Frontend
+ * The default controller of the CMS Backend. Default action is actionIndex, which renders an all in one administration mask for creating and maintaining the page tree.
+ * 
+ * @menuLabel CMS Administration
  * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
  */
 class DefaultController extends Controller {
@@ -42,6 +44,10 @@ class DefaultController extends Controller {
 			'model_wrapperform' => $model_wrapperform 
 		] );
 	}
+	/**
+	 * @menuLabel __HIDDEN__
+	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 */
 	public function actionEditMenuLanguageVersion($menuItemId, $useget = false) {
 		$menuItemId = intval ( $menuItemId );
 		$model_menu = CmsMenuItem::find ()->where ( [ 
@@ -179,6 +185,10 @@ class DefaultController extends Controller {
 			'message' => $message 
 		] );
 	}
+	/**
+	 * @menuLabel __HIDDEN__
+	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 */
 	public function actionCreateMenuLanguageVersion($hierarchyItemId, $languageId) {
 		$message = null;
 		$hierarchyItemId = intval ( $hierarchyItemId );
