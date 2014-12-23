@@ -19,7 +19,11 @@ class SimpleCmsAsset extends AssetBundle {
 	// remove this in production once forum development is done
 	public $publishOptions = ['forceCopy' => true];
 
-	public $depends = ['yii\web\JqueryAsset'];
+	public $depends = [
+		'yii\web\JqueryAsset',
+        'yii\web\YiiAsset',
+        'yii\bootstrap\BootstrapAsset',
+	];
 	
 	public function init() {
 		$this->sourcePath = ( __DIR__ . '/simplecms' );

@@ -7,6 +7,7 @@ use schallschlucker\simplecms\assets\FancytreeAsset;
 use schallschlucker\simplecms\assets\SimpleCmsAsset;
 use schallschlucker\simplecms\models\CmsHierarchyItem;
 use schallschlucker\simplecms\models\MenuItemAndContentForm;
+use schallschlucker\simplecms\widgets\CmsBackendFunctionBarWidget;
 
 /* @var $this yii\web\View */
 /* @var $model schallschlucker\simplecms\models\CmsAdministrationMainTreeViewForm */
@@ -16,11 +17,18 @@ FancytreeAsset::register ( $this );
 SimpleCmsAsset::register ( $this );
 
 $this->title = Yii::t ( 'app/cms', 'CMS Administration' );
+$this->params ['breadcrumbs'] [] = [
+	'label' => Yii::t ( 'app/cms', 'CMS Administration' ),
+	'url' => [
+		'default/index'
+	]
+];
 $this->params ['breadcrumbs'] [] = $this->title;
+
+echo CmsBackendFunctionBarWidget::widget();
 ?>
+
 <div class="pn_cms-default-index">
-	<h1><?= $this->title ?></h1>
-	<p></p>
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<div class="cms-administration-main-tree-view-form">
@@ -99,22 +107,22 @@ ActiveForm::end ();
 <?php
 $jsonLangMapping = json_encode ( $this->context->module->getLanguageManager()->getConfiguredLanguageIdToCodeMapping () );
 $jsonTreeSourceUrl = Url::to ( [ 
-		'cms-hierarchy/page-tree-json',
+		'default/page-tree-json',
 		'language' => $model->treeDisplayLanguageId,
 		'expandLevel' => $model->expandFolderDepth,
 		'hideMissingLanguages' => $model->hideItemsWithMissingLanguage 
 ] );
 $updateSiblingsPositionUrl = Url::to ( [ 
-		'cms-hierarchy/set-item-position-within-siblings-json' 
+		'default/set-item-position-within-siblings-json' 
 ] );
 $ajaxUpdateParentAndPositionUrl = Url::to ( [ 
-		'cms-hierarchy/set-item-parent-and-position-json' 
+		'default/set-item-parent-and-position-json' 
 ] );
 $ajaxCreateNewHierarchyItemAndMenuUrl = Url::to ( [ 
-		'cms-hierarchy/create-hierarchy-item-json' 
+		'default/create-hierarchy-item-json' 
 ] );
 $updateDisplayStateUrl = Url::to ( [ 
-		'cms-hierarchy/set-display-state-json' 
+		'default/set-display-state-json' 
 ] );
 
 $translation1 = Yii::t ( 'app/cms', 'Create new entry for language code: ' );

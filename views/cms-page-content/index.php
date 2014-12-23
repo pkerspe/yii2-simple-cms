@@ -1,13 +1,22 @@
 <?php
 use yii\helpers\Html;
 use yii\grid\GridView;
+use common\components\navigation\CmsBackendFunctionBarWidget;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\modules\pn_cms\models\CmsPageContenttSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t ( 'app/cms', 'Cms Page Contents' );
+$this->params ['breadcrumbs'] [] = [
+	'label' => Yii::t ( 'app/cms', 'CMS Administration' ),
+	'url' => [
+		'default/index'
+	]
+];
 $this->params ['breadcrumbs'] [] = $this->title;
+
+CmsBackendFunctionBarWidget::widget();
 ?>
 <div class="cms-page-content-index">
 

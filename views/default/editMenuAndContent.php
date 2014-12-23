@@ -13,7 +13,7 @@ $this->title = Yii::t ( 'app/cms', 'Edit language version' );
 $this->params ['breadcrumbs'] [] = [ 
 		'label' => Yii::t ( 'app/cms', 'CMS Administration' ),
 		'url' => [ 
-				'index' 
+				'default/index' 
 		] 
 ];
 $this->params ['breadcrumbs'] [] = $this->title;
