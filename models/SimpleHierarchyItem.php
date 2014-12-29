@@ -21,6 +21,7 @@ class SimpleHierarchyItem {
 	public $availableLanguageCodes = [ ];
 	public $key;
 	public $title;
+	public $alias;
 	public $expanded;
 	public $position;
 	public $displayState;
@@ -82,6 +83,7 @@ class SimpleHierarchyItem {
 		$this->position = $cmsHierarchyItemDetailsArray ['position'];
 		if(isset($cmsHierarchyItemDetailsArray ['menu_item']) && $cmsHierarchyItemDetailsArray ['menu_item'] != null){
 			$this->title = $cmsHierarchyItemDetailsArray ['menu_item'] ['name'];
+			$this->alias = $cmsHierarchyItemDetailsArray ['menu_item'] ['alias'];
 			$this->menu_id = $cmsHierarchyItemDetailsArray ['menu_item'] ['id'];
 			$this->content_id = $cmsHierarchyItemDetailsArray ['menu_item'] ['page_content_id'];
 			$this->document_id = $cmsHierarchyItemDetailsArray ['menu_item'] ['document_id'];
@@ -133,10 +135,15 @@ class SimpleHierarchyItem {
 	}
 	
 	public function getFormattedUrl(){
-		if($this->content_id != null)
-			return Url::toRoute(['/cms-frontend/show/page','pageContentId' => $this->content_id]);
+		if($this->content_id != null){
+			if($this->alias != null && $this->alias != ''){
+				return Url::toRoute(['show/alias','menuItemAlias' => $this->alias]);
+			} else {
+				return Url::toRoute(['show/page','menuItemId' => $this->menu_id]);
+			}
+		}
 		else if($this->document_id)
-			return Url::toRoute(['/cms-frontend/show/document','documentId' => $this->document_id]);
+			return Url::toRoute(['show/document','documentId' => $this->document_id]);
 		else
 			return $this->direct_url;
 	}

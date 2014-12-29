@@ -2,10 +2,15 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\View;
-
+use schallschlucker\simplecms\widgets\CmsBootstrapNavbarWidget;
 /* @var $this yii\web\View */
 /* @var $pageContentModel schallschlucker\simplecms\models\CmsPageContent */
 /* @var $isfallbacklanguage boolean */
+
+$widget = new CmsBootstrapNavbarWidget();
+$widget->displayRootItem = true;
+$widget->enableHoverDropDown = true;
+echo $widget->run();
 
 if($pageContentModel->css != null && $pageContentModel->css != ''){
 	$this->registerCss ( $pageContentModel->css,[],'cmsCustonCssCode' );

@@ -26,11 +26,19 @@ class Frontend extends \yii\base\Module {
 	public $cache;
 	
 	/**
+	 * @var string The prefix for user module URL.
+	 * @See [[GroupUrlRule::prefix]]
+	 */
+	public $urlPrefix = 'simplecms_frontend';
+	
+	/**
 	 *
 	 * @var array The rules to be used in URL management.
 	 */
 	public $urlRules = [ 
-			'show/homepage',
+		'home' => 'show/homepage',
+		'page/<menuItemId:\d+>' => 'show/page',
+		'c/<menuItemAlias:\w+>' => 'show/alias',
 	];
 	
 	/**

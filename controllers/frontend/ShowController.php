@@ -70,9 +70,13 @@ class ShowController extends Controller {
 	 * @return View
 	 */
 	public function actionPage($menuItemId) {
-		$isFallback = false;
 		$menuItemId = intval($menuItemId);
 		$menuItem = CmsMenuItem::find()->where(['id' => $menuItemId])->with('pageContent')->one();
+		return $this->renderPage($menuItem);
+	}
+	
+	private function renderPage($menuItem){
+		$isFallback = false;
 		if($menuItem == null){
 			throw new NotFoundHttpException('No menu could be found for the given menu id',404);
 		}
@@ -80,11 +84,23 @@ class ShowController extends Controller {
 		if($pageContent == null){
 			throw new NotFoundHttpException('No page content could be found for the menu id',404);
 		}
+		//set meta tags if needed
+		if($pageContent->meta_keywords != null && trim($pageContent->meta_keywords) != '')
+			$this->view->registerMetaTag(['name' => 'keywords','content' => $pageContent->meta_keywords]);
+		if($pageContent->description != null && trim($pageContent->description) != '')
+			$this->view->registerMetaTag(['name' => 'description','content' => $pageContent->description]);
 		
 		return $this->render ( 'page', [
 			'pageContentModel' => $pageContent,
 			'isfallbacklanguage' => $isFallback,
 		] );
+	}
+	
+	public function actionAlias($menuItemAlias){
+		$menuItemAlias = preg_replace('/[^a-zA-Z0-9_\-]/', '', $menuItemAlias);
+		
+		$menuItem = CmsMenuItem::find()->where(['alias' => $menuItemAlias])->with('pageContent')->one();
+		return $this->renderPage($menuItem);
 	}
 	
 	/**
