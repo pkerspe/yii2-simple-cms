@@ -56,7 +56,7 @@ TEXT;
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cms-navbar-collapse-1">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -69,23 +69,25 @@ TEXT;
 TEXT;
 		$simpleHierarchyItem = NavigationController::getRootHierarchyItemCached($this->languageId);
 		$areaDropDownClasses = '';
+		$areaDropDownAttributes = '';
 		
 		if($this->displayRootItem){
-			$widgetHtml .= '<li><a href="'.$simpleHierarchyItem->getFormattedUrl().'">'.$simpleHierarchyItem->title.'</a></li>';
+			$widgetHtml .= '<li>'.$simpleHierarchyItem->getLinkTag().'</li>';
 		}
 		
 		if(!$this->enableHoverDropDown){
-			$areaDropDownClasses = 'data-toggle="dropdown" class="dropdown-toggle"';
+			$areaDropDownClasses = 'dropdown-toggle';
+			$areaDropDownAttributes = ' data-toggle="dropdown" ';
 		}
 		foreach($simpleHierarchyItem->getAllChildren() as $areaItem){
 			if(count($areaItem->children) > 0){
-				$widgetHtml .= '<li class="dropdown"><a href="'.$areaItem->getFormattedUrl().'" '.$areaDropDownClasses.' role="button" aria-expanded="false">'.$areaItem->title.'<span class="caret"></span></a><ul class="dropdown-menu" role="menu">';
+				$widgetHtml .= '<li class="dropdown">'.$areaItem->getLinkTag($areaDropDownClasses,$areaDropDownAttributes.' role="button" aria-expanded="false"','<span class="caret"></span>').'<ul class="dropdown-menu" role="menu">';
 				foreach($areaItem->getAllChildren() as $areaChildItem){
-					$widgetHtml .= '<li><a href="'.$areaChildItem->getFormattedUrl().'">'.$areaChildItem->title.'</a></li>';
+					$widgetHtml .= '<li>'.$areaChildItem->getLinkTag().'</li>';
 				}
 				$widgetHtml .= '</ul></li>';
 			} else {
-				$widgetHtml .= '<li><a href="'.$areaItem->getFormattedUrl().'">'.$areaItem->title.'</a></li>';
+				$widgetHtml .= '<li>'.$areaItem->getLinkTag().'</li>';
 			}
 		}
 		

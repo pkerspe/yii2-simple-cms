@@ -16,6 +16,8 @@ class SimpleHierarchyItem {
 	public $content_id;
 	public $document_id;
 	public $direct_url;
+	public $linkTarget;
+	public $linkCssClass;
 	public $languageId;
 	public $languageCode;
 	public $availableLanguageCodes = [ ];
@@ -27,7 +29,7 @@ class SimpleHierarchyItem {
 	public $displayState;
 	public $isFallbackLanguage = false; // if current language is not available and fallback language is returned instead
 	public $levelDepth;
-	public $allLanguagesWithMarker = [ ];
+	public $allLanguagesWithMarker = [];
 	public $firstSibling = false;
 	public $lastSibling = false;
 
@@ -85,6 +87,8 @@ class SimpleHierarchyItem {
 			$this->title = $cmsHierarchyItemDetailsArray ['menu_item'] ['name'];
 			$this->alias = $cmsHierarchyItemDetailsArray ['menu_item'] ['alias'];
 			$this->menu_id = $cmsHierarchyItemDetailsArray ['menu_item'] ['id'];
+			$this->linkTarget = $cmsHierarchyItemDetailsArray ['menu_item'] ['link_target'];
+			$this->linkCssClass = $cmsHierarchyItemDetailsArray ['menu_item'] ['link_css_class'];
 			$this->content_id = $cmsHierarchyItemDetailsArray ['menu_item'] ['page_content_id'];
 			$this->document_id = $cmsHierarchyItemDetailsArray ['menu_item'] ['document_id'];
 			$this->direct_url = $cmsHierarchyItemDetailsArray ['menu_item'] ['direct_url'];
@@ -147,6 +151,13 @@ class SimpleHierarchyItem {
 		else
 			return $this->direct_url;
 	}
+	
+	public function getLinkTag($cssClasses = '', $attributeString = '', $prependLinkText = ''){
+		$cssCode = ($cssClasses != '' || $this->linkCssClass != '') ? ' class="'.$cssClasses.' '.$this->linkCssClass.'" ' : '';
+		$linkTarget = ($this->linkTarget != null && $this->linkTarget != '') ? ' target="'.$this->linkTarget.'" ' : '';
+		return '<a href="'.$this->getFormattedUrl().'"'.$cssCode.''.$linkTarget.' '.$attributeString.'>'.$this->title.$prependLinkText.'</a>';
+	}
+	
 	/**
 	 * 
 	 * @return SimpleHierarchyItem[]:
