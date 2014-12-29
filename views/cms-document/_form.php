@@ -11,10 +11,11 @@ use schallschlucker\simplecms\models\CmsDocument;
 
 $magicFile = Yii::getAlias ( BaseFileHelper::$mimeMagicFile );
 $mimeTypes = require ($magicFile);
-foreach ( $mimeTypes as $key => $value ) {
-	$mimeTypes [$key] = $key . ': ' . $value;
-}
+$mimeTypeMapping = [];
 sort ( $mimeTypes );
+foreach ( $mimeTypes as $key => $value ) {
+	$mimeTypeMapping [] = ['extension' => $key ,'mimetype'=> $value];
+}
 ?>
 <div class="form">
 <?php
@@ -46,7 +47,7 @@ echo $form->field ( $model, 'presentation_style' )->dropdownList ( [
 	CmsDocument::PRESENTATION_STYLE_EMBEDED => 'embedded in standard layout',
 	CmsDocument::PRESENTATION_STYLE_DOWNLOAD => 'send file detached to trigger browsers download link dialog' 
 ] );
-echo $form->field ( $model, 'mime_type' )->dropdownList ( $mimeTypes );
+echo $form->field ( $model, 'mime_type' )->dropdownList ( yii\helpers\BaseArrayHelper::map($mimeTypeMapping,'mimetype','mimetype'));
 echo $form->field ( $model, 'meta_keywords' )->textInput ( [ 
 	'maxlength' => 255 
 ] );

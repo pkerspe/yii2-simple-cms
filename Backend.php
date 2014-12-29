@@ -24,6 +24,7 @@ class Backend extends \yii\base\Module {
 	
 	public $controllerNamespace = 'schallschlucker\simplecms\controllers\backend';
 	public $languageManager;
+	public $cache;
 	
 	/**
 	 *
@@ -66,5 +67,34 @@ class Backend extends \yii\base\Module {
 		}
 		$configuredLangManager = $this->languageManager;
 		return Yii::$app->$configuredLangManager;
+	}
+	
+	/**
+	 * store a value to the cache, if the cache is configured. Just ignores value if cache is not configured
+	 * @param unknown $cacheKey
+	 * @param unknown $value
+	 * @param unknown $caheLivetime
+	 */
+	public function setCacheValue($cacheKey, $value, $cacheLivetime){
+		if($this->cache != null){
+			Yii::$app->get($this->cache,true)->set($cacheKey, $value, $cacheLivetime);
+		}
+	}
+	
+	/**
+	 * retrieve a value with the given cacheKey from the cache if a cache is configured at all and if the value could be found.
+	 * If no cache is configured the fallbackValue is returned (by default this value is "false" if no parameter is given) 
+	 * @param unknown $cacheKey
+	 * @param string $fallbackValue
+	 * @return unknown|string
+	 */
+	public function getCachedValue($cacheKey,$fallbackValue = false){
+		if($this->cache != null){
+			$value = Yii::$app->get($this->cache,true)->get($cacheKey);
+			if($value !== false){
+				return $value;
+			}
+		}	
+		return $fallbackValue;
 	}
 }

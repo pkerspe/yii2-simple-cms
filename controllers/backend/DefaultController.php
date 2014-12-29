@@ -22,6 +22,7 @@ use schallschlucker\simplecms\models\CmsHierarchyItem;
 use schallschlucker\simplecms\models\CmsMaintenanceForm;
 use schallschlucker\simplecms\controllers\backend\SettingsAndMaintenanceController;
 use yii\db\Expression;
+use schallschlucker\simplecms\models\SimpleHierarchyItem;
 
 /**
  * The default controller of the CMS Backend.
@@ -31,6 +32,9 @@ use yii\db\Expression;
  * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
  */
 class DefaultController extends Controller {
+	
+	public static $ROOT_HIERARCHY_ITEM_ID = 0;
+	
 	/**
 	 * @menuLabel display root page of cms
 	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
@@ -249,7 +253,7 @@ class DefaultController extends Controller {
 	 *        	hideMissingLanguages boolean hide or show hierarchy items that do not have a translation (cms menu item) in the requested language
 	 * @param
 	 *        	filterDisplayState array an array if integers indicating which displayStates should be filtered from the results (@see CmsHierarchyItem::DISPLAYSTATE_PUBLISHED_VISIBLE_IN_NAVIGATION)
-	 * @return array an SimpleHierarchyItem instance, containing all subnodes in a node-tree structure (children property holds children of each node)
+	 * @return SimpleHierarchyItem an SimpleHierarchyItem instance, containing all subnodes in a node-tree structure (children property holds children of each node)
 	 */
 	public static function getMenuTree($language, $expandLevel, $hideMissingLanguages, $removeHierarchyItemsWithNoContent = false, $filterDisplayState = []) {
 		$language = intval ( $language );
@@ -300,10 +304,13 @@ class DefaultController extends Controller {
 			}
 		}
 		
-		$rootItem = new SimpleHierarchyItem ( $itemIndex [0], ($expandLevel > 0), 0 );
-		unset ( $itemIndex [0] );
-		DefaultController::populateChildrenRecursive ( $rootItem, $itemIndex, $expandLevel, 1 );
-		return $rootItem;
+		if(isset($itemIndex [0])){
+			$rootItem = new SimpleHierarchyItem ( $itemIndex [0], ($expandLevel > 0), 0 );
+			unset ( $itemIndex [0] );
+			DefaultController::populateChildrenRecursive ( $rootItem, $itemIndex, $expandLevel, 1 );
+			return $rootItem;
+		}
+		return null;
 	}
 	
 	/**
@@ -594,6 +601,10 @@ class DefaultController extends Controller {
 			if ($displayState <= CmsHierarchyItem::DISPLAYSTATE_MAX_VALUE && $displayState >= CmsHierarchyItem::DISPLAYSTATE_MIN_VALUE) {
 				$cmsHierarchyItem = CmsHierarchyItem::findOne ( $hierarchyItemId );
 				if ($cmsHierarchyItem) {
+					if( $cmsHierarchyItem->id == DefaultController::$ROOT_HIERARCHY_ITEM_ID ) {
+						$result ['result'] = 'failed';
+						$result ['message'] = 'the display state of the root node cannot be changed';
+					} else {
 					$cmsHierarchyItem->display_state = $displayState;
 					if ($cmsHierarchyItem->save ()) {
 						$result ['result'] = 'success';
@@ -602,6 +613,7 @@ class DefaultController extends Controller {
 					} else {
 						$result ['result'] = 'failed';
 						$result ['message'] = 'error while trying to update hierarchy node';
+					}
 					}
 				} else {
 					$result ['result'] = 'failed';
@@ -637,103 +649,4 @@ class BasicHierarchyItem {
 		$this->parent_id = $cmsHierarchyItem->parent_id;
 	}
 }
-
-/**
- * internal helper class for less memory consuming representation of an hierarhcy item with capability of representing a tree structure (parent/child relations)
- * @author Paul Kerspe
- *
- */
-class SimpleHierarchyItem {
-	public $children = [ ];
-	public $parent_id;
-	public $id;
-	public $menu_id;
-	public $content_id;
-	public $document_id;
-	public $direct_url;
-	public $languageId;
-	public $languageCode;
-	public $availableLanguageCodes = [ ];
-	public $key;
-	public $title;
-	public $expanded;
-	public $position;
-	public $displayState;
-	public $isFallbackLanguage = false; // if current language is not available and fallback language is returned instead
-	public $levelDepth;
-	public $allLanguagesWithMarker = [ ];
-	public $firstSibling = false;
-	public $lastSibling = false;
-	function __construct($cmsHierarchyItemDetailsArray, $displayExpanded, $levelDepth) {
-		$this->levelDepth = $levelDepth;
-		$this->id = $cmsHierarchyItemDetailsArray ['id'];
-		$this->key = $cmsHierarchyItemDetailsArray ['id'];
-		$this->parent_id = $cmsHierarchyItemDetailsArray ['parent_id'];
-		$this->position = $cmsHierarchyItemDetailsArray ['position'];
-		if(isset($cmsHierarchyItemDetailsArray ['menu_item']) && $cmsHierarchyItemDetailsArray ['menu_item'] != null){
-			$this->title = $cmsHierarchyItemDetailsArray ['menu_item'] ['name'];
-			$this->menu_id = $cmsHierarchyItemDetailsArray ['menu_item'] ['id'];
-			$this->content_id = $cmsHierarchyItemDetailsArray ['menu_item'] ['page_content_id'];
-			$this->document_id = $cmsHierarchyItemDetailsArray ['menu_item'] ['document_id'];
-			$this->direct_url = $cmsHierarchyItemDetailsArray ['menu_item'] ['direct_url'];
-			$this->languageId = $cmsHierarchyItemDetailsArray ['menu_item'] ['language'];
-			$this->languageCode = Yii::$app->controller->module->getLanguageManager()->getMappingForIdResolveAlias ( $cmsHierarchyItemDetailsArray ['menu_item'] ['language'] )['code'];
-		}
-		$this->expanded = $displayExpanded;
-		$this->displayState = $cmsHierarchyItemDetailsArray ['display_state'];
-		$this->isFallbackLanguage = (isset ( $cmsHierarchyItemDetailsArray ['displaying_fallback_language'] ) && $cmsHierarchyItemDetailsArray ['displaying_fallback_language']);
-
-		foreach ( $cmsHierarchyItemDetailsArray ['available_menu_items_all_languages'] as $menuItem ) {
-			$this->addAvailableLanguageCodes ( Yii::$app->controller->module->getLanguageManager()->getMappingForIdResolveAlias ( $menuItem ['language'] )['code'], $menuItem ['id'] );
-		}
-
-		// create an array with all languages, where the available languages are marked explicitly (this is used to display the existing and non existing language versions in the frontend
-		foreach ( Yii::$app->controller->module->getLanguageManager()->getAllConfiguredLanguageCodes () as $languageId => $languageCode ) {
-			$this->allLanguagesWithMarker [] = [
-				'code' => $languageCode,
-				'language_id' => $languageId,
-				'available' => array_key_exists ( $languageCode, $this->availableLanguageCodes ),
-				'menu_item_id' => (isset ( $this->availableLanguageCodes [$languageCode] )) ? $this->availableLanguageCodes [$languageCode] : ''
-			];
-		}
-	}
-	public function addAvailableLanguageCodes($languageCode, $menuItemId) {
-		$this->availableLanguageCodes [$languageCode] = $menuItemId;
-	}
-	public function addChild($simpleHierarchyItem) {
-		if ($simpleHierarchyItem instanceof SimpleHierarchyItem) {
-			$this->children [] = $simpleHierarchyItem;
-		} else {
-			throw new Exception ( 'Wrong object type given as child element.' );
-		}
-	}
-	/**
-	 * set final valies and order children by position for beforeoutput as json encoded string to client
-	 */
-	public function finalizeForOutput() {
-		if (count ( $this->children ) > 0) {
-			// sort children by position
-			usort ( $this->children, array (get_class($this->children [0]) ,"compare") );
-			foreach ( $this->children as $child ) {
-				$child->finalizeForOutput ();
-			}
-			$this->children [0]->firstSibling = true;
-			end ($this->children)->lastSibling = true;
-		}
-	}
-	public function getAllChildren() {
-		return $this->children;
-	}
-
-	/*
-	 * static comparing function for sorting items depending on their position
-	 */
-	static function compare($a, $b) {
-		$al = $a->position;
-		$bl = $b->position;
-		if ($al == $bl) {
-			return 0;
-		}
-		return ($al > $bl) ? + 1 : - 1;
-	}
-}
+?>

@@ -23,26 +23,52 @@ use yii\base\Component;
  */
 class LanguageManager extends Component {
 	public $languageIdMappings = [ 
-			[ 
-					'de',
-					'displaytext' => [ 
-							'deutsch',
-							'en' => 'german' 
-					] 
+		'1' => [
+			'id' => 1,
+			'code' => 'de', 
+			'displaytext' => [
+				'de' => 'deutsch', 
+				'en' => 'german',
+				'pl' => 'niemiecki',
+				'tr' => 'alman',
 			],
-			'de-DE' => [ 
-					'1' 
+		],
+		'de-DE' => [
+			'alias' => '1'
+		],
+		'2' => [
+			'id' => 2,
+			'code' => 'en', 
+			'displaytext' => [
+				'de' => 'englisch', 
+				'en' => 'english',
+				'pl' => 'angielski',
+				'tr' => 'ingilizce',
 			],
-			'2' => [ 
-					'en',
-					'displaytext' => [ 
-							'englisch',
-							'en' => 'english' 
-					] 
+		],
+		'en-US' => [
+			'alias' => '2',
+		],
+		'3' => [
+			'id' => 3,
+			'code' => 'pl', 
+			'displaytext' => [
+				'de' => 'polnisch', 
+				'en' => 'polish',
+				'pl' => 'polski',
+				'tr' => 'lehçe',
 			],
-			'en-US' => [ 
-					'2' 
-			] 
+		],
+		'4' => [
+			'id' => 4,
+			'code' => 'tr', 
+			'displaytext' => [
+				'de' => 'türkisch', 
+				'en' => 'turkish',
+				'pl' => 'turecki',
+				'tr' => 'türk',
+			],
+		],
 	];
 	
 	public function getConfiguredLanguageIdToCodeMapping() {
@@ -55,6 +81,28 @@ class LanguageManager extends Component {
 			}
 		}
 		return $languageIdCodeMapping;
+	}
+	
+	/**
+	 * The function tries to indentify the given language code or String and map it to the internally used language id (the integer value that is stored in the database)
+	 * @param unknown $languageCodeOrString
+	 * @return integer the language id for the string if found, null if nothing could be found.
+	 */
+	public function getLanguageIdForString($languageCodeOrString){
+		$languageId = null;
+		if($languageCodeOrString == ''){
+			return null;
+		} else {
+			foreach ( $this->languageIdMappings as $key => $languageIdMapping ) {
+				if($key == $languageCodeOrString || (isset($languageIdMapping['code']) && $languageIdMapping['code'] == $languageCodeOrString) ){
+					if(isset($languageIdMapping['alias']) )
+						return $this->languageIdMappings[$languageIdMapping['alias']]['id'];
+					else
+						return $languageIdMapping['id'];
+				}
+			}
+		}
+		return null;
 	}
 	
 	public function getDefaultLanguageId() {
