@@ -27,6 +27,9 @@
 	"require" : {
 		"php" : ">=5.5.0"
 	},
+	"extra" : {
+		"bootstrap": "schallschlucker\\simplecms\\Bootstrap"
+    },
 	"autoload" : {
 		"psr-4" : {
 			"schallschlucker\\simplecms\\" : ""
