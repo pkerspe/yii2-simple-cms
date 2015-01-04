@@ -6,18 +6,58 @@ use yii\web\View;
 use schallschlucker\simplecms\models\SimpleMediaCategory;
 use schallschlucker\simplecms\assets\FancytreeAsset;
 use schallschlucker\simplecms\assets\SimpleCmsAsset;
+use schallschlucker\simplecms\controllers\backend\MediaController;
 
 /* @var $this yii\web\View */
-/* @var $categories SimpleMediaCategory */
 FancytreeAsset::register ( $this );
 SimpleCmsAsset::register ( $this );
 ?>
 <?php
-$jsonUrl = Url::toRoute(['media/category-tree-json']);
+$deleteMediaItemUrl = Url::toRoute(['media/delete-media-item-json','mediaItemId' => '123']);
+$deleteMediaVariationItemUrl = Url::toRoute(['media/delete-media-variation-item-json','mediaVariationItemId' => '123']);
+$createCategoryItemUrl = Url::toRoute(['media/create-category-item-json']);
+$jsonUrl = Url::toRoute(['media/category-tree-json','mediaType' => $mediatype, 'activeCategoryId' => $activeCategoryId]);
 $mediaItemsUrl = Url::toRoute(['media/media-for-category','categoryId' => '123']);
-$mediaUploadUrl = Url::toRoute(['media/upload','targetCategoryId' => '123']);
+$mediaUploadUrl = Url::toRoute(['media/upload','targetCategoryId' => '123','mediaType' => $mediatype]);
+$mediaCategoryIdsNotToDelete = implode(',', [MediaController::$MEDIA_AUDIO_BASE_CATEGORY_ID,MediaController::$MEDIA_VIDEO_BASE_CATEGORY_ID,MediaController::$MEDIA_IMAGE_BASE_CATEGORY_ID,MediaController::$ROOT_MEDIA_CATEGORY_ID]);
 
 $javaScript = <<<JS
+	var protectedCategoryIds = [$mediaCategoryIdsNotToDelete]; 
+
+	function deleteMediaItem(mediaItemId, variationId,htmlId){
+		if(confirm('Do you realy want to delete this media item?')){
+			if(variationId == '' || variationId == undefined || variationId == null){
+				jQuery.ajax({
+					url: '$deleteMediaItemUrl'.replace('123',mediaItemId),
+					data : {},
+					dataType: 'json',
+					success: function(result){
+						console.log(result);
+						if(result[0].success == true){
+							$('#'+htmlId).hide();
+						} else {
+							alert(result[0].message);
+						}
+					}
+				});
+			} else {
+				jQuery.ajax({
+					url: '$deleteMediaVariationItemUrl'.replace('123',variationId),
+					data : {},
+					dataType: 'json',
+					success: function(result){
+						console.log(result);
+						if(result[0].success == true){
+							alert('variation deleted successfully');
+						} else {
+							alert(result[0].message);
+						}
+					}
+				});
+			}
+		}
+	}
+	
 	function onClose(imgUrl,width,height){
 		if(width == 0 || height == 0){
 			var result='<img src="'+imgUrl+'">';
@@ -53,16 +93,31 @@ $javaScript = <<<JS
     			return;
     		}
         	//perform ajax call to create new folder and add item to tree
-        	newKey = '123'; //must be string, otherwise the getNodeByKey does not work
-        	node.addChildren({
-        		title:foldername,
-        		key:newKey,
-        		folder:true,
-        		expanded:true,
+        	jQuery.ajax({
+				url: '$createCategoryItemUrl',
+				data : {
+					parentCategoryId: parentFolderId, 
+					name: foldername
+				},
+				dataType: 'json',
+				success: function(result){
+					console.log(result);
+					if(result[0].success == true){
+			        	newKey = ''+result[0].newid; //must be string, otherwise the getNodeByKey does not work
+			        	node.addChildren({
+			        		title:foldername,
+			        		key:newKey,
+			        		folder:true,
+			        		expanded:true,
+						});
+			        	//sort alphabetically 
+						node.sortChildren();
+						$("#categoryTree").fancytree("getTree").getNodeByKey(newKey).setActive();
+					} else {
+						alert(result[0].message);
+					}
+				}
 			});
-        	//sort alphabetically 
-			node.sortChildren();
-			$("#categoryTree").fancytree("getTree").getNodeByKey(newKey).setActive();
       	} else {
         	alert("Select the parent folder where to create the new folder below");
       	}
@@ -71,7 +126,9 @@ $javaScript = <<<JS
 	function deleteSelectedFolder(){
 		var node = $("#categoryTree").fancytree("getActiveNode");
     	if( node ){
-    		if(node.children){
+    		if($.inArray(node.key, protectedCategoryIds)){
+    			alert('The folder cannot be deleted, since it is a system folder');
+    		} else if(node.children){
     			alert("The folder cannot be deleted, since it contains other subfolders. Delete the subfolders first.");
     		} else if(confirm('Do you realy want to delete the folder "'+node.title+'"?')){
     			parentFolderName = node.title;
@@ -112,7 +169,13 @@ $javaScript = <<<JS
 		    activate: function(event, data) {
 	        	var node = data.node;
 	       		showMediaForCategory(node.key);
-	      	}
+	      	},
+	      	init: function(event,data){
+				//check if default folder should be opened
+				var activeKey = '$activeCategoryId';
+				if(activeKey != '')
+					$("#categoryTree").fancytree("getTree").getNodeByKey(activeKey).setActive(); 
+			} 
 		});
 	});
 JS;

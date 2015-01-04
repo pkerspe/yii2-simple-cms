@@ -6,9 +6,10 @@ use yii\web\View;
 use schallschlucker\simplecms\models\MenuItemAndContentForm;
 use schallschlucker\simplecms\assets\SimpleCmsAsset;
 use schallschlucker\simplecms\assets\CkeditorAsset;
+use schallschlucker\simplecms\controllers\backend\MediaController;
 
 //set the path of the image browser dialog
-echo ('<script type="text/javascript">var imageBrowserUrl = "'.Url::toRoute(['media/mediabrowser','mediatype'=>'image']).'";</script>');
+echo ('<script type="text/javascript">var imageBrowserUrl = "'.Url::toRoute(['media/mediabrowser','mediatype'=>'IMAGE','activeCategoryId' => MediaController::$MEDIA_IMAGE_BASE_CATEGORY_ID]).'";</script>');
 
 SimpleCmsAsset::register ( $this );
 CkeditorAsset::register ( $this );

@@ -1,5 +1,6 @@
 <?php
 
+use schallschlucker\simplecms\controllers\backend\MediaController;
 /*
  * This file is part of the simple cms project for Yii2
  *
@@ -26,6 +27,7 @@ use yii\web\UploadedFile;
 use yii\base\InvalidValueException;
 use yii\helpers\BaseFileHelper;
 use yii\db\Expression;
+use yii\base\InvalidParamException;
 
 /**
  * The controller for media elements in the cms (images/videos/audio files).
@@ -55,26 +57,192 @@ class MediaController extends Controller {
 	 * @menuLabel display root page of cms
 	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
 	 */
-	public function actionMediabrowser() {
-		$simpleMediaCategoryRoot = $this->getCategoryTree ();
+	public function actionMediabrowser($mediatype = null, $activeCategoryId = null) {
 		return $this->renderPartial ( 'mediaBrowser', [ 
-			'categories' => $simpleMediaCategoryRoot 
+			'mediatype' => $mediatype,
+			'activeCategoryId' => $activeCategoryId
 		] );
+	}
+	
+	
+	/**
+	 * create a new media category item and return the result in json formated way
+	 * @return View
+	 */
+	public function actionCreateCategoryItemJson($parentCategoryId, $name) {
+		$result = [];
+		$result['message'] = '';
+		$result['success'] = true;
+	
+		$parentCategoryId = intval($parentCategoryId);
+		/* @var $parentContentMediaCategory CmsContentCategory */
+		$parentContentMediaCategory = CmsContentCategory::findOne($parentCategoryId);
+		if($parentContentMediaCategory == null){
+			$result['success'] = false;
+			$result['message'] .= 'The parnet category id seems to be invalid (id = '.$parentCategoryId.' could not be found)';
+		} else {
+			$newCmsContentCategoryItem = new CmsContentCategory();
+			$newCmsContentCategoryItem->displayname = $name;
+			$newCmsContentCategoryItem->parent_id = $parentCategoryId;
+			if($newCmsContentCategoryItem->insert()){
+				$result['success'] = true;
+				$result['message'] .= 'Category has been created';
+				$result['newid'] = $newCmsContentCategoryItem->id;
+			} else {
+				$result['success'] = false;
+				$result['message'] .= 'failed to create new category item';
+				$result['errors'] = $newCmsContentCategoryItem->errors;
+			}
+		}
+	
+		Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+		$headers = Yii::$app->response->headers;
+		$headers->add ( 'Content-Type', 'application/json; charset=utf-8' );
+		Yii::$app->response->charset = 'UTF-8';
+		return json_encode ( [
+			$result
+		], JSON_PRETTY_PRINT );
+	}
+	
+	/**
+	 * delete a media item and return the result in json formated way
+	 * @return View
+	 */
+	public function actionDeleteMediaItemJson($mediaItemId) {
+		$result = [];
+		$result['message'] = '';
+		$result['success'] = true;
+		
+		$mediaItemId = intval($mediaItemId);
+		/* @var $contentMedia CmsContentMedia */
+		$contentMedia = CmsContentMedia::findOne($mediaItemId);
+		if($contentMedia == null){
+			$result['success'] = false;
+			$result['message'] = 'The media item id seems to be invalid (id = '.$mediaItemId.' could not be found)';			
+		} else {
+			$variations = $contentMedia->getCmsContentMediaVariations()->all();
+			$deleteVariationsSuccess = true;
+			foreach($variations as $variation){
+				/* @var $variation CmsContentMediaVariation */
+				$filePath = $variation->file_path.DIRECTORY_SEPARATOR.$variation->file_name;
+				if(!$variation->delete()){
+					$deleteVariationsSuccess = false;
+					$result['success'] = false;
+					$result['message'] = $result['message'].' Failed to delete variation (id = '.$variation->id.') of media item with id '.$mediaItemId;
+				} else {
+					//delete file from disk
+					if(!unlink($filePath)){
+						$deleteVariationsSuccess = false;
+						$result['success'] = false;
+						$result['message'] = $result['message'].' Database entry deleted, but failed to delete file in filesystem';
+					}
+				}
+			}
+			if($deleteVariationsSuccess) {
+				if($contentMedia->delete()) {
+					$filePath = $contentMedia->file_path.DIRECTORY_SEPARATOR.$contentMedia->file_name;
+					$result['success'] = true;
+					$result['message'] = $result['message'].' Item with id '.$mediaItemId. ' has been deleted.';
+					if(!unlink($filePath)){
+						$result['success'] = false;
+						$result['message'] = $result['message'].' Database entry deleted, but failed to delete file in filesystem.';
+					}
+				} else {
+					$result['success'] = false;
+					$result['message'] = $result['message'].' Database entry could not be deleted.';
+					$result['errors'] = $contentMedia->errors;
+				}
+			}
+		}
+		
+		Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+		$headers = Yii::$app->response->headers;
+		$headers->add ( 'Content-Type', 'application/json; charset=utf-8' );
+		Yii::$app->response->charset = 'UTF-8';
+		return json_encode ( [
+			$result
+		], JSON_PRETTY_PRINT );
+	}
+	
+	
+	/**
+	 * delete a media item variation and return the result in json formated way
+	 * @return View
+	 */
+	public function actionDeleteMediaVariationItemJson($mediaVariationItemId) {
+		$result = [];
+		$result['message'] = '';
+		$result['success'] = true;
+	
+		$mediaVariationItemId = intval($mediaVariationItemId);
+		/* @var $contentMediaVariation CmsContentMediaVariation */
+		$contentMediaVariation = CmsContentMediaVariation::findOne($mediaVariationItemId);
+		if($contentMedia == null){
+			$result['success'] = false;
+			$result['message'] .= 'The media item variation id seems to be invalid (id = '.$mediaVariationItemId.' could not be found)';
+		} else {
+			$filePath = $contentMediaVariation->file_path.DIRECTORY_SEPARATOR.$contentMediaVariation->file_name;
+			if(!$contentMediaVariation->delete()){
+				$result['success'] = true;
+				$result['message'] .= 'Media variation item with id '.$mediaVariationItemId. ' has been deleted';
+				if(!unlink($filePath)){
+					$result['success'] = false;
+					$result['message'] .= 'Database entry deleted, but failed to delete file in filesystem';
+				}
+			}
+		}
+	
+		Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+		$headers = Yii::$app->response->headers;
+		$headers->add ( 'Content-Type', 'application/json; charset=utf-8' );
+		Yii::$app->response->charset = 'UTF-8';
+		return json_encode ( [
+			$result
+		], JSON_PRETTY_PRINT );
 	}
 	
 	/**
 	 *
 	 * @return View
 	 */
-	public function actionCategoryTreeJson() {
-		$rootItem = $this->getCategoryTree ();
+	public function actionCategoryTreeJson($mediaType = null) {
+		$simpleMediaCategoryRoot = $this->getCategoryTree ();
+		if($mediaType == null) $mediaType = '';
+		$mediaType = strtoupper($mediaType);
+		switch ($mediaType){
+			case MediaController::$MEDIA_TYPE_IMAGE:
+				/* @var $mediaArea SimpleMediaCategory */
+				foreach($simpleMediaCategoryRoot->getChildren() as $mediaArea){
+					if($mediaArea->key != MediaController::$MEDIA_IMAGE_BASE_CATEGORY_ID){
+						$simpleMediaCategoryRoot->removeChild($mediaArea->key);
+					}
+				}
+				break;
+			case MediaController::$MEDIA_TYPE_VIDEO:
+				foreach($simpleMediaCategoryRoot->getChildren() as $mediaArea){
+					if($mediaArea->key != MediaController::$MEDIA_VIDEO_BASE_CATEGORY_ID){
+						$simpleMediaCategoryRoot->removeChild($mediaArea->key);
+					}
+				}				
+				break;
+			case MediaController::$MEDIA_TYPE_AUDIO:
+				foreach($simpleMediaCategoryRoot->getChildren() as $mediaArea){
+					if($mediaArea->key != MediaController::$MEDIA_AUDIO_BASE_CATEGORY_ID){
+						$simpleMediaCategoryRoot->removeChild($mediaArea->key);
+					}
+				}
+				break;
+			default:
+				break;
+		}
+		
 		
 		Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
 		$headers = Yii::$app->response->headers;
 		$headers->add ( 'Content-Type', 'application/json; charset=utf-8' );
 		Yii::$app->response->charset = 'UTF-8';
 		return json_encode ( [ 
-			$rootItem 
+			$simpleMediaCategoryRoot 
 		], JSON_PRETTY_PRINT );
 	}
 	
@@ -88,7 +256,7 @@ class MediaController extends Controller {
 		$category = CmsContentCategory::findOne ( $categoryId );
 		$cmsContentMediaArray = CmsContentMedia::find ()->where ( [ 
 			'content_category_id' => $categoryId 
-		] )->with ( 'cmsContentMediaVariations' )->all ();
+		] )->orderby('file_name ASC')->with ( 'cmsContentMediaVariations' )->all ();
 		return $this->renderPartial ( 'mediaForCategory', [ 
 			'contentMediaArray' => $cmsContentMediaArray,
 			'category' => $category 
@@ -157,9 +325,10 @@ class MediaController extends Controller {
 	 */
 	private function getFullUploadPathForFile($file,$createFolder = false){
 		$currentDate = new \DateTime();
+		$cleanedFileName = str_replace(' ', '_', $file->name);
 		$formatedPath = $currentDate->format('Y/m/d');
 		$targetFolder = BaseFileHelper::normalizePath(MediaController::$MEDIA_UPLOAD_REPOSITORY_PATH.DIRECTORY_SEPARATOR.$formatedPath).DIRECTORY_SEPARATOR;
-		$fullFilePath = $targetFolder.$file->name;
+		$fullFilePath = $targetFolder.$cleanedFileName;
 		
 		//check if folder exists, create if not
 		if(!file_exists($targetFolder)){
@@ -170,7 +339,7 @@ class MediaController extends Controller {
 		
 		$conflictCounter = 1;
 		while(file_exists($fullFilePath)){
-			$fullFilePath = $targetFolder.$file->baseName.'_'.$conflictCounter.'.'.$file->extension;
+			$fullFilePath = $targetFolder.str_replace(' ', '_', $file->baseName).'_'.$conflictCounter.'.'.$file->extension;
 			$conflictCounter++;
 		}
 		return $fullFilePath;
@@ -180,7 +349,11 @@ class MediaController extends Controller {
 	 * upload new media files and link to a given content category id
 	 * @return string
 	 */
-	public function actionUpload($targetCategoryId) {
+	public function actionUpload($targetCategoryId,$mediaType = null) {
+		if($mediaType != null && MediaController::$MEDIA_TYPE_AUDIO != $mediaType && MediaController::$MEDIA_TYPE_IMAGE != $mediaType && MediaController::$MEDIA_TYPE_VIDEO != $mediaType ){
+			throw new InvalidParamException('The media type '.$mediaType.' is not known.');
+		}
+		
 		$model = new MediaBrowserImageUpload();
 		$targetCategoryId = intval($targetCategoryId);
 		$model->targetCategoryId = $targetCategoryId; 
@@ -225,6 +398,7 @@ class MediaController extends Controller {
 							return $this->render ( 'fileUpload', [
 								'model' => $model,
 								'errors' => $content->errors,
+								'mediaType' => $mediaType,
 								'msg' => $msg
 							] );
 							//throw new Exception('The upload of one or more files failed. Most likely validation of properties failed');
@@ -234,17 +408,14 @@ class MediaController extends Controller {
 						throw new Exception('The upload of one or more files failed.');
 					}
 				}
-				$this->layout = 'modalLayout';
-				return $this->render ( 'fileUploadSuccess', [
-					'model' => $model,
-					'uploadedCmsContentMediaArray' => $cmsMediaContentItemsArray,
-					'msg' => $msg
-				] );
+				//reload browser for current folder
+				return $this->redirect(Url::toRoute(['media/mediabrowser','mediatype'=>$mediaType,'activeCategoryId' => $targetCategoryId]));
 			}
 		}
 		$this->layout = 'modalLayout';
 		return $this->render ( 'fileUpload', [ 
 			'model' => $model,
+			'mediaType' => $mediaType,
 			'msg' => $msg
 		] );
 	}

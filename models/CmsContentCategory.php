@@ -38,7 +38,7 @@ class CmsContentCategory extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'displayname'], 'required'],
+            [['displayname'], 'required'],
             [['id', 'parent_id'], 'integer'],
             [['displayname'], 'string', 'max' => 50]
         ];

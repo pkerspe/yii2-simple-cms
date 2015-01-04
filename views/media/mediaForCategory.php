@@ -26,7 +26,8 @@ function showDetails(url){
 	foreach($contentMediaArray as $cmsContentMedia){
 		/* @var $cmsContentMedia CmsContentMedia */
 ?>
-	<div class="mediaBrowserPreviewContainer pull-left" id="<?php echo $cmsContentMedia->id; ?>">
+	<div class="mediaBrowserPreviewContainer pull-left" id="media-<?php echo $cmsContentMedia->id; ?>">
+			<a href="#" class="btn btn-warning" title="delete this media and all its variations" onclick="deleteMediaItem('<?php echo $cmsContentMedia->id ?>','','media-<?php echo $cmsContentMedia->id; ?>');"><span class="glyphicon glyphicon-trash"></span> Delete</a>
 		<div class="btn-group pull-right">
 			<a href="#" class="btn btn-default" title="insert primary version" onclick="showDetails('<?php echo Url::toRoute(['media/details','mediaItemId' => $cmsContentMedia->id]) ?>');">Details</a>
 			<button type="button" class="btn btn-success" onClick="return onClose('<?php echo Url::toRoute(['media/get-media','mediaItemId' => $cmsContentMedia->id]) ?>',<?php echo (($cmsContentMedia->dimension_width != null)?$cmsContentMedia->dimension_width : 0) ?>,<?php echo (($cmsContentMedia->dimension_height != null)? $cmsContentMedia->dimension_height : 0); ?>)">Insert Media</button>

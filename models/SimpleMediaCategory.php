@@ -47,6 +47,15 @@ class SimpleMediaCategory {
 		$this->children[] = $impleMediaCategory;
 	}
 	
+	public function removeChild($itemId){
+		foreach($this->children as $key => $simpleMediaCategory){
+			if($simpleMediaCategory->key == $itemId){
+				unset($this->children[$key]);
+				break;
+			}	
+		}
+	}
+	
 	/**
 	 * get all children form the current category
 	 * @return SimpleMediaCategory[]
