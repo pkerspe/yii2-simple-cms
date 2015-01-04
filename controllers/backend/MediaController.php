@@ -202,6 +202,53 @@ class MediaController extends Controller {
 	}
 	
 	/**
+	 * delete a media category if it is empty and has no child items and return the result in json formated way
+	 * @return View
+	 */
+	public function actionDeleteContentCategoryItemJson($contentCategoryId) {
+		$result = [];
+		$result['message'] = '';
+		$result['success'] = true;
+	
+		$contentCategoryId = intval($contentCategoryId);
+		/* @var $category CmsContentCategory */
+		$category = CmsContentCategory::find()->where(['id' => $contentCategoryId])->with('cmsContentCategories')->one();
+		if($category == null){
+			$result['success'] = false;
+			$result['message'] = 'The category item id seems to be invalid (id = '.$contentCategoryId.' could not be found)';
+		} else {
+			//check if item has children 
+			if(count($category->cmsContentCategories) > 0){
+				$result['success'] = false;
+				$result['message'] = $result['message'].' Could not delete item, since it contains child elements. Delete the sub-items first.';
+			} else {
+				//check if media items are still linked to this category
+				if(CmsContentMedia::find()->where(['content_category_id' => $category->id])->count() > 0){
+					$result['success'] = false;
+					$result['message'] = $result['message'].'Could not delete category, since it still contains media items. Delete the related media items first.';
+				} else {
+					if($category->delete()){
+						$result['success'] = true;
+						$result['message'] = $result['message'].' Item with id '.$category->id. ' has been deleted.';
+					} else {
+						$result['success'] = false;
+						$result['message'] = $result['message'].'Failed to delete category item from database.';
+						$result['errors'] = $category->errors;
+					}
+				}
+			}
+		}
+	
+		Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+		$headers = Yii::$app->response->headers;
+		$headers->add ( 'Content-Type', 'application/json; charset=utf-8' );
+		Yii::$app->response->charset = 'UTF-8';
+		return json_encode ( [
+			$result
+		], JSON_PRETTY_PRINT );
+	}
+	
+	/**
 	 *
 	 * @return View
 	 */

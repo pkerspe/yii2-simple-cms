@@ -19,10 +19,10 @@ $createCategoryItemUrl = Url::toRoute(['media/create-category-item-json']);
 $jsonUrl = Url::toRoute(['media/category-tree-json','mediaType' => $mediatype, 'activeCategoryId' => $activeCategoryId]);
 $mediaItemsUrl = Url::toRoute(['media/media-for-category','categoryId' => '123']);
 $mediaUploadUrl = Url::toRoute(['media/upload','targetCategoryId' => '123','mediaType' => $mediatype]);
-$mediaCategoryIdsNotToDelete = implode(',', [MediaController::$MEDIA_AUDIO_BASE_CATEGORY_ID,MediaController::$MEDIA_VIDEO_BASE_CATEGORY_ID,MediaController::$MEDIA_IMAGE_BASE_CATEGORY_ID,MediaController::$ROOT_MEDIA_CATEGORY_ID]);
-
+$mediaCategoryIdsNotToDelete = json_encode([''.MediaController::$MEDIA_AUDIO_BASE_CATEGORY_ID,''.MediaController::$MEDIA_VIDEO_BASE_CATEGORY_ID,''.MediaController::$MEDIA_IMAGE_BASE_CATEGORY_ID,''.MediaController::$ROOT_MEDIA_CATEGORY_ID]);
+$deleteFolderUrl = Url::toRoute(['media/delete-content-category-item-json','contentCategoryId' => '123']);
 $javaScript = <<<JS
-	var protectedCategoryIds = [$mediaCategoryIdsNotToDelete]; 
+	var protectedCategoryIds = $mediaCategoryIdsNotToDelete; 
 
 	function deleteMediaItem(mediaItemId, variationId,htmlId){
 		if(confirm('Do you realy want to delete this media item?')){
@@ -126,16 +126,30 @@ $javaScript = <<<JS
 	function deleteSelectedFolder(){
 		var node = $("#categoryTree").fancytree("getActiveNode");
     	if( node ){
-    		if($.inArray(node.key, protectedCategoryIds)){
+    		if($.inArray(node.key, protectedCategoryIds) > -1){
     			alert('The folder cannot be deleted, since it is a system folder');
     		} else if(node.children){
     			alert("The folder cannot be deleted, since it contains other subfolders. Delete the subfolders first.");
     		} else if(confirm('Do you realy want to delete the folder "'+node.title+'"?')){
-    			parentFolderName = node.title;
-    			parentFolderId = node.key;
-        		alert("Deleting item if it does not contain media items: " + node.title);
+    			folderId = node.key;
+    			url = '$deleteFolderUrl'.replace('123',folderId);
+        		jQuery.ajax({
+					url: url,
+					data : {},
+					dataType: 'json',
+					success: function(result){
+						console.log(result);
+						if(result[0].success == true){
+							parentNode = node.parent
+				        	node.remove();
+				        	parentNode.setActive();
+						} else {
+							alert(result[0].message);
+						}
+					}
+				});
         	}
-      	}else{
+      	} else {
         	alert("Select the folder to delete first");
       	}
 	}
