@@ -7,6 +7,9 @@ use schallschlucker\simplecms\models\MenuItemAndContentForm;
 use schallschlucker\simplecms\assets\SimpleCmsAsset;
 use schallschlucker\simplecms\assets\CkeditorAsset;
 
+//set the path of the image browser dialog
+echo ('<script type="text/javascript">var imageBrowserUrl = "'.Url::toRoute(['media/mediabrowser','mediatype'=>'image']).'";</script>');
+
 SimpleCmsAsset::register ( $this );
 CkeditorAsset::register ( $this );
 $this->title = Yii::t ( 'app/cms', 'Edit language version' );

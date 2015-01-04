@@ -7,9 +7,7 @@ use schallschlucker\simplecms\widgets\CmsBootstrapNavbarWidget;
 /* @var $pageContentModel schallschlucker\simplecms\models\CmsPageContent */
 /* @var $isfallbacklanguage boolean */
 
-$widget = new CmsBootstrapNavbarWidget();
-$widget->displayRootItem = true;
-$widget->enableHoverDropDown = true;
+$widget = new CmsBootstrapNavbarWidget(['displayRootItem'=>true,'enableHoverDropDown'=>true]);
 echo $widget->run();
 
 if($pageContentModel->css != null && $pageContentModel->css != ''){

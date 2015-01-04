@@ -23,6 +23,7 @@ class SimpleCmsAsset extends AssetBundle {
 		'yii\web\JqueryAsset',
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
+		'yii\bootstrap\BootstrapPluginAsset',
 	];
 	
 	public function init() {

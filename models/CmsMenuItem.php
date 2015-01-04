@@ -45,7 +45,7 @@ class CmsMenuItem extends \yii\db\ActiveRecord {
 				'class' => TimestampBehavior::className (),
 				'createdAtAttribute' => 'created_datetime',
 				'updatedAtAttribute' => 'modification_datetime',
-				'value' => new Expression ( 'NOW()' ) 
+				'value' => new Expression( 'NOW()' ) 
 			],
 			[ 
 				'class' => BlameableBehavior::className (),

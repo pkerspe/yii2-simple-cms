@@ -24,6 +24,7 @@ use schallschlucker\simplecms\models\CmsMaintenanceForm;
 use schallschlucker\simplecms\controllers\backend\SettingsAndMaintenanceController;
 use yii\db\Expression;
 use yii\web\NotFoundHttpException;
+use yii\base\View;
 
 /**
  * The default controller of the CMS frontend to provide actions for displaying content/documents
@@ -71,15 +72,37 @@ class ShowController extends Controller {
 	 */
 	public function actionPage($menuItemId) {
 		$menuItemId = intval($menuItemId);
-		$menuItem = CmsMenuItem::find()->where(['id' => $menuItemId])->with('pageContent')->one();
+		$menuItem = CmsMenuItem::find()->where(['id' => $menuItemId])->with('pageContent')->with('cmsHierarchyItem')->one();
 		return $this->renderPage($menuItem);
 	}
 	
+	/**
+	 * show the page for the given alias name
+	 * @param String $menuItemAlias
+	 * @return View
+	 */
+	public function actionAlias($menuItemAlias){
+		$menuItemAlias = preg_replace('/[^a-zA-Z0-9_\-]/', '', $menuItemAlias);
+		
+		$menuItem = CmsMenuItem::find()->where(['alias' => $menuItemAlias, ])->with('pageContent')->with('cmsHierarchyItem')->one();
+		return $this->renderPage($menuItem);
+	}
+
+	/**
+	 * 
+	 * @param CmsMenuItem $menuItem
+	 * @throws NotFoundHttpException
+	 * @return View
+	 */
 	private function renderPage($menuItem){
 		$isFallback = false;
 		if($menuItem == null){
 			throw new NotFoundHttpException('No menu could be found for the given menu id',404);
 		}
+		if($menuItem->cmsHierarchyItem->display_state === CmsHierarchyItem::DISPLAYSTATE_UNPUBLISHED){
+			throw new NotFoundHttpException('You dont have the rights to access this item',403);
+		}
+		
 		$pageContent = $menuItem->pageContent;
 		if($pageContent == null){
 			throw new NotFoundHttpException('No page content could be found for the menu id',404);
@@ -94,13 +117,6 @@ class ShowController extends Controller {
 			'pageContentModel' => $pageContent,
 			'isfallbacklanguage' => $isFallback,
 		] );
-	}
-	
-	public function actionAlias($menuItemAlias){
-		$menuItemAlias = preg_replace('/[^a-zA-Z0-9_\-]/', '', $menuItemAlias);
-		
-		$menuItem = CmsMenuItem::find()->where(['alias' => $menuItemAlias])->with('pageContent')->one();
-		return $this->renderPage($menuItem);
 	}
 	
 	/**

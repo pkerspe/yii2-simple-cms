@@ -29,7 +29,7 @@ class Frontend extends \yii\base\Module {
 	 * @var string The prefix for user module URL.
 	 * @See [[GroupUrlRule::prefix]]
 	 */
-	public $urlPrefix = 'simplecms_frontend';
+	public $urlPrefix = 'cms';
 	
 	/**
 	 *

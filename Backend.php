@@ -13,6 +13,7 @@ namespace schallschlucker\simplecms;
 
 use Yii;
 use yii\base\InvalidConfigException;
+use schallschlucker\simplecms\controllers\backend\MediaController;
 
 /**
  * The simple cms backend module
@@ -25,6 +26,11 @@ class Backend extends \yii\base\Module {
 	public $controllerNamespace = 'schallschlucker\simplecms\controllers\backend';
 	public $languageManager;
 	public $cache;
+	public $mimetypeMediaTypeMapping = [
+		'IMAGE' => ['image/jpeg','image/gif','image/png'],
+		'AUDIO' => ['audio/wav','audio/mpeg3','audio/x-mpeg-3','audio/x-mpequrl'],
+		'VIDEO' => ['video/mpeg','video/quicktime','video/vdo','application/x-troff-msvideo','video/msvideo'],
+	];
 	
 	/**
 	 *
@@ -96,5 +102,14 @@ class Backend extends \yii\base\Module {
 			}
 		}	
 		return $fallbackValue;
+	}
+	
+	
+	public function getMediaTypeForMimeType($mimeTypeString){
+		foreach($this->mimetypeMediaTypeMapping as $mediaType => $mimetypes){
+			/* @var $mimetypes array */
+			if(in_array($mimeTypeString,$mimetypes)) return $mediaType;
+		}
+		return MediaController::$MEDIA_TYPE_UNKNOWN;
 	}
 }

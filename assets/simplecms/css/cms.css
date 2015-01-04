@@ -1,3 +1,81 @@
+div#mediaTreeFunctions {
+	width:auto;
+	padding-top:20px;
+}
+
+div#mediaTreeFunctions a {
+	display:block;
+	width:auto;
+}
+
+div.mediaBrowserPreviewContainer {
+	width: 500px;
+	background-color:#eee;
+	margin-bottom:15px;
+	margin-right:15px;
+}
+
+div.clearLeft {
+	clear:left;
+	content: "";
+	display:block;
+}
+
+div.thumbnailDisplay {
+	width:104px;
+	height:104px;
+	overflow:hidden;
+	border:1px solid grey;
+	margin-right:10px;
+	white-space: nowrap;
+	background: #fff;
+	text-align: center; 
+	margin: 5px 10px;
+}
+
+.thumbnailImg {
+	background: #fff;
+    vertical-align: middle;
+    max-height: 100px;
+    max-width: 100px;
+}
+
+.helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+div.thumbnailMetaData {
+	width:370px;
+	display:inline-block;
+	font-size:11px;
+	padding-top:10px;
+	padding-right:10px;
+}
+
+div.metaData {
+	font-size:12px;
+}
+
+span.filename, span.createdDate, span.createdBy, span.modifiedDate, span.modifiedBy, span.dimensions, span.dimensions {
+	display: block;
+	width: auto;
+} 
+
+span.filename {
+	font-size:12px;
+	font-weight:bold;
+}
+
+div.mediaDisplay {
+	max-width: 570px;
+	max-height: 300px;
+	overflow:auto;
+	border:1px solid grey;
+}
+// end image browser settings
+
 span.error {
 	display: block;
 	font-weight: bold;
@@ -5,6 +83,19 @@ span.error {
 
 span.success {
 	display: block;
+}
+
+div.mediaVariationButtons {
+	position:absolute;
+	top:0px;
+}
+
+div.mediaDetailsImageContainer {
+	padding-top: 46px;
+}
+
+div.mediaVariationButtons {
+	font-size:12px;
 }
 
 span.fancytree-icon {
