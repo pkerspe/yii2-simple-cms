@@ -16,6 +16,7 @@ SimpleCmsAsset::register ( $this );
 $deleteMediaItemUrl = Url::toRoute(['media/delete-media-item-json','mediaItemId' => '123']);
 $deleteMediaVariationItemUrl = Url::toRoute(['media/delete-media-variation-item-json','mediaVariationItemId' => '123']);
 $createCategoryItemUrl = Url::toRoute(['media/create-category-item-json']);
+$renameCategoryItemUrl = Url::toRoute(['media/rename-content-category-json']);
 $jsonUrl = Url::toRoute(['media/category-tree-json','mediaType' => $mediatype, 'activeCategoryId' => $activeCategoryId]);
 $mediaItemsUrl = Url::toRoute(['media/media-for-category','categoryId' => '123']);
 $mediaUploadUrl = Url::toRoute(['media/upload','targetCategoryId' => '123','mediaType' => $mediatype]);
@@ -79,6 +80,43 @@ $javaScript = <<<JS
 		var mediaItemUrl = '$mediaItemsUrl';
 		mediaItemUrl = mediaItemUrl.replace('123',categoryId);
 		$('#mediaItems').load(mediaItemUrl);
+	}
+	
+	function renameFolder(){
+		var node = $("#categoryTree").fancytree("getActiveNode");
+    	if( node ){
+    		parentFolderName = node.title;
+    		parentFolderId = node.key;
+    		var foldername = prompt("Please enter the new name for the folder\\n(only characters a-z/A-Z, numbers 0-9, blanks, '-' and '_' are allowed)", "");
+    		foldername = foldername.replace(/[^a-zA-Z0-9_\s\-]/g,'');
+    		foldername = foldername.trim();
+    		if(foldername == ''){
+    			alert('New folder name must not be blank. Only characters, numbers, spaces, "_" and "-" are allowerd');
+    			return;
+    		}
+        	//perform ajax call to create new folder and add item to tree
+        	jQuery.ajax({
+				url: '$renameCategoryItemUrl',
+				data : {
+					categoryItemId:node.key, 
+					newName:foldername
+				},
+				dataType: 'json',
+				success: function(result){
+					console.log(result);
+					if(result[0].success == true){
+			        	node.setTitle(foldername);
+			        	//sort alphabetically 
+						node.sortChildren();
+						$("#categoryTree").fancytree("getTree").getNodeByKey(newKey).setActive();
+					} else {
+						alert(result[0].message);
+					}
+				}
+			});
+      	} else {
+        	alert("Select the folder to rename");
+      	}
 	}
 	
 	function createNewFolderBelowSelected(){
@@ -152,6 +190,10 @@ $javaScript = <<<JS
       	} else {
         	alert("Select the folder to delete first");
       	}
+	}
+	
+	function moveMediaItem(mediaItemId,htmlListItemId){
+		alert('moving item id '+mediaItemId);
 	}
 	
 	function uploadFile(){
@@ -231,7 +273,8 @@ $this->registerJs ( $javaScript, View::POS_END, 'cmsMediaBrowser' );
     	<div id="folderBar" class="">
 			<div id="categoryTree"></div>
 			<div id="mediaTreeFunctions">
-				<a class="btn btn-default" onClick="createNewFolderBelowSelected();"><span class="glyphicon glyphicon-pencil"></span> create new folder</a>
+				<a class="btn btn-default" onClick="createNewFolderBelowSelected();"><span class="glyphicon glyphicon-asterisk"></span> create new folder</a>
+				<a class="btn btn-default" onClick="renameFolder();"><span class="glyphicon glyphicon-pencil"></span> rename folder</a>
 				<a class="btn btn-default" onClick="deleteSelectedFolder();"><span class="glyphicon glyphicon-trash"></span> delete folder</a>
 				<a class="btn btn-default" onClick="uploadFile();"><span class="glyphicon glyphicon-upload"></span> upload file</a>
 			</div>  

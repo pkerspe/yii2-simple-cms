@@ -1,6 +1,6 @@
 <?php
+namespace schallschlucker\simplecms\controllers\backend;
 
-use schallschlucker\simplecms\controllers\backend\MediaController;
 /*
  * This file is part of the simple cms project for Yii2
  *
@@ -9,8 +9,8 @@ use schallschlucker\simplecms\controllers\backend\MediaController;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace schallschlucker\simplecms\controllers\backend;
 
+use schallschlucker\simplecms\controllers\backend\MediaController;
 use Yii;
 use yii\helpers\Url;
 use yii\web\Controller;
@@ -155,6 +155,49 @@ class MediaController extends Controller {
 			}
 		}
 		
+		Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+		$headers = Yii::$app->response->headers;
+		$headers->add ( 'Content-Type', 'application/json; charset=utf-8' );
+		Yii::$app->response->charset = 'UTF-8';
+		return json_encode ( [
+			$result
+		], JSON_PRETTY_PRINT );
+	}
+	
+	/**
+	 * 
+	 * @param unknown $categoryItemId
+	 * @param unknown $newName the new name for the category (only character, numbers, spaces and _ - allowed. All other cahracters will be filtered out)
+	 * @return View
+	 */
+	public function actionRenameContentCategoryJson($categoryItemId,$newName) {
+		$result = [];
+		$result['message'] = '';
+		$result['success'] = true;
+	
+		$categoryItemId = intval($categoryItemId);
+		$cleanedName = preg_replace('/[^a-zA-z\s0-9_\-]/','',$newName);
+		if($cleanedName == ''){
+			$result['success'] = false;
+			$result['message'] = 'The category name seems to be invalid or empty';
+		} else {
+			/* @var $contentCategory CmsContentCategory */
+			$contentCategory = CmsContentCategory::findOne($categoryItemId);
+			if($contentCategory == null){
+				$result['success'] = false;
+				$result['message'] = 'The category id seems to be invalid (id = '.$categoryItemId.' could not be found)';
+			} else {
+				$contentCategory->displayname = $cleanedName;
+				if($contentCategory->update()){
+					$result['success'] = true;
+					$result['message'] = 'The category has been renamed to '.$cleanedName;
+				} else {
+					$result['success'] = false;
+					$result['message'] = 'Updating the database entry for the  category (id = '.$categoryItemId.') failed';
+				}
+			}
+		}
+	
 		Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
 		$headers = Yii::$app->response->headers;
 		$headers->add ( 'Content-Type', 'application/json; charset=utf-8' );
