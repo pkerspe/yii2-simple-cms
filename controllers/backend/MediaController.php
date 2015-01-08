@@ -578,7 +578,12 @@ class MediaController extends Controller {
 	 * @param CmsContentMedia $cmsContentMedia        	
 	 */
 	private function getThumbnailFileName($cmsContentMedia) {
-		return $cmsContentMedia->id . '_thumb.jpg';
+		switch($cmsContentMedia->mime_type){
+			case 'image/gif':
+				return $cmsContentMedia->id . '_thumb.gif';
+			default:
+				return $cmsContentMedia->id . '_thumb.jpg';
+		}
 	}
 	
 	/**
@@ -623,8 +628,15 @@ class MediaController extends Controller {
 		imagecopyresampled ( $tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height );
 		
 		// save thumbnail into a file
-		$targetThumbnailPath = MediaController::$MEDIA_THUMBNAIL_REPOSITORY_PATH . DIRECTORY_SEPARATOR . $this->getThumbnailFileName ( $cmsContentMedia );
-		if (imagejpeg ( $tmp_img, $targetThumbnailPath )) {
+		$newThumbFilename = $this->getThumbnailFileName ( $cmsContentMedia );
+		$targetThumbnailPath = MediaController::$MEDIA_THUMBNAIL_REPOSITORY_PATH . DIRECTORY_SEPARATOR . $newThumbFilename;
+		$success = false;
+		if(stripos($newThumbFilename , '.gif') !== false){
+			$success = imagegif($tmp_img, $targetThumbnailPath );
+		} else {
+			$success = imagejpeg( $tmp_img, $targetThumbnailPath );
+		}
+		if($success === true) {
 			return $targetThumbnailPath;
 		} else
 			return false;
