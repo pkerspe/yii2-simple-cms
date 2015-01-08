@@ -19,7 +19,6 @@ function showDetails(url){
 		width: 600
 	});
 }
-	
 </script>
 		
 <h3>Media for Category '<?php echo $category->displayname ?>'</h3>
@@ -29,7 +28,7 @@ function showDetails(url){
 ?>
 	<div class="mediaBrowserPreviewContainer pull-left" id="media-<?php echo $cmsContentMedia->id; ?>">
 		<a href="#" class="btn btn-warning btn-sm" title="delete this media and all its variations" onclick="deleteMediaItem('<?php echo $cmsContentMedia->id ?>','','media-<?php echo $cmsContentMedia->id; ?>');"><span class="glyphicon glyphicon-trash"></span> Delete</a>
-		<a href="#" class="btn btn-default btn-sm" title="move this media item to another folder" onclick="moveMediaItem('<?php echo $cmsContentMedia->id ?>','media-<?php echo $cmsContentMedia->id; ?>');"><span class="glyphicon glyphicon-share-alt"></span> Move</a>
+		<a href="#" class="btn btn-default btn-sm" id="draggable-<?php echo $cmsContentMedia->id; ?>" title="move this media item to another folder" onclick="moveMediaItem('<?php echo $cmsContentMedia->id ?>','media-<?php echo $cmsContentMedia->id; ?>');"><span class="glyphicon glyphicon-share-alt"></span> Move</a>
 		<div class="btn-group pull-right">
 			<a href="#" class="btn btn-default btn-sm" title="insert primary version" onclick="showDetails('<?php echo Url::toRoute(['media/details','mediaItemId' => $cmsContentMedia->id]) ?>');">Details</a>
 			<button type="button" class="btn btn-success btn-sm" onClick="return onClose('<?php echo Url::toRoute(['media/get-media','mediaItemId' => $cmsContentMedia->id]) ?>',<?php echo (($cmsContentMedia->dimension_width != null)?$cmsContentMedia->dimension_width : 0) ?>,<?php echo (($cmsContentMedia->dimension_height != null)? $cmsContentMedia->dimension_height : 0); ?>)">Insert Media</button>
@@ -57,6 +56,21 @@ function showDetails(url){
 			<span class="filesize"><span class="glyphicon glyphicon-file" title="filesize"></span> <?php echo Yii::$app->formatter->asShortSize($cmsContentMedia->filesize_bytes); ?></span>
 		</div>
 	</div>
+<script>
+$(function() {
+	$( "#media-<?php echo $cmsContentMedia->id; ?>").draggable({
+		revert: "invalid",
+		cursor: "move",
+		cursorAt: { top: -5, left: -5 },
+		handle:"#draggable-<?php echo $cmsContentMedia->id; ?>", 
+		connectToFancytree: true, 
+		helper: function( event ) {
+			return $( "<div class='ui-widget-header'><img style=\"width:40px\" src=\"<?php echo Url::toRoute(['media/thumbnail','mediaItemId' => $cmsContentMedia->id]) ?>\" title=\"<?php echo $cmsContentMedia->meta_description; ?>\"/></div>" );
+		},
+		customId:<?php echo $cmsContentMedia->id; ?>
+	});
+});
+</script>
 <?php  
 	}
 ?>

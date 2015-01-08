@@ -14,6 +14,7 @@ SimpleCmsAsset::register ( $this );
 ?>
 <?php
 $deleteMediaItemUrl = Url::toRoute(['media/delete-media-item-json','mediaItemId' => '123']);
+$moveMediaItemUrl = Url::toRoute(['media/move-media-item-json']);
 $deleteMediaVariationItemUrl = Url::toRoute(['media/delete-media-variation-item-json','mediaVariationItemId' => '123']);
 $createCategoryItemUrl = Url::toRoute(['media/create-category-item-json']);
 $renameCategoryItemUrl = Url::toRoute(['media/rename-content-category-json']);
@@ -218,6 +219,7 @@ $javaScript = <<<JS
 	
 	$(function(){
 		$("#categoryTree").fancytree({
+			extensions: ["dnd"],
 	    	source: {
 	        	url: "$jsonUrl",
 				cache: false
@@ -231,7 +233,46 @@ $javaScript = <<<JS
 				var activeKey = '$activeCategoryId';
 				if(activeKey != '')
 					$("#categoryTree").fancytree("getTree").getNodeByKey(activeKey).setActive(); 
-			} 
+			},
+        	dnd: {
+				preventVoidMoves: true, // Prevent dropping nodes 'before self', etc.
+				preventRecursiveMoves: true, // Prevent dropping nodes on own descendants
+				autoExpandMS: 400,
+				draggable: {
+					scroll: false,
+					revert: "invalid"
+				},
+				dragStart: function(node, data) {
+					return false;
+				},
+				dragEnter: function(node, data) {
+        			if(node.key == 0 || node.key == node.tree.getActiveNode().key)
+        				return false;
+					return ["over"];
+				},
+				dragDrop: function(node, data) {
+					if( !data.otherNode ){
+						if(confirm("Do you realy want to move this item to the folder '"+node.title+"'?")){
+		        			jQuery.ajax({
+								url: '$moveMediaItemUrl',
+								data : {
+									mediaItemId:data.draggable.options.customId,
+									targetCategoryId:node.key
+								},
+								dataType: 'json',
+								success: function(result){
+									if(result[0].success == true){
+										data.draggable.element.get(0).remove();
+									} else {
+										alert(result[0].message);
+									}
+								}
+        					});
+        				}
+						return;
+					}
+				}
+			}
 		});
 	});
 JS;
@@ -262,7 +303,6 @@ $this->registerJs ( $javaScript, View::POS_END, 'cmsMediaBrowser' );
 		position:absolute;
 		left:270px;
 		top:10px;
-		overflow:auto;
 		height:100%;
 	}
 	</style>

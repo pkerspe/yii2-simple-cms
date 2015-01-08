@@ -71,7 +71,7 @@ span.filename {
 div.mediaDisplay {
 	max-width: 570px;
 	max-height: 300px;
-	overflow:auto;
+	/*overflow:auto;*/
 	border:1px solid grey;
 }
 // end image browser settings
@@ -128,7 +128,7 @@ span.cms-admin-menu-icons a:hover.icon-inactive {
 }
 
 span.cms-admin-menu-icons a.glyphicon, span.cms-admin-menu-icons span.glyphicon
-	{
+{
 	margin-right: 10px;
 	font-style: normal;
 	text-decoration: none;

@@ -165,6 +165,51 @@ class MediaController extends Controller {
 	}
 	
 	/**
+	 * move a media item to another category (=folder)
+	 * @param integer $mediaItemId
+	 * @param integer $targetCategoryId
+	 */
+	public function actionMoveMediaItemJson($mediaItemId,$targetCategoryId){
+		$result = [];
+		$result['message'] = '';
+		$result['success'] = true;
+		
+		$mediaItemId = intval($mediaItemId);
+		/* @var $contentMedia CmsContentMedia */
+		$contentMedia = CmsContentMedia::findOne($mediaItemId);
+		
+		$targetCategoryId = intval($targetCategoryId);
+		/* @var $contentCatgeory CmsContentCategory */
+		$contentCatgeory = CmsContentCategory::findOne($targetCategoryId);
+
+		if($contentMedia == null){
+			$result['success'] = false;
+			$result['message'] = 'The media item id seems to be invalid (id = '.$mediaItemId.' could not be found)';
+		} else if($contentCatgeory == null){
+			$result['success'] = false;
+			$result['message'] = 'The category item id seems to be invalid (id = '.$contentCatgeory.' could not be found)';
+		} else {
+			$contentMedia->content_category_id = $contentCatgeory->id;
+			if($contentMedia->update()){
+				$result['success'] = true;
+				$result['message'] = 'The media item has been moved to the category with the id '.$contentCatgeory->id.' successfully';
+			} else {
+				$result['success'] = false;
+				$result['message'] = 'An error occured while trying to update the media item category id.)';
+				$result['errors'] = $contentMedia->errors;
+			}
+		}		
+		
+		Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+		$headers = Yii::$app->response->headers;
+		$headers->add ( 'Content-Type', 'application/json; charset=utf-8' );
+		Yii::$app->response->charset = 'UTF-8';
+		return json_encode ( [
+			$result
+		], JSON_PRETTY_PRINT );
+	}
+	
+	/**
 	 * 
 	 * @param unknown $categoryItemId
 	 * @param unknown $newName the new name for the category (only character, numbers, spaces and _ - allowed. All other cahracters will be filtered out)
