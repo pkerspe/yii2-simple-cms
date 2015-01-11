@@ -1,4 +1,4 @@
-# Yii2-simplecmd
+# Yii2-simple-cms
 A basic yii2 content management module for easily creating and maintaining a page structure, including navigation widget, full text search, image and document management and a wysiwyg html editor for the content pages.
 Does not include an fine granulated access rights management, only differentiates between: anonymous/guest and logged in users. 
 The extensions supports site structures in multiple languages for international sites.
