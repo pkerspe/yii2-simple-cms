@@ -32,7 +32,7 @@ class m141217_232437_simplecms_init extends Migration {
 	}
 	
 	
-	public function up() {
+	public function safeUp() {
 		$this->createTable ( '{{%cms_content_media}}', [
 			'id' => Schema::TYPE_INTEGER . "(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY",
 			'media_type' => Schema::TYPE_STRING . "(50) NOT NULL COMMENT 'the media type (AUDIO, VIDEO, IMAGE)'",
@@ -59,12 +59,9 @@ class m141217_232437_simplecms_init extends Migration {
 			'file_path' => Schema::TYPE_STRING . "(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'the path in the servers media repository'",
 		], $this->tableOptions. " COMMENT='a variation of a media item is e.g. a thumbnail image of a media item.'" );
 
-		$this->createIndex ( 'fk_parent_content_media_id_idx', '{{%cms_content_media_variation}}', 'parent_content_media_id', false );
-		$this->addForeignKey('fk_parent_content_media_id', '{{%cms_menu_item}}', 'parent_content_media_id', '{{%cms_content_media}}', 'id');
-		
 		$this->createTable ( '{{%cms_menu_item}}', [
 			'id' => Schema::TYPE_INTEGER . "(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY",
-			'cms_hierarchy_item_id' => Schema::TYPE_INTEGER . "(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'the hierarchy_item where this menu item belongs to'",
+			'cms_hierarchy_item_id' => Schema::TYPE_INTEGER . "(10) unsigned NOT NULL COMMENT 'the hierarchy_item where this menu item belongs to'",
 			'alias' => Schema::TYPE_STRING . "(255) DEFAULT NULL COMMENT 'an alias (e.g. human readable text that relates to the topic of the menu items content) to be used for the link (URL) pointing to the menu item instead of using an integer id.'",
 			'language' => Schema::TYPE_INTEGER . "(10) unsigned NOT NULL COMMENT 'the language of this menu item'",
 			'name' => Schema::TYPE_STRING . "(255) NOT NULL COMMENT 'the display name as displayed in the navigation'",
@@ -79,14 +76,6 @@ class m141217_232437_simplecms_init extends Migration {
 			'createdby_userid' => Schema::TYPE_INTEGER . "(11) unsigned NOT NULL COMMENT 'user id of the user who created the page content element'",
 		], $this->tableOptions." COMMENT='a cms_menu is a language specific menu entry used to be displayed in the navigation'" );
 
-		$this->createIndex ( 'unique_hierarchy_lang', '{{%cms_menu_item}}', ['language','cms_hierarchy_item_id'], true );
-		$this->createIndex ( 'fk_menu_document_id_idx', '{{%cms_menu_item}}', 'document_id', false );
-		$this->createIndex ( 'fk_menu_page_content_id_idx', '{{%cms_menu_item}}', 'page_content_id', false );
-		
-		$this->addForeignKey('fk_cms_hierarchy_item', '{{%cms_menu_item}}', 'cms_hierarchy_item_id', '{{%cms_hierarchy_item}}', 'id');
-		$this->addForeignKey('fk_menu_document_id', '{{%cms_menu_item}}', 'document_id', '{{%cms_document}}', 'id');
-		$this->addForeignKey('fk_menu_page_content_id', '{{%cms_menu_item}}', 'page_content_id', '{{%cms_page_content}}', 'id');
-		
 		$this->createTable ( '{{%cms_document}}', [ 
 			'id' => Schema::TYPE_INTEGER . "(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY",
 			'language' => Schema::TYPE_INTEGER . "(10) unsigned NOT NULL COMMENT 'the language id of the document'",
@@ -96,35 +85,47 @@ class m141217_232437_simplecms_init extends Migration {
 			'meta_keywords' => Schema::TYPE_STRING . "(255) DEFAULT NULL COMMENT 'keywords of the contents of this document rendered in the meta tags (if the content is displayed inline in the default layout) and used in the search'",
 			'meta_description' => Schema::TYPE_STRING . "(255) DEFAULT NULL COMMENT 'a short description of the contents of this document rendered in the meta tags (if the content is displayed inline in the default layout) and used in the search'",
 			'modification_datetime' => Schema::TYPE_DATETIME . " DEFAULT NULL COMMENT 'last modification date and time of the page content element'",
-			'modification_userid' => Schema::TYPE_INT . "(11) unsigned DEFAULT NULL COMMENT 'user id of the user who modified the document element (not the document itself) for the last time'",
+			'modification_userid' => Schema::TYPE_INTEGER . "(11) unsigned DEFAULT NULL COMMENT 'user id of the user who modified the document element (not the document itself) for the last time'",
 			'created_datetime' => Schema::TYPE_DATETIME . " NOT NULL COMMENT 'creation date and time of the document element (not the document itself)'",
-			'createdby_userid' => Schema::TYPE_INT . "(11) unsigned NOT NULL COMMENT 'user id of the user who created the document element (not the document itself)'",
+			'createdby_userid' => Schema::TYPE_INTEGER . "(11) unsigned NOT NULL COMMENT 'user id of the user who created the document element (not the document itself)'",
 			'presentation_style' => Schema::TYPE_SMALLINT . "(2) NOT NULL DEFAULT '2' COMMENT 'The style for presenting this document when the link is called'" 
 		], $this->tableOptions );
 		
 		$this->createTable ( '{{%cms_hierarchy_item}}', [ 
-			'id' => Schema::TYPE_INTEGER . "(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'the id of the navigation item",
+			'id' => Schema::TYPE_INTEGER . "(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'the id of the navigation item'",
 			'parent_id' => Schema::TYPE_INTEGER . "(10) unsigned DEFAULT '0' COMMENT 'the id of the parent item in the hierarchy'",
 			'position' => Schema::TYPE_SMALLINT . "(5) unsigned NOT NULL COMMENT 'the position of the item within its siblings (for defining the order of the navigation items when being displayed)'",
 			'position' => Schema::TYPE_SMALLINT . "(2) unsigned NOT NULL DEFAULT '1' COMMENT 'a status that influences the display status of this item in the navigation.'" 
 		], $this->tableOptions );
-		$this->addForeignKey ( 'fk_parent_hierarchy_item_id', '{{%cms_hierarchy_item}}', 'parent_id', '{{%cms_hierarchy_item}}', 'id', 'CASCADE', 'RESTRICT' );
-		$this->createIndex ( 'fk_parent_hierarchy_item_id_idx', '{{%cms_hierarchy_item}}', 'parent_id', false );
 		
 		$this->createTable ( '{{%cms_page_content}}', [ 
-			'id' => Schema::TYPE_INTEGER . "(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'the id of the page content item",
+			'id' => Schema::TYPE_INTEGER . "(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'the id of the page content item'",
 			'language' => Schema::TYPE_INTEGER . "(10) unsigned NOT NULL COMMENT 'the language id of the page content'",
-			'metatags_general' => Schema::TYPE_INTEGER . "(500) DEFAULT NULL COMMENT 'metatags to be rendered in the frontend view page'",
+			'metatags_general' => Schema::TYPE_STRING . "(500) DEFAULT NULL COMMENT 'metatags to be rendered in the frontend view page'",
 			'meta_keywords' => Schema::TYPE_STRING . "(255) DEFAULT NULL COMMENT 'keywords to be used in the search as well as in the metatags in the frontend'",
 			'description' => Schema::TYPE_STRING . "(500) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'a short description of the contents of this page. Used in Metatags as well as to display a preview of the page content in the search results or teaser lists'",
 			'content' => Schema::TYPE_TEXT . " COMMENT 'the content of this page (HTML)'",
 			'javascript' => Schema::TYPE_TEXT . " COMMENT 'additional javascript to be rendered on the bottom of the page html source'",
 			'css' => Schema::TYPE_TEXT . " COMMENT 'additional css to be rendered on the top of the page html source'",
 			'modification_datetime' => Schema::TYPE_DATETIME . " DEFAULT NULL COMMENT 'last modification date and time of the page content element'",
-			'modification_userid' => Schema::TYPE_INT . "(11) unsigned DEFAULT NULL COMMENT 'user id of the user who modified the page content element for the last time'",
+			'modification_userid' => Schema::TYPE_INTEGER . "(11) unsigned DEFAULT NULL COMMENT 'user id of the user who modified the page content element for the last time'",
 			'created_datetime' => Schema::TYPE_DATETIME . " NOT NULL COMMENT 'creation date and time of the page content element'",
-			'createdby_userid' => Schema::TYPE_INT . "(11) unsigned NOT NULL COMMENT 'user id of the user who created the page content element'" 
+			'createdby_userid' => Schema::TYPE_INTEGER . "(11) unsigned NOT NULL COMMENT 'user id of the user who created the page content element'" 
 		], $this->tableOptions );
+
+		$this->createIndex ( 'fk_parent_content_media_id_idx', '{{%cms_content_media_variation}}', 'parent_content_media_id', false );
+		$this->addForeignKey('fk_parent_content_media_id', '{{%cms_content_media_variation}}', 'parent_content_media_id', '{{%cms_content_media}}', 'id');
+		
+		$this->createIndex ( 'unique_hierarchy_lang', '{{%cms_menu_item}}', ['language','cms_hierarchy_item_id'], true );
+		$this->createIndex ( 'fk_menu_document_id_idx', '{{%cms_menu_item}}', 'document_id', false );
+		$this->createIndex ( 'fk_menu_page_content_id_idx', '{{%cms_menu_item}}', 'page_content_id', false );
+		
+		$this->addForeignKey('fk_cms_hierarchy_item', '{{%cms_menu_item}}', 'cms_hierarchy_item_id', '{{%cms_hierarchy_item}}', 'id');
+		$this->addForeignKey('fk_menu_document_id', '{{%cms_menu_item}}', 'document_id', '{{%cms_document}}', 'id');
+		$this->addForeignKey('fk_menu_page_content_id', '{{%cms_menu_item}}', 'page_content_id', '{{%cms_page_content}}', 'id');
+		
+		$this->addForeignKey ( 'fk_parent_hierarchy_item_id', '{{%cms_hierarchy_item}}', 'parent_id', '{{%cms_hierarchy_item}}', 'id', 'CASCADE', 'RESTRICT' );
+		$this->createIndex ( 'fk_parent_hierarchy_item_id_idx', '{{%cms_hierarchy_item}}', 'parent_id', false );
 	}
 	
 	public function down() {
