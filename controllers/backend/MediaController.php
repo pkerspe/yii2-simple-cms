@@ -42,10 +42,10 @@ class MediaController extends Controller {
 	public static $MEDIA_TYPE_IMAGE = 'IMAGE';
 	public static $MEDIA_TYPE_UNKNOWN = 'UNKOWN';
 	
-	public static $ROOT_MEDIA_CATEGORY_ID = 0;
-	public static $MEDIA_IMAGE_BASE_CATEGORY_ID = 1;
-	public static $MEDIA_VIDEO_BASE_CATEGORY_ID = 2;
-	public static $MEDIA_AUDIO_BASE_CATEGORY_ID = 3;
+	public static $ROOT_MEDIA_CATEGORY_ID = 1;
+	public static $MEDIA_IMAGE_BASE_CATEGORY_ID = 2;
+	public static $MEDIA_VIDEO_BASE_CATEGORY_ID = 3;
+	public static $MEDIA_AUDIO_BASE_CATEGORY_ID = 4;
 	
 	public static $MEDIA_UPLOAD_REPOSITORY_PATH = '/var/www/virtualhosts/www.einzelpflegefachkraft.de/curassist-app/backend/web/images/media-repositoy';
 	public static $MEDIA_THUMBNAIL_REPOSITORY_PATH = '/var/www/virtualhosts/www.einzelpflegefachkraft.de/curassist-app/backend/web/images/thumbnail_repository';
