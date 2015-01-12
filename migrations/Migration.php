@@ -1,5 +1,5 @@
 <?php
-
+namespace schallschlucker\simplecms\migrations;
 /*
  * This file is part of the simple-cms project for Yii2
  *
@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace schallschlucker\simplecms\migrations;
+
 
 /**
  *
