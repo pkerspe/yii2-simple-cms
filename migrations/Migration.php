@@ -28,8 +28,11 @@ class Migration extends \yii\db\Migration {
 		parent::init ();
 		
 		switch (\Yii::$app->db->driverName) {
-			case 'mysql' :
+			case 'mysql':
 				$this->tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
+				break;
+			case 'postgresql':
+				$this->tableOptions = '';
 				break;
 			default :
 				throw new \RuntimeException ( 'Your database is not yet supported!' );
