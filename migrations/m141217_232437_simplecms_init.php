@@ -129,12 +129,12 @@ class m141217_232437_simplecms_init extends Migration {
 	}
 	
 	public function down() {
-		$this->dropTable ( '{{%cms_content_media}}' );
 		$this->dropTable ( '{{%cms_content_media_variation}}' );
+		$this->dropTable ( '{{%cms_content_media}}' );
+		$this->dropTable ( '{{%cms_menu_item}}' );
 		$this->dropTable ( '{{%cms_document}}' );
-		$this->dropTable ( '{{%cms_hierarhcy_item}}' );
-		$this->dropTable ( '{{%cms_menu_item}' );
-		$this->dropTable ( '{{%cms_page_content}' );
+		$this->dropTable ( '{{%cms_page_content}}' );
+		$this->dropTable ( '{{%cms_hierarchy_item}}' );
 	}
 }
 ?>
