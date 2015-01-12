@@ -129,6 +129,7 @@ class m141217_232437_simplecms_init extends Migration {
 		$this->insert('{{%cms_content_category}}', ['id' => MediaController::$MEDIA_VIDEO_BASE_CATEGORY_ID, 'parent_id' => MediaController::$ROOT_MEDIA_CATEGORY_ID ,'displayname' => 'videos']);
 		$this->insert('{{%cms_content_category}}', ['id' => MediaController::$MEDIA_AUDIO_BASE_CATEGORY_ID, 'parent_id' => MediaController::$ROOT_MEDIA_CATEGORY_ID ,'displayname' => 'audio']);
 		
+		//create indexes and foreign keys for all tables
 		$this->createIndex ( 'fk_parent_category_item_id_idx', '{{%cms_content_category}}', 'parent_id', false );
 		$this->addForeignKey('fk_parent_category_item_id', '{{%cms_content_category}}', 'parent_id', '{{%cms_content_category}}', 'id','NO ACTION','NO ACTION');
 		
