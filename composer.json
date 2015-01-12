@@ -25,7 +25,9 @@
 	],
 	"minimum-stability" : "beta",
 	"require" : {
-		"php" : ">=5.5.0"
+		"php" : ">=5.5.0",
+		"yiisoft/yii2-jui" : "~2",
+		"yiisoft/yii2-bootstrap" : "~2"
 	},
 	"extra" : {
 		"bootstrap" : "schallschlucker\\simplecms\\Bootstrap"
