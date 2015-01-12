@@ -146,8 +146,6 @@ class m141217_232437_simplecms_init extends Migration {
 		$this->addForeignKey ( 'fk_parent_hierarchy_item_id', '{{%cms_hierarchy_item}}', 'parent_id', '{{%cms_hierarchy_item}}', 'id','NO ACTION','NO ACTION' );
 		$this->createIndex ( 'fk_parent_hierarchy_item_id_idx', '{{%cms_hierarchy_item}}', 'parent_id', false );
 		
-		// insert rquired root items
-
 	}
 	
 	public function down() {
