@@ -11,6 +11,7 @@
 use yii\db\Schema;
 use yii\base\InvalidConfigException;
 use schallschlucker\simplecms\migrations\Migration;
+use schallschlucker\simplecms\controllers\backend\MediaController;
 
 /**
  *
@@ -93,10 +94,13 @@ class m141217_232437_simplecms_init extends Migration {
 		
 		$this->createTable ( '{{%cms_hierarchy_item}}', [ 
 			'id' => Schema::TYPE_INTEGER . "(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'the id of the navigation item'",
-			'parent_id' => Schema::TYPE_INTEGER . "(10) unsigned DEFAULT '0' COMMENT 'the id of the parent item in the hierarchy'",
+			'parent_id' => Schema::TYPE_INTEGER . "(10) unsigned DEFAULT '1' COMMENT 'the id of the parent item in the hierarchy'",
 			'position' => Schema::TYPE_SMALLINT . "(5) unsigned NOT NULL COMMENT 'the position of the item within its siblings (for defining the order of the navigation items when being displayed)'",
-			'position' => Schema::TYPE_SMALLINT . "(2) unsigned NOT NULL DEFAULT '1' COMMENT 'a status that influences the display status of this item in the navigation.'" 
+			'display_state' => Schema::TYPE_SMALLINT . "(2) unsigned NOT NULL DEFAULT '1' COMMENT 'a status that influences the display status of this item in the navigation.'" 
 		], $this->tableOptions );
+		
+		//root hierarchy item
+		$this->insert('{{%cms_hierarchy_item}}', ['id' => 1, 'parent_id' => NULL ,'position' => 1,'display_state' => 1]);
 		
 		$this->createTable ( '{{%cms_page_content}}', [ 
 			'id' => Schema::TYPE_INTEGER . "(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'the id of the page content item'",
@@ -112,20 +116,38 @@ class m141217_232437_simplecms_init extends Migration {
 			'created_datetime' => Schema::TYPE_DATETIME . " NOT NULL COMMENT 'creation date and time of the page content element'",
 			'createdby_userid' => Schema::TYPE_INTEGER . "(11) unsigned NOT NULL COMMENT 'user id of the user who created the page content element'" 
 		], $this->tableOptions );
+		
+		$this->createTable ( '{{%cms_content_category}}', [
+			'id' => Schema::TYPE_INTEGER . "(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'the id of the category'",
+			'parent_id' => Schema::TYPE_INTEGER . "(11) unsigned DEFAULT NULL COMMENT 'the parnet category id to allow building a tree structure'",
+			'displayname' => Schema::TYPE_STRING . "(50) NOT NULL COMMENT 'the name of the virtual folder / category'",
+		], $this->tableOptions . " COMMENT='the content categories are used to build a virtual folder structure to categorize/sort the media items (videos/images/sound files) '" );
 
+		//root media category item
+		$this->insert('{{%cms_content_category}}', ['id' => MediaController::$ROOT_MEDIA_CATEGORY_ID, 'parent_id' => NULL ,'displayname' => 'root']);
+		$this->insert('{{%cms_content_category}}', ['id' => MediaController::$MEDIA_IMAGE_BASE_CATEGORY_ID, 'parent_id' => MediaController::$ROOT_MEDIA_CATEGORY_ID ,'displayname' => 'images']);
+		$this->insert('{{%cms_content_category}}', ['id' => MediaController::$MEDIA_VIDEO_BASE_CATEGORY_ID, 'parent_id' => MediaController::$ROOT_MEDIA_CATEGORY_ID ,'displayname' => 'videos']);
+		$this->insert('{{%cms_content_category}}', ['id' => MediaController::$MEDIA_AUDIO_BASE_CATEGORY_ID, 'parent_id' => MediaController::$ROOT_MEDIA_CATEGORY_ID ,'displayname' => 'audio']);
+		
+		$this->createIndex ( 'fk_parent_category_item_id_idx', '{{%cms_content_category}}', 'parent_id', false );
+		$this->addForeignKey('fk_parent_category_item_id', '{{%cms_content_category}}', 'parent_id', '{{%cms_content_category}}', 'id','NO ACTION','NO ACTION');
+		
 		$this->createIndex ( 'fk_parent_content_media_id_idx', '{{%cms_content_media_variation}}', 'parent_content_media_id', false );
-		$this->addForeignKey('fk_parent_content_media_id', '{{%cms_content_media_variation}}', 'parent_content_media_id', '{{%cms_content_media}}', 'id');
+		$this->addForeignKey('fk_parent_content_media_id', '{{%cms_content_media_variation}}', 'parent_content_media_id', '{{%cms_content_media}}', 'id','NO ACTION','NO ACTION');
 		
 		$this->createIndex ( 'unique_hierarchy_lang', '{{%cms_menu_item}}', ['language','cms_hierarchy_item_id'], true );
 		$this->createIndex ( 'fk_menu_document_id_idx', '{{%cms_menu_item}}', 'document_id', false );
 		$this->createIndex ( 'fk_menu_page_content_id_idx', '{{%cms_menu_item}}', 'page_content_id', false );
 		
-		$this->addForeignKey('fk_cms_hierarchy_item', '{{%cms_menu_item}}', 'cms_hierarchy_item_id', '{{%cms_hierarchy_item}}', 'id');
-		$this->addForeignKey('fk_menu_document_id', '{{%cms_menu_item}}', 'document_id', '{{%cms_document}}', 'id');
-		$this->addForeignKey('fk_menu_page_content_id', '{{%cms_menu_item}}', 'page_content_id', '{{%cms_page_content}}', 'id');
+		$this->addForeignKey('fk_cms_hierarchy_item', '{{%cms_menu_item}}', 'cms_hierarchy_item_id', '{{%cms_hierarchy_item}}', 'id','NO ACTION','NO ACTION');
+		$this->addForeignKey('fk_menu_document_id', '{{%cms_menu_item}}', 'document_id', '{{%cms_document}}', 'id','NO ACTION','NO ACTION');
+		$this->addForeignKey('fk_menu_page_content_id', '{{%cms_menu_item}}', 'page_content_id', '{{%cms_page_content}}', 'id','NO ACTION','NO ACTION');
 		
-		$this->addForeignKey ( 'fk_parent_hierarchy_item_id', '{{%cms_hierarchy_item}}', 'parent_id', '{{%cms_hierarchy_item}}', 'id', 'CASCADE', 'RESTRICT' );
+		$this->addForeignKey ( 'fk_parent_hierarchy_item_id', '{{%cms_hierarchy_item}}', 'parent_id', '{{%cms_hierarchy_item}}', 'id','NO ACTION','NO ACTION' );
 		$this->createIndex ( 'fk_parent_hierarchy_item_id_idx', '{{%cms_hierarchy_item}}', 'parent_id', false );
+		
+		// insert rquired root items
+
 	}
 	
 	public function down() {
