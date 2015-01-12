@@ -23,13 +23,13 @@
 			"role" : "Developer, Manager"
 		}
 	],
-	"minimum-stability" : "stable",
+	"minimum-stability" : "beta",
 	"require" : {
 		"php" : ">=5.5.0"
 	},
 	"extra" : {
-		"bootstrap": "schallschlucker\\simplecms\\Bootstrap"
-    },
+		"bootstrap" : "schallschlucker\\simplecms\\Bootstrap"
+	},
 	"autoload" : {
 		"psr-4" : {
 			"schallschlucker\\simplecms\\" : ""
