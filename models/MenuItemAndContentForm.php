@@ -32,7 +32,7 @@ class MenuItemAndContentForm extends Model {
 	 */
 	public function attributeLabels() {
 		return [ 
-			'contentType' => Yii::t ( 'app/cms', 'content type' ) 
+			'contentType' => Yii::t ( 'simplecms', 'content type' ) 
 		];
 	}
 	

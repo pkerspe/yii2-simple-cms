@@ -103,14 +103,14 @@ class DefaultController extends Controller {
 					if (! $page_content_id_set) {
 						$model_menu->page_content_id = $model_content->id;
 						if ($model_menu->save ()) {
-							$message .= '<span class="success">' . Yii::t ( 'app/cms', 'Content linked to Menu language version' ) . '</span>';
+							$message .= '<span class="success">' . Yii::t ( 'simplecms', 'Content linked to Menu language version' ) . '</span>';
 						} else {
-							$message .= '<span class="error">' . Yii::t ( 'app/cms', 'Error: content saved, yet it could not be linked to the menu language version!' ) . implode ( $model_content->getFirstErrors (), ' ' ) . '</span>';
+							$message .= '<span class="error">' . Yii::t ( 'simplecms', 'Error: content saved, yet it could not be linked to the menu language version!' ) . implode ( $model_content->getFirstErrors (), ' ' ) . '</span>';
 						}
 					}
-					$message .= '<span class="success">' . Yii::t ( 'app/cms', 'Content saved successfully' ) . '</span>';
+					$message .= '<span class="success">' . Yii::t ( 'simplecms', 'Content saved successfully' ) . '</span>';
 				} else {
-					$message .= '<span class="error">' . Yii::t ( 'app/cms', 'Error: saving content failed!' ) . implode ( $model_content->getFirstErrors (), ' ' ) . '</span>';
+					$message .= '<span class="error">' . Yii::t ( 'simplecms', 'Error: saving content failed!' ) . implode ( $model_content->getFirstErrors (), ' ' ) . '</span>';
 				}
 			}
 			
@@ -118,9 +118,9 @@ class DefaultController extends Controller {
 			// $menu_item_new_name = new CmsMenuItem();
 			if ($model_menu->load ( Yii::$app->request->post () )) {
 				if ($model_menu->save ()) {
-					$message .= '<span class="success">' . Yii::t ( 'app/cms', 'Menu details saved successfully' ) . '</span>';
+					$message .= '<span class="success">' . Yii::t ( 'simplecms', 'Menu details saved successfully' ) . '</span>';
 				} else {
-					$message .= '<span class="error">' . Yii::t ( 'app/cms', 'Error: saving new menu name!' ) . '</span>';
+					$message .= '<span class="error">' . Yii::t ( 'simplecms', 'Error: saving new menu name!' ) . '</span>';
 				}
 			}
 			
@@ -148,17 +148,17 @@ class DefaultController extends Controller {
 						$model_menu->document_id = $model_document->id;
 						$model_menu->save ();
 					}
-					$message .= '<span class="success">' . Yii::t ( 'app/cms', 'Document saved successfully' ) . '</span>';
+					$message .= '<span class="success">' . Yii::t ( 'simplecms', 'Document saved successfully' ) . '</span>';
 				} else {
-					$message .= '<span class="error">' . Yii::t ( 'app/cms', 'Error: saving document failed!' ) . '</span>';
+					$message .= '<span class="error">' . Yii::t ( 'simplecms', 'Error: saving document failed!' ) . '</span>';
 				}
 			}
 			// check if menu item name has been altered
 			if ($model_menu->load ( Yii::$app->request->post () )) {
 				if ($model_menu->save ()) {
-					$message .= '<span class="success">' . Yii::t ( 'app/cms', 'Menu details saved successfully' ) . '</span>';
+					$message .= '<span class="success">' . Yii::t ( 'simplecms', 'Menu details saved successfully' ) . '</span>';
 				} else {
-					$message .= '<span class="error">' . Yii::t ( 'app/cms', 'Error: saving new menu name!' ) . '</span>';
+					$message .= '<span class="error">' . Yii::t ( 'simplecms', 'Error: saving new menu name!' ) . '</span>';
 				}
 			}
 			
@@ -169,9 +169,9 @@ class DefaultController extends Controller {
 			 */
 			if ($model_menu->load ( Yii::$app->request->post () )) {
 				if ($model_menu->save ()) {
-					$message .= '<span class="success">' . Yii::t ( 'app/cms', 'Menu details saved successfully' ) . '</span>';
+					$message .= '<span class="success">' . Yii::t ( 'simplecms', 'Menu details saved successfully' ) . '</span>';
 				} else {
-					$message .= '<span class="error">' . Yii::t ( 'app/cms', 'Error: saving new menu name!' ) . '</span>';
+					$message .= '<span class="error">' . Yii::t ( 'simplecms', 'Error: saving new menu name!' ) . '</span>';
 				}
 			}
 			$model_wrapperform->contentType = MenuItemAndContentForm::CONTENT_TYPE_URL;
@@ -228,7 +228,7 @@ class DefaultController extends Controller {
 				] );
 				return $this->redirect ( $redirectUrl );
 			} else {
-				$message .= '<span class="error">' . Yii::t ( 'app/cms', 'Error while trying to save new menu item: ' ) . implode ( $model_menu->getFirstErrors (), ' ' ) . '</span>';
+				$message .= '<span class="error">' . Yii::t ( 'simplecms', 'Error while trying to save new menu item: ' ) . implode ( $model_menu->getFirstErrors (), ' ' ) . '</span>';
 			}
 		}
 		

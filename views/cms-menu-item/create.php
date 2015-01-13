@@ -4,11 +4,11 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\modules\pn_cms\models\CmsMenuItem */
 
-$this->title = Yii::t ( 'app/cms', 'Create {modelClass}', [ 
+$this->title = Yii::t ( 'simplecms', 'Create {modelClass}', [ 
 		'modelClass' => 'Cms Menu Item' 
 ] );
 $this->params ['breadcrumbs'] [] = [ 
-		'label' => Yii::t ( 'app/cms', 'Cms Menu Items' ),
+		'label' => Yii::t ( 'simplecms', 'Cms Menu Items' ),
 		'url' => [ 
 				'index' 
 		] 

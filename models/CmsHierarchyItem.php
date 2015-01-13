@@ -63,10 +63,10 @@ class CmsHierarchyItem extends \yii\db\ActiveRecord {
 	 */
 	public function attributeLabels() {
 		return [ 
-			'id' => Yii::t ( 'app/cms', 'ID' ),
-			'parent_id' => Yii::t ( 'app/cms', 'Parent ID' ),
-			'position' => Yii::t ( 'app/cms', 'Position' ),
-			'display_state' => Yii::t ( 'app/cms', 'Display State' ) 
+			'id' => Yii::t ( 'simplecms', 'ID' ),
+			'parent_id' => Yii::t ( 'simplecms', 'Parent ID' ),
+			'position' => Yii::t ( 'simplecms', 'Position' ),
+			'display_state' => Yii::t ( 'simplecms', 'Display State' ) 
 		];
 	}
 	

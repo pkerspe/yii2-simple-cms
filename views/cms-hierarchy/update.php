@@ -4,11 +4,11 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\modules\pn_cms\models\CmsHierarchyItem */
 
-$this->title = Yii::t ( 'app/cms', 'Update {modelClass}: ', [ 
+$this->title = Yii::t ( 'simplecms', 'Update {modelClass}: ', [ 
 		'modelClass' => 'Cms Hierarchy Item' 
 ] ) . ' ' . $model->id;
 $this->params ['breadcrumbs'] [] = [ 
-		'label' => Yii::t ( 'app/cms', 'Cms Hierarchy Items' ),
+		'label' => Yii::t ( 'simplecms', 'Cms Hierarchy Items' ),
 		'url' => [ 
 				'index' 
 		] 
@@ -20,7 +20,7 @@ $this->params ['breadcrumbs'] [] = [
 				'id' => $model->id 
 		] 
 ];
-$this->params ['breadcrumbs'] [] = Yii::t ( 'app/cms', 'Update' );
+$this->params ['breadcrumbs'] [] = Yii::t ( 'simplecms', 'Update' );
 ?>
 <div class="cms-hierarchy-item-update">
 

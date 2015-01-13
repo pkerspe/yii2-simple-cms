@@ -9,9 +9,9 @@ use schallschlucker\simplecms\assets\CkeditorAsset;
 
 SimpleCmsAsset::register ( $this );
 CkeditorAsset::register ( $this );
-$this->title = Yii::t ( 'app/cms', 'Create new content' );
+$this->title = Yii::t ( 'simplecms', 'Create new content' );
 $this->params ['breadcrumbs'] [] = [ 
-		'label' => Yii::t ( 'app/cms', 'CMS Administration' ),
+		'label' => Yii::t ( 'simplecms', 'CMS Administration' ),
 		'url' => [ 
 				'index' 
 		] 
@@ -29,9 +29,9 @@ $this->params ['breadcrumbs'] [] = $this->title;
 
 <?php
 $form = ActiveForm::begin ();
-echo Yii::t ( 'app/cms', 'Please enter the name for the new language version of this menu item' );
+echo Yii::t ( 'simplecms', 'Please enter the name for the new language version of this menu item' );
 echo $form->field ( $model_wrapperform, 'newMenuName' )->textInput ();
-echo Yii::t ( 'app/cms', 'The content type of this menu item has not yet been specified. Please select the content type to continue.' );
+echo Yii::t ( 'simplecms', 'The content type of this menu item has not yet been specified. Please select the content type to continue.' );
 echo $form->field ( $model_wrapperform, 'contentType' )->radioList ( [ 
 		MenuItemAndContentForm::CONTENT_TYPE_PAGE => 'content page',
 		MenuItemAndContentForm::CONTENT_TYPE_DOCUMENT => 'linked document',

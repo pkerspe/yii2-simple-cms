@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 
 $this->title = $model->id;
 $this->params ['breadcrumbs'] [] = [ 
-		'label' => Yii::t ( 'app/cms', 'Cms Documents' ),
+		'label' => Yii::t ( 'simplecms', 'Cms Documents' ),
 		'url' => [ 
 				'index' 
 		] 
@@ -20,7 +20,7 @@ $this->params ['breadcrumbs'] [] = $this->title;
 
 	<p>
         <?= Html::a(Yii::t('simplecms', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary'])?>
-        <?=Html::a ( Yii::t ( 'app/cms', 'Delete' ), [ 'delete','id' => $model->id ], [ 'class' => 'btn btn-danger','data' => [ 'confirm' => Yii::t ( 'app/cms', 'Are you sure you want to delete this item?' ),'method' => 'post' ] ] )?>
+        <?=Html::a ( Yii::t ( 'simplecms', 'Delete' ), [ 'delete','id' => $model->id ], [ 'class' => 'btn btn-danger','data' => [ 'confirm' => Yii::t ( 'simplecms', 'Are you sure you want to delete this item?' ),'method' => 'post' ] ] )?>
     </p>
 
     <?=DetailView::widget ( [ 'model' => $model,'attributes' => [ 'id','language','file_name','file_path','mime_type' ] ] )?>

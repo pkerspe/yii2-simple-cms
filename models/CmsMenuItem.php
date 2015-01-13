@@ -110,7 +110,7 @@ class CmsMenuItem extends \yii\db\ActiveRecord {
 				],
 				'match',
 				'pattern' => '/^[a-zA-Z\-_0-9]*$/',
-				'message' => Yii::t ( 'app/cms', 'only characters, numbers and "-" or "_" are allowed (no blanks or special characters)' ) 
+				'message' => Yii::t ( 'simplecms', 'only characters, numbers and "-" or "_" are allowed (no blanks or special characters)' ) 
 			],
 			[ 
 				[ 
@@ -118,7 +118,7 @@ class CmsMenuItem extends \yii\db\ActiveRecord {
 				],
 				'match',
 				'pattern' => '/^[a-zA-Z\-_0-9 ]*$/',
-				'message' => Yii::t ( 'app/cms', 'only characters, numbers and "-" or "_"  and blanks are allowed (no special characters)' ) 
+				'message' => Yii::t ( 'simplecms', 'only characters, numbers and "-" or "_"  and blanks are allowed (no special characters)' ) 
 			],
 			[ 
 				[ 
@@ -154,20 +154,20 @@ class CmsMenuItem extends \yii\db\ActiveRecord {
 	 */
 	public function attributeLabels() {
 		return [ 
-			'id' => Yii::t ( 'app/cms', 'ID' ),
-			'alias' => Yii::t ( 'app/cms', 'Alias' ),
-			'cms_hierarchy_item_id' => Yii::t ( 'app/cms', 'Cms Hierarchy Item ID' ),
-			'language' => Yii::t ( 'app/cms', 'Language' ),
-			'name' => Yii::t ( 'app/cms', 'Name' ),
-			'page_content_id' => Yii::t ( 'app/cms', 'Page Content ID' ),
-			'document_id' => Yii::t ( 'app/cms', 'Document ID' ),
-			'direct_url' => Yii::t ( 'app/cms', 'Direct Url' ),
-			'link_target' => Yii::t ( 'app/cms', 'Link Target' ),
-			'link_css_class' => Yii::t ( 'app/cms', 'Link Css Class' ),
-			'modification_datetime' => Yii::t ( 'app/cms', 'Modification Datetime' ),
-			'modification_userid' => Yii::t ( 'app/cms', 'Modification Userid' ),
-			'created_datetime' => Yii::t ( 'app/cms', 'Created Datetime' ),
-			'createdby_userid' => Yii::t ( 'app/cms', 'Createdby Userid' ) 
+			'id' => Yii::t ( 'simplecms', 'ID' ),
+			'alias' => Yii::t ( 'simplecms', 'Alias' ),
+			'cms_hierarchy_item_id' => Yii::t ( 'simplecms', 'Cms Hierarchy Item ID' ),
+			'language' => Yii::t ( 'simplecms', 'Language' ),
+			'name' => Yii::t ( 'simplecms', 'Name' ),
+			'page_content_id' => Yii::t ( 'simplecms', 'Page Content ID' ),
+			'document_id' => Yii::t ( 'simplecms', 'Document ID' ),
+			'direct_url' => Yii::t ( 'simplecms', 'Direct Url' ),
+			'link_target' => Yii::t ( 'simplecms', 'Link Target' ),
+			'link_css_class' => Yii::t ( 'simplecms', 'Link Css Class' ),
+			'modification_datetime' => Yii::t ( 'simplecms', 'Modification Datetime' ),
+			'modification_userid' => Yii::t ( 'simplecms', 'Modification Userid' ),
+			'created_datetime' => Yii::t ( 'simplecms', 'Created Datetime' ),
+			'createdby_userid' => Yii::t ( 'simplecms', 'Createdby Userid' ) 
 		];
 	}
 	

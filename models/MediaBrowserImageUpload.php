@@ -26,8 +26,8 @@ class MediaBrowserImageUpload extends Model {
 	 */
 	public function attributeLabels() {
 		return [ 
-			'targetCategoryId' => Yii::t ( 'app/cms', 'folder' ),
-			'file' => Yii::t ( 'app/cms', 'files' ),
+			'targetCategoryId' => Yii::t ( 'simplecms', 'folder' ),
+			'file' => Yii::t ( 'simplecms', 'files' ),
 		];
 	}
 	

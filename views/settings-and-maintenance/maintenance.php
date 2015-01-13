@@ -8,9 +8,9 @@ use schallschlucker\simplecms\widgets\CmsBackendFunctionBarWidget;
 /* @var $searchModel common\modules\pn_cms\models\CmsHierarchyItemSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t ( 'app/cms', 'CMS Maintenance' );
+$this->title = Yii::t ( 'simplecms', 'CMS Maintenance' );
 $this->params ['breadcrumbs'] [] = [
-	'label' => Yii::t ( 'app/cms', 'CMS Administration' ),
+	'label' => Yii::t ( 'simplecms', 'CMS Administration' ),
 	'url' => [
 		'default/index'
 	]

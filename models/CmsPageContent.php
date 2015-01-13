@@ -117,18 +117,18 @@ class CmsPageContent extends \yii\db\ActiveRecord {
 	 */
 	public function attributeLabels() {
 		return [ 
-			'id' => Yii::t ( 'app/cms', 'ID' ),
-			'language' => Yii::t ( 'app/cms', 'Language' ),
-			'metatags_general' => Yii::t ( 'app/cms', 'Metatags General' ),
-			'meta_keywords' => Yii::t ( 'app/cms', 'Meta Keywords' ),
-			'description' => Yii::t ( 'app/cms', 'Description' ),
-			'content' => Yii::t ( 'app/cms', 'Content' ),
-			'javascript' => Yii::t ( 'app/cms', 'Javascript' ),
-			'css' => Yii::t ( 'app/cms', 'Css' ),
-			'modification_datetime' => Yii::t ( 'app/cms', 'Modification Datetime' ),
-			'modification_userid' => Yii::t ( 'app/cms', 'Modification Userid' ),
-			'created_datetime' => Yii::t ( 'app/cms', 'Created Datetime' ),
-			'createdby_userid' => Yii::t ( 'app/cms', 'Createdby Userid' ) 
+			'id' => Yii::t ( 'simplecms', 'ID' ),
+			'language' => Yii::t ( 'simplecms', 'Language' ),
+			'metatags_general' => Yii::t ( 'simplecms', 'Metatags General' ),
+			'meta_keywords' => Yii::t ( 'simplecms', 'Meta Keywords' ),
+			'description' => Yii::t ( 'simplecms', 'Description' ),
+			'content' => Yii::t ( 'simplecms', 'Content' ),
+			'javascript' => Yii::t ( 'simplecms', 'Javascript' ),
+			'css' => Yii::t ( 'simplecms', 'Css' ),
+			'modification_datetime' => Yii::t ( 'simplecms', 'Modification Datetime' ),
+			'modification_userid' => Yii::t ( 'simplecms', 'Modification Userid' ),
+			'created_datetime' => Yii::t ( 'simplecms', 'Created Datetime' ),
+			'createdby_userid' => Yii::t ( 'simplecms', 'Createdby Userid' ) 
 		];
 	}
 	

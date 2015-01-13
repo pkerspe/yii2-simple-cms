@@ -4,11 +4,11 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\modules\pn_cms\models\CmsPageContent */
 
-$this->title = Yii::t ( 'app/cms', 'Create {modelClass}', [ 
+$this->title = Yii::t ( 'simplecms', 'Create {modelClass}', [ 
 		'modelClass' => 'Cms Page Content' 
 ] );
 $this->params ['breadcrumbs'] [] = [ 
-		'label' => Yii::t ( 'app/cms', 'Cms Page Contents' ),
+		'label' => Yii::t ( 'simplecms', 'Cms Page Contents' ),
 		'url' => [ 
 				'index' 
 		] 

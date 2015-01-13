@@ -7,9 +7,9 @@ use common\components\navigation\CmsBackendFunctionBarWidget;
 /* @var $searchModel common\modules\pn_cms\models\CmsPageContenttSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t ( 'app/cms', 'Cms Page Contents' );
+$this->title = Yii::t ( 'simplecms', 'Cms Page Contents' );
 $this->params ['breadcrumbs'] [] = [
-	'label' => Yii::t ( 'app/cms', 'CMS Administration' ),
+	'label' => Yii::t ( 'simplecms', 'CMS Administration' ),
 	'url' => [
 		'default/index'
 	]
@@ -24,7 +24,7 @@ CmsBackendFunctionBarWidget::widget();
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?=Html::a ( Yii::t ( 'app/cms', 'Create {modelClass}', [ 'modelClass' => 'Cms Page Content' ] ), [ 'create' ], [ 'class' => 'btn btn-success' ] )?>
+        <?=Html::a ( Yii::t ( 'simplecms', 'Create {modelClass}', [ 'modelClass' => 'Cms Page Content' ] ), [ 'create' ], [ 'class' => 'btn btn-success' ] )?>
     </p>
 
     <?=GridView::widget ( 

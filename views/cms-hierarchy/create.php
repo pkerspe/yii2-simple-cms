@@ -4,11 +4,11 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\modules\pn_cms\models\CmsHierarchyItem */
 
-$this->title = Yii::t ( 'app/cms', 'Create {modelClass}', [ 
+$this->title = Yii::t ( 'simplecms', 'Create {modelClass}', [ 
 		'modelClass' => 'Cms Hierarchy Item' 
 ] );
 $this->params ['breadcrumbs'] [] = [ 
-		'label' => Yii::t ( 'app/cms', 'Cms Hierarchy Items' ),
+		'label' => Yii::t ( 'simplecms', 'Cms Hierarchy Items' ),
 		'url' => [ 
 				'index' 
 		] 

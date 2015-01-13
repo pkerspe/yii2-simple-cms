@@ -13,9 +13,9 @@ echo ('<script type="text/javascript">var imageBrowserUrl = "'.Url::toRoute(['me
 
 SimpleCmsAsset::register ( $this );
 CkeditorAsset::register ( $this );
-$this->title = Yii::t ( 'app/cms', 'Edit language version' );
+$this->title = Yii::t ( 'simplecms', 'Edit language version' );
 $this->params ['breadcrumbs'] [] = [ 
-		'label' => Yii::t ( 'app/cms', 'CMS Administration' ),
+		'label' => Yii::t ( 'simplecms', 'CMS Administration' ),
 		'url' => [ 
 				'default/index' 
 		] 
@@ -34,7 +34,7 @@ $this->params ['breadcrumbs'] [] = $this->title;
 <?php
 $form = ActiveForm::begin ();
 if ($model_wrapperform->contentType == MenuItemAndContentForm::CONTENT_TYPE_UNDEFINED) {
-	echo Yii::t ( 'app/cms', 'The content type of this menu item has not yet been specified. Please select the content type to continue.' );
+	echo Yii::t ( 'simplecms', 'The content type of this menu item has not yet been specified. Please select the content type to continue.' );
 	echo $form->field ( $model_wrapperform, 'contentType' )->radioList ( [ 
 			MenuItemAndContentForm::CONTENT_TYPE_PAGE => 'content page',
 			MenuItemAndContentForm::CONTENT_TYPE_DOCUMENT => 'linked document',

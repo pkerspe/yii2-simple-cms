@@ -124,18 +124,18 @@ class CmsDocument extends \yii\db\ActiveRecord {
 	 */
 	public function attributeLabels() {
 		return [ 
-			'id' => Yii::t ( 'app/cms', 'ID' ),
-			'language' => Yii::t ( 'app/cms', 'Language' ),
-			'file_name' => Yii::t ( 'app/cms', 'File Name' ),
-			'file_path' => Yii::t ( 'app/cms', 'File Path' ),
-			'mime_type' => Yii::t ( 'app/cms', 'Mime Type' ),
-			'meta_keywords' => Yii::t ( 'app/cms', 'Meta Keywords' ),
-			'meta_description' => Yii::t ( 'app/cms', 'Meta Description' ),
-			'modification_datetime' => Yii::t ( 'app/cms', 'Modification Datetime' ),
-			'modification_userid' => Yii::t ( 'app/cms', 'Modification Userid' ),
-			'created_datetime' => Yii::t ( 'app/cms', 'Created Datetime' ),
-			'createdby_userid' => Yii::t ( 'app/cms', 'Createdby Userid' ),
-			'presentation_style' => Yii::t ( 'app/cms', 'Presentation Style' ) 
+			'id' => Yii::t ( 'simplecms', 'ID' ),
+			'language' => Yii::t ( 'simplecms', 'Language' ),
+			'file_name' => Yii::t ( 'simplecms', 'File Name' ),
+			'file_path' => Yii::t ( 'simplecms', 'File Path' ),
+			'mime_type' => Yii::t ( 'simplecms', 'Mime Type' ),
+			'meta_keywords' => Yii::t ( 'simplecms', 'Meta Keywords' ),
+			'meta_description' => Yii::t ( 'simplecms', 'Meta Description' ),
+			'modification_datetime' => Yii::t ( 'simplecms', 'Modification Datetime' ),
+			'modification_userid' => Yii::t ( 'simplecms', 'Modification Userid' ),
+			'created_datetime' => Yii::t ( 'simplecms', 'Created Datetime' ),
+			'createdby_userid' => Yii::t ( 'simplecms', 'Createdby Userid' ),
+			'presentation_style' => Yii::t ( 'simplecms', 'Presentation Style' ) 
 		];
 	}
 	

@@ -16,9 +16,9 @@ use schallschlucker\simplecms\widgets\CmsBackendFunctionBarWidget;
 FancytreeAsset::register ( $this );
 SimpleCmsAsset::register ( $this );
 
-$this->title = Yii::t ( 'app/cms', 'CMS Administration' );
+$this->title = Yii::t ( 'simplecms', 'CMS Administration' );
 $this->params ['breadcrumbs'] [] = [
-	'label' => Yii::t ( 'app/cms', 'CMS Administration' ),
+	'label' => Yii::t ( 'simplecms', 'CMS Administration' ),
 	'url' => [
 		'default/index'
 	]
@@ -81,7 +81,7 @@ echo CmsBackendFunctionBarWidget::widget();
 $form = ActiveForm::begin ( [ 
 		'id' => 'newMenuDialogForm' 
 ] );
-echo Yii::t ( 'app/cms', 'Please enter the name for the new language version of this menu item' );
+echo Yii::t ( 'simplecms', 'Please enter the name for the new language version of this menu item' );
 ?>
 	<input type="input" id="newMenuName" name="newMenuName" value="" /> <input
 		type="hidden" id="position" name="position" value="" /> <input
@@ -89,7 +89,7 @@ echo Yii::t ( 'app/cms', 'Please enter the name for the new language version of 
 		type="hidden" id="parentHierarchyItemId" name="parentHierarchyItemId"
 		value="" />
 <?php
-echo Yii::t ( 'app/cms', 'Please select the content type:' );
+echo Yii::t ( 'simplecms', 'Please select the content type:' );
 echo $form->field ( $model_wrapperform, 'contentType' )->radioList ( [ 
 		MenuItemAndContentForm::CONTENT_TYPE_PAGE => 'content page',
 		MenuItemAndContentForm::CONTENT_TYPE_DOCUMENT => 'linked document',
@@ -125,9 +125,9 @@ $updateDisplayStateUrl = Url::to ( [
 		'default/set-display-state-json' 
 ] );
 
-$translation1 = Yii::t ( 'app/cms', 'Create new entry for language code: ' );
-$translation2 = Yii::t ( 'app/cms', 'Edit language version for language code: ' );
-$translation3 = Yii::t ( 'app/cms', 'Item not available in requested language, displaying a fallback language instead.' );
+$translation1 = Yii::t ( 'simplecms', 'Create new entry for language code: ' );
+$translation2 = Yii::t ( 'simplecms', 'Edit language version for language code: ' );
+$translation3 = Yii::t ( 'simplecms', 'Item not available in requested language, displaying a fallback language instead.' );
 
 $editMenuItemUrlWithReplace = Url::toRoute ( [ 
 		'default/edit-menu-language-version',
