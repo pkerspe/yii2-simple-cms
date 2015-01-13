@@ -33,7 +33,7 @@ use schallschlucker\simplecms\models\SimpleHierarchyItem;
  */
 class DefaultController extends Controller {
 	
-	public static $ROOT_HIERARCHY_ITEM_ID = 0;
+	public static $ROOT_HIERARCHY_ITEM_ID = 1;
 	
 	/**
 	 * @menuLabel display root page of cms
@@ -304,11 +304,13 @@ class DefaultController extends Controller {
 			}
 		}
 		
-		if(isset($itemIndex [0])){
-			$rootItem = new SimpleHierarchyItem ( $itemIndex [0], ($expandLevel > 0), 0 );
-			unset ( $itemIndex [0] );
+		if(isset($itemIndex [DefaultController::$ROOT_HIERARCHY_ITEM_ID])){
+			$rootItem = new SimpleHierarchyItem ( $itemIndex [DefaultController::$ROOT_HIERARCHY_ITEM_ID], ($expandLevel > 0), 0 );
+			unset ( $itemIndex [DefaultController::$ROOT_HIERARCHY_ITEM_ID] );
 			DefaultController::populateChildrenRecursive ( $rootItem, $itemIndex, $expandLevel, 1 );
 			return $rootItem;
+		} else {
+			throw new Exception('Missing root hierarchy item (with id = '.DefaultController::$ROOT_HIERARCHY_ITEM_ID.'). Can not build page tree.');
 		}
 		return null;
 	}
