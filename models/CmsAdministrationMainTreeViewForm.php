@@ -34,9 +34,9 @@ class CmsAdministrationMainTreeViewForm extends Model {
 	 */
 	public function attributeLabels() {
 		return [ 
-			'treeDisplayLanguageId' => Yii::t ( 'app\cms', 'menu tree language' ),
-			'hideItemsWithMissingLanguage' => Yii::t ( 'app\cms', 'hide menu items without translation in requested language' ),
-			'expandFolderDepth' => Yii::t ( 'app\cms', 'expand folder until depth' ) 
+			'treeDisplayLanguageId' => Yii::t ( 'simplecms', 'menu tree language' ),
+			'hideItemsWithMissingLanguage' => Yii::t ( 'simplecms', 'hide menu items without translation in requested language' ),
+			'expandFolderDepth' => Yii::t ( 'simplecms', 'expand folder until depth' ) 
 		];
 	}
 }

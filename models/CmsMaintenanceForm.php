@@ -32,7 +32,7 @@ class CmsMaintenanceForm extends Model {
 	 */
 	public function attributeLabels() {
 		return [ 
-			'checkPositionsrecursive' => Yii::t ( 'app\cms', 'check and fix position values for complete tree' ),
+			'checkPositionsrecursive' => Yii::t ( 'simplecms', 'check and fix position values for complete tree' ),
 		];
 	}
 }

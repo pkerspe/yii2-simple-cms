@@ -43,5 +43,9 @@ class Bootstrap implements BootstrapInterface
             $app->get('urlManager')->rules[] = new GroupUrlRule($configUrlRule);
 
         }
+        $app->get('i18n')->translations['simplecms*'] = [
+        	'class'    => 'yii\i18n\PhpMessageSource',
+        	'basePath' => __DIR__ . '/messages',
+        ];
     }
 }
