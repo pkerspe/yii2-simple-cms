@@ -99,9 +99,6 @@ class m141217_232437_simplecms_init extends Migration {
 			'display_state' => Schema::TYPE_SMALLINT . "(2) unsigned NOT NULL DEFAULT '1' COMMENT 'a status that influences the display status of this item in the navigation.'" 
 		], $this->tableOptions );
 		
-		//root hierarchy item
-		$this->insert('{{%cms_hierarchy_item}}', ['id' => 1, 'parent_id' => NULL ,'position' => 1,'display_state' => 1]);
-		
 		$this->createTable ( '{{%cms_page_content}}', [ 
 			'id' => Schema::TYPE_INTEGER . "(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'the id of the page content item'",
 			'language' => Schema::TYPE_INTEGER . "(10) unsigned NOT NULL COMMENT 'the language id of the page content'",
@@ -119,10 +116,19 @@ class m141217_232437_simplecms_init extends Migration {
 		
 		$this->createTable ( '{{%cms_content_category}}', [
 			'id' => Schema::TYPE_INTEGER . "(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'the id of the category'",
-			'parent_id' => Schema::TYPE_INTEGER . "(11) unsigned DEFAULT NULL COMMENT 'the parnet category id to allow building a tree structure'",
+			'parent_id' => Schema::TYPE_INTEGER . "(11) unsigned DEFAULT NULL COMMENT 'the parent category id to allow building a tree structure'",
 			'displayname' => Schema::TYPE_STRING . "(50) NOT NULL COMMENT 'the name of the virtual folder / category'",
 		], $this->tableOptions . " COMMENT='the content categories are used to build a virtual folder structure to categorize/sort the media items (videos/images/sound files) '" );
 
+		//root hierarchy item
+		$this->insert('{{%cms_hierarchy_item}}', ['id' => 1, 'parent_id' => NULL ,'position' => 1,'display_state' => 1]);
+		//root item page content
+		$this->insert('{{%cms_page_content}}', ['id' => 1, 'language' => 2,'content' => 'This is the root page','created_datetime' => '2015-01-01','createdby_userid' => '1']);
+		$this->insert('{{%cms_page_content}}', ['id' => 2, 'language' => 1,'content' => 'Dies ist die Startseite','created_datetime' => '2015-01-01','createdby_userid' => '1']);
+		//root menu item
+		$this->insert('{{%cms_menu_item}}', ['id' => 1, 'cms_hierarchy_item_id' => 1 ,'language' => 2,'page_content_id' => 1,'name' => 'root','created_datetime' => '2015-01-01','createdby_userid' => '1']);
+		$this->insert('{{%cms_menu_item}}', ['id' => 2, 'cms_hierarchy_item_id' => 1 ,'language' => 1,'page_content_id' => 2,'name' => 'root','created_datetime' => '2015-01-01','createdby_userid' => '1']);
+		
 		//root media category item
 		$this->insert('{{%cms_content_category}}', ['id' => MediaController::$ROOT_MEDIA_CATEGORY_ID, 'parent_id' => NULL ,'displayname' => 'root']);
 		$this->insert('{{%cms_content_category}}', ['id' => MediaController::$MEDIA_IMAGE_BASE_CATEGORY_ID, 'parent_id' => MediaController::$ROOT_MEDIA_CATEGORY_ID ,'displayname' => 'images']);
