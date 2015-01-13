@@ -39,7 +39,7 @@ echo $form->field ( $model_wrapperform, 'contentType' )->radioList ( [
 ] );
 ?>
 	<div class="form-group">
-		<?= Html::submitButton(Yii::t('app/cms', 'Continue'), ['class' => 'btn btn-primary'])?>
+		<?= Html::submitButton(Yii::t('simplecms', 'Continue'), ['class' => 'btn btn-primary'])?>
 	</div>
 <?php
 ActiveForm::end ();

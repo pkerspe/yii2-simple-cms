@@ -36,12 +36,12 @@ echo CmsBackendFunctionBarWidget::widget();
 
 				<?= $field = $form->field($model, 'treeDisplayLanguageId')->dropDownList($this->context->module->getLanguageManager()->getConfiguredIdLanguagesMappingTranslated(\Yii::$app->language),['class'=>'input-small']); ?>
 
-				<?= $form->field($model, 'expandFolderDepth')->dropDownList([9999=>'all',1=>Yii::t('app/cms','expand folders until {0,ordinal} level',1),2=>Yii::t('app/cms', 'expand folders until {0,ordinal} level',2),3=>Yii::t('app/cms', 'expand folders until {0,ordinal} level',3),4=>Yii::t('app/cms', 'expand folders until {0,ordinal} level',4),5=>Yii::t('app/cms', 'expand folders until {0,ordinal} level',5)],['class'=>'input-small'])?>
+				<?= $form->field($model, 'expandFolderDepth')->dropDownList([9999=>'all',1=>Yii::t('simplecms','expand folders until {0,ordinal} level',1),2=>Yii::t('simplecms', 'expand folders until {0,ordinal} level',2),3=>Yii::t('simplecms', 'expand folders until {0,ordinal} level',3),4=>Yii::t('simplecms', 'expand folders until {0,ordinal} level',4),5=>Yii::t('simplecms', 'expand folders until {0,ordinal} level',5)],['class'=>'input-small'])?>
 
 				<?= $field = $form->field($model, 'hideItemsWithMissingLanguage')->checkbox(); ?>
 				
 				<div class="form-group">
-					<?= Html::submitButton(Yii::t('app/cms', 'Refresh') , ['class' => 'btn btn-success btn-xs'])?>
+					<?= Html::submitButton(Yii::t('simplecms', 'Refresh') , ['class' => 'btn btn-success btn-xs'])?>
 				</div>
 
 				<?php ActiveForm::end(); ?>
@@ -60,11 +60,11 @@ echo CmsBackendFunctionBarWidget::widget();
 
 			<thead>
 				<tr>
-					<th><?= Yii::t('app/cms', 'menu item name') ?></th>
-					<th><?= Yii::t('app/cms', 'type') ?></th>
-					<th><?= Yii::t('app/cms', 'displayed' ) ?></th>
-					<th><?= Yii::t('app/cms', 'item languages') ?></th>
-					<th><?= Yii::t('app/cms', 'status') ?></th>
+					<th><?= Yii::t('simplecms', 'menu item name') ?></th>
+					<th><?= Yii::t('simplecms', 'type') ?></th>
+					<th><?= Yii::t('simplecms', 'displayed' ) ?></th>
+					<th><?= Yii::t('simplecms', 'item languages') ?></th>
+					<th><?= Yii::t('simplecms', 'status') ?></th>
 				</tr>
 			</thead>
 
@@ -97,8 +97,8 @@ echo $form->field ( $model_wrapperform, 'contentType' )->radioList ( [
 ] )->label ( false );
 ?>
 	<div class="form-group">
-		<?= Html::a(Yii::t('app/cms', 'Continue'), ['#'], ['class' => 'btn btn-primary','onclick' => 'performAjaxCallForNewMenu();'])?>
-		<?= Html::a(Yii::t('app/cms', 'Cancel'), ['#'], ['class' => 'btn btn-warning','onclick' => '$(\'#newMenuDialogForm\').trigger("reset");dialog.dialog("close");'])?>
+		<?= Html::a(Yii::t('simplecms', 'Continue'), ['#'], ['class' => 'btn btn-primary','onclick' => 'performAjaxCallForNewMenu();'])?>
+		<?= Html::a(Yii::t('simplecms', 'Cancel'), ['#'], ['class' => 'btn btn-warning','onclick' => '$(\'#newMenuDialogForm\').trigger("reset");dialog.dialog("close");'])?>
 	</div>
 <?php
 ActiveForm::end ();

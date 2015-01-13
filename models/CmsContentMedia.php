@@ -84,21 +84,21 @@ class CmsContentMedia extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app/cms', 'ID'),
-        	'content_category_id' => Yii::t('app/cms', 'Category'),
-            'media_type' => Yii::t('app/cms', 'Media Type'),
-            'filesize_bytes' => Yii::t('app/cms', 'Filesize'),
-        	'file_name' => Yii::t('app/cms', 'File Name'),
-            'file_path' => Yii::t('app/cms', 'File Path'),
-            'mime_type' => Yii::t('app/cms', 'Mime Type'),
-            'dimension_width' => Yii::t('app/cms', 'Dimension Width'),
-            'dimension_height' => Yii::t('app/cms', 'Dimension Height'),
-            'meta_keywords' => Yii::t('app/cms', 'Meta Keywords'),
-            'meta_description' => Yii::t('app/cms', 'Meta Description'),
-            'modification_datetime' => Yii::t('app/cms', 'Modification Datetime'),
-            'modification_userid' => Yii::t('app/cms', 'Modification Userid'),
-            'created_datetime' => Yii::t('app/cms', 'Created Datetime'),
-            'createdby_userid' => Yii::t('app/cms', 'Createdby Userid'),
+            'id' => Yii::t('simplecms', 'ID'),
+        	'content_category_id' => Yii::t('simplecms', 'Category'),
+            'media_type' => Yii::t('simplecms', 'Media Type'),
+            'filesize_bytes' => Yii::t('simplecms', 'Filesize'),
+        	'file_name' => Yii::t('simplecms', 'File Name'),
+            'file_path' => Yii::t('simplecms', 'File Path'),
+            'mime_type' => Yii::t('simplecms', 'Mime Type'),
+            'dimension_width' => Yii::t('simplecms', 'Dimension Width'),
+            'dimension_height' => Yii::t('simplecms', 'Dimension Height'),
+            'meta_keywords' => Yii::t('simplecms', 'Meta Keywords'),
+            'meta_description' => Yii::t('simplecms', 'Meta Description'),
+            'modification_datetime' => Yii::t('simplecms', 'Modification Datetime'),
+            'modification_userid' => Yii::t('simplecms', 'Modification Userid'),
+            'created_datetime' => Yii::t('simplecms', 'Created Datetime'),
+            'createdby_userid' => Yii::t('simplecms', 'Createdby Userid'),
         ];
     }
 

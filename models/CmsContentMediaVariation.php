@@ -54,13 +54,13 @@ class CmsContentMediaVariation extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app/cms', 'ID'),
-            'parent_content_media_id' => Yii::t('app/cms', 'Parent Content Media ID'),
-            'dimension_width' => Yii::t('app/cms', 'Dimension Width'),
-            'dimension_height' => Yii::t('app/cms', 'Dimension Height'),
-            'mime_type' => Yii::t('app/cms', 'Mime Type'),
-            'file_name' => Yii::t('app/cms', 'File Name'),
-            'file_path' => Yii::t('app/cms', 'File Path'),
+            'id' => Yii::t('simplecms', 'ID'),
+            'parent_content_media_id' => Yii::t('simplecms', 'Parent Content Media ID'),
+            'dimension_width' => Yii::t('simplecms', 'Dimension Width'),
+            'dimension_height' => Yii::t('simplecms', 'Dimension Height'),
+            'mime_type' => Yii::t('simplecms', 'Mime Type'),
+            'file_name' => Yii::t('simplecms', 'File Name'),
+            'file_path' => Yii::t('simplecms', 'File Path'),
         ];
     }
 

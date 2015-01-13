@@ -28,8 +28,8 @@ $form = ActiveForm::begin ( [
     <?= $form->field($model, 'display_state')?>
 
     <div class="form-group">
-        <?= Html::submitButton(Yii::t('app/cms', 'Search'), ['class' => 'btn btn-primary'])?>
-        <?= Html::resetButton(Yii::t('app/cms', 'Reset'), ['class' => 'btn btn-default'])?>
+        <?= Html::submitButton(Yii::t('simplecms', 'Search'), ['class' => 'btn btn-primary'])?>
+        <?= Html::resetButton(Yii::t('simplecms', 'Reset'), ['class' => 'btn btn-default'])?>
     </div>
 
     <?php ActiveForm::end(); ?>

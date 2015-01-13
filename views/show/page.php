@@ -14,7 +14,7 @@ if($pageContentModel->css != null && $pageContentModel->css != ''){
 	$this->registerCss ( $pageContentModel->css,[],'cmsCustonCssCode' );
 }
 if($isfallbacklanguage){
-	echo '<p class="fallbackwarning">'.Yii::t('app/cms', 'The page could not be found in the requested language, displaying fallback language instead').'</p>';
+	echo '<p class="fallbackwarning">'.Yii::t('simplecms', 'The page could not be found in the requested language, displaying fallback language instead').'</p>';
 }
 
 echo $pageContentModel->content;

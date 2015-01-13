@@ -42,7 +42,7 @@ if ($model_wrapperform->contentType == MenuItemAndContentForm::CONTENT_TYPE_UNDE
 	] );
 	?>
 		<div class="form-group">
-            <?= Html::submitButton(Yii::t('app/cms', 'Continue'), ['class' => 'btn btn-primary'])?>
+            <?= Html::submitButton(Yii::t('simplecms', 'Continue'), ['class' => 'btn btn-primary'])?>
         </div>
 <?php
 } else {

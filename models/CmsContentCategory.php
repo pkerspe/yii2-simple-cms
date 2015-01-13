@@ -50,9 +50,9 @@ class CmsContentCategory extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app/cms', 'ID'),
-            'parent_id' => Yii::t('app/cms', 'Parent ID'),
-            'displayname' => Yii::t('app/cms', 'Displayname'),
+            'id' => Yii::t('simplecms', 'ID'),
+            'parent_id' => Yii::t('simplecms', 'Parent ID'),
+            'displayname' => Yii::t('simplecms', 'Displayname'),
         ];
     }
 
