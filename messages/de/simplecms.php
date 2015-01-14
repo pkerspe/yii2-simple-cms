@@ -67,4 +67,5 @@ return [
 	'Presentation Style' => 'Presentation Style',
 	'Position' => 'Position',
 	'Display State' => 'Display State',
+	'You can drag and drop menu items to rearange them (use the menu name for dragging). Right clicking on the menu name reveals a context menu to create new menu items.' => 'You can drag and drop menu items to rearange them (use the menu name for dragging). Right clicking on the menu name reveals a context menu to create new menu items.',
 ];

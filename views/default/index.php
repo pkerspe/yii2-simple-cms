@@ -8,6 +8,7 @@ use schallschlucker\simplecms\assets\SimpleCmsAsset;
 use schallschlucker\simplecms\models\CmsHierarchyItem;
 use schallschlucker\simplecms\models\MenuItemAndContentForm;
 use schallschlucker\simplecms\widgets\CmsBackendFunctionBarWidget;
+use schallschlucker\simplecms\controllers\backend\DefaultController;
 
 /* @var $this yii\web\View */
 /* @var $model schallschlucker\simplecms\models\CmsAdministrationMainTreeViewForm */
@@ -104,6 +105,7 @@ echo $form->field ( $model_wrapperform, 'contentType' )->radioList ( [
 ActiveForm::end ();
 ?>
 </div>
+<div class="well"><?php echo(Yii::t('simplecms','You can drag and drop menu items to rearange them (use the menu name for dragging). Right clicking on the menu name reveals a context menu to create new menu items.')); ?></div>
 <?php
 $jsonLangMapping = json_encode ( $this->context->module->getLanguageManager()->getConfiguredLanguageIdToCodeMapping () );
 $jsonTreeSourceUrl = Url::to ( [ 
@@ -142,6 +144,7 @@ $createMenuItemUrlWithReplace = Url::toRoute ( [
 $displayStatusHidden = CmsHierarchyItem::DISPLAYSTATE_PUBLISHED_HIDDEN_IN_NAVIGATION;
 $displayStatusVisible = CmsHierarchyItem::DISPLAYSTATE_PUBLISHED_VISIBLE_IN_NAVIGATION;
 $displayStatusUnpublished = CmsHierarchyItem::DISPLAYSTATE_UNPUBLISHED;
+$rootNodeId = DefaultController::$ROOT_HIERARCHY_ITEM_ID;
 
 $languageIdMappingFunction = <<<JS
 var jsonTreeSourceUrl = '$jsonTreeSourceUrl';
@@ -161,6 +164,7 @@ function getAllConfiguredLanguages(){
 	var langMapping = $jsonLangMapping;
 	return langMapping;
 }
+var rootHierarchyNodeId = $rootNodeId;
 JS;
 
 $this->registerJs ( $languageIdMappingFunction, View::POS_END, 'cmsTreeViewSettingsAndHelper' );
@@ -377,7 +381,7 @@ $(function(){
 			//	console.log("dragStart with SHIFT");
 			//}
 			// allow dragging `node` unless key is 0 (root node):
-			if(node.key == 0) return false;
+			if(node.key == rootHierarchyNodeId) return false;
 			return true;
 		},
 		dragEnter: function(node, data) {
@@ -385,7 +389,7 @@ $(function(){
 			//data = the node that is beeing dragged
 
 			//do not allow anything to be dragged before or after root, but only below
-		   if(node.key == 0){
+		   if(node.key == rootHierarchyNodeId){
 				return ["over"];
 		   }
 		   return true;
@@ -438,7 +442,7 @@ $(function(){
 		}
 		$tdList.eq(1).html(contentTypeHtml);
 		
-		var htmlAvailLang = '<span class="flag flag_'+data.node.data.languageCode+'"><a href="'+editMenuLink.replace('_ID_',data.node.data.menu_id)+'" title="'+translation_edit_language_version+data.node.data.languageCode+'"><span class="languageText">'+data.node.data.languageCode+'</span></a></span>';
+		var htmlAvailLang = '<a href="'+editMenuLink.replace('_ID_',data.node.data.menu_id)+'" title="'+translation_edit_language_version+data.node.data.languageCode+'"><span class="flag flag_'+data.node.data.languageCode+'"><span class="languageText">'+data.node.data.languageCode+'</span></span><span class="glyphicon glyphicon-pencil" title="edit content"></span></a>';
 		if(data.node.data.isFallbackLanguage){
 			htmlAvailLang += '<span class="glyphicon glyphicon-warning-sign" style="font-style:normal;color:red !important;" title="'+translation_displaying_fallback_language+'"></span>';
 		}
@@ -461,7 +465,7 @@ $(function(){
 			'<a id="adminSetUnpublishedLink'+data.node.data.id+'" 	onclick="updateHierarchyItemDisplayState('+data.node.data.id+',displayStatusUnpublished);; return false;" 	class="'+ ((data.node.data.displayState == displayStatusUnpublished)? '' : 'icon-inactive') +' glyphicon glyphicon-eye-close" 	title="display-state: unpublished" id="adminSetUnpublishedLink'+data.node.data.id+'"></a>';
 		
 		//move item up (reduce position value by 1)
-		if(data.node.data.id == 0 || data.node.data.firstSibling){
+		if(data.node.data.id == rootHierarchyNodeId || data.node.data.firstSibling){
 			hiddenClass = 'invisible'
 		} else {
 			hiddenClass = ''
@@ -469,7 +473,7 @@ $(function(){
 		statusHtml += '<a id="moveUpLink'+data.node.key+'" onclick="setPosition( '+data.node.key +' , \'up\')" class="glyphicon glyphicon-arrow-up '+hiddenClass+'" title="move item up"></a>';
 
 		//move item down (increase position value by 1)
-		if(data.node.data.id == 0 || data.node.data.lastSibling){
+		if(data.node.data.id == rootHierarchyNodeId || data.node.data.lastSibling){
 			hiddenClass = 'invisible'
 		} else {
 			hiddenClass = ''
