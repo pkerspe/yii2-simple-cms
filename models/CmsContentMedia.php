@@ -19,7 +19,7 @@ use yii\behaviors\TimestampBehavior;
  * This is the model class for table "cms_content_media".
  *
  * @property integer $id
- * @property integer $content_category_id  
+ * @property integer $content_category_id the id of the content category (folder in media browser) this item belongs to
  * @property string $media_type the media type category
  * @property integer $filesize_bytes the size of the media file in bytes
  * @property string $file_name the name of the file in the file system on the server

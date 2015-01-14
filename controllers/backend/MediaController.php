@@ -47,10 +47,9 @@ class MediaController extends Controller {
 	public static $MEDIA_VIDEO_BASE_CATEGORY_ID = 3;
 	public static $MEDIA_AUDIO_BASE_CATEGORY_ID = 4;
 	
-	public static $MEDIA_UPLOAD_REPOSITORY_PATH = '/var/www/virtualhosts/www.einzelpflegefachkraft.de/curassist-app/backend/web/images/media-repositoy';
-	public static $MEDIA_THUMBNAIL_REPOSITORY_PATH = '/var/www/virtualhosts/www.einzelpflegefachkraft.de/curassist-app/backend/web/images/thumbnail_repository';
 	public static $MEDIA_THUMBNAIL_WIDTH = 100;
 	public static $MEDIA_THUMBNAIL_HEIGHT = 100;
+	
 	public $defaultAction = 'mediabrowser';
 	
 	/**
@@ -79,7 +78,7 @@ class MediaController extends Controller {
 		$parentContentMediaCategory = CmsContentCategory::findOne($parentCategoryId);
 		if($parentContentMediaCategory == null){
 			$result['success'] = false;
-			$result['message'] .= 'The parnet category id seems to be invalid (id = '.$parentCategoryId.' could not be found)';
+			$result['message'] .= 'The parent category id seems to be invalid (id = '.$parentCategoryId.' could not be found)';
 		} else {
 			$newCmsContentCategoryItem = new CmsContentCategory();
 			$newCmsContentCategoryItem->displayname = $name;
@@ -454,7 +453,7 @@ class MediaController extends Controller {
 	/**
 	 * generate the abosolute path for a uploaded media file where to store the file.
 	 * The folder structure is not the same as the virtual structure that is shown in the media browser. Instead for a new uploaded file a folder following the pattern '.../YYYY/MM/DD' will be created.
-	 * Uses the value of  @see MediaController::$MEDIA_UPLOAD_REPOSITORY_PATH 
+	 * Uses the value of  @see Frontend->getMediarepositoryBasePath() 
 	 * @param UploadedFile $file
 	 * @return string the full path to the storage folder for this file (note: the folder itself will NOT only be created automatically if the optional parameter createFolder is set to true!)
 	 */
@@ -462,7 +461,7 @@ class MediaController extends Controller {
 		$currentDate = new \DateTime();
 		$cleanedFileName = str_replace(' ', '_', $file->name);
 		$formatedPath = $currentDate->format('Y/m/d');
-		$targetFolder = BaseFileHelper::normalizePath(MediaController::$MEDIA_UPLOAD_REPOSITORY_PATH.DIRECTORY_SEPARATOR.$formatedPath).DIRECTORY_SEPARATOR;
+		$targetFolder = BaseFileHelper::normalizePath($this->module->getMediarepositoryBasePath().DIRECTORY_SEPARATOR.$formatedPath).DIRECTORY_SEPARATOR;
 		$fullFilePath = $targetFolder.$cleanedFileName;
 		
 		//check if folder exists, create if not
@@ -523,7 +522,7 @@ class MediaController extends Controller {
 								$content->dimension_width = $dimensions['width']; 
 								$content->dimension_height = $dimensions['height'];
 							} else {
-								$msg .= 'Unable to detec image dimensions for image '.$content->file_name;
+								$msg .= 'Unable to detect image dimensions for image '.$content->file_name;
 							}
 						}
 						$content->created_datetime = new Expression( 'NOW()' );
@@ -629,7 +628,7 @@ class MediaController extends Controller {
 		
 		// save thumbnail into a file
 		$newThumbFilename = $this->getThumbnailFileName ( $cmsContentMedia );
-		$targetThumbnailPath = MediaController::$MEDIA_THUMBNAIL_REPOSITORY_PATH . DIRECTORY_SEPARATOR . $newThumbFilename;
+		$targetThumbnailPath = $this->module->getThumbnailRepostoryPath() . DIRECTORY_SEPARATOR . $newThumbFilename;
 		$success = false;
 		if(stripos($newThumbFilename , '.gif') !== false){
 			$success = imagegif($tmp_img, $targetThumbnailPath );
@@ -673,8 +672,14 @@ class MediaController extends Controller {
 			// TODO: do logging, maybe inform admin and display failure image instead
 			throw new NotFoundHttpException ( 'Media item could not be found', 404 );
 		}
+		//check if thumbnail folder exists
+		if(!is_dir($this->module->getThumbnailRepostoryPath())){
+			if(!mkdir($this->module->getThumbnailRepostoryPath(),0777,true)){
+				throw new Exception ( 'Thumbnail folder not found and automatic generation failed. Check access rights for base folder.' );
+			}
+		}
 		// check if thumbnail exists
-		$filePath = FileHelper::normalizePath ( MediaController::$MEDIA_THUMBNAIL_REPOSITORY_PATH . DIRECTORY_SEPARATOR . $this->getThumbnailFileName ( $cmsContentMedia ) );
+		$filePath = FileHelper::normalizePath ( $this->module->getThumbnailRepostoryPath() . DIRECTORY_SEPARATOR . $this->getThumbnailFileName ( $cmsContentMedia ) );
 		if (! file_exists ( $filePath )) {
 			// generate thumbnail
 			$filePath = $this->createThumbnail ( $cmsContentMedia, MediaController::$MEDIA_THUMBNAIL_WIDTH, MediaController::$MEDIA_THUMBNAIL_HEIGHT );
@@ -713,10 +718,10 @@ class MediaController extends Controller {
 		}
 		unset ( $allRowsArray );
 		// init root item
-		if (! isset ( $associativeArray [0] ))
-			throw new \Exception ( "category root item could not be found for id = 0. Cannot build category tree" );
+		if (! isset ( $associativeArray [MediaController::$ROOT_MEDIA_CATEGORY_ID] ))
+			throw new \Exception ( "category root item could not be found for id = ".MediaController::$ROOT_MEDIA_CATEGORY_ID.". Cannot build category tree" );
 		
-		$simpleMediaCategoryRoot = $associativeArray [0];
+		$simpleMediaCategoryRoot = $associativeArray [MediaController::$ROOT_MEDIA_CATEGORY_ID];
 		$this->fillCategoryTreeRecursive ( $simpleMediaCategoryRoot, $associativeArray );
 		
 		return $simpleMediaCategoryRoot;

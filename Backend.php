@@ -112,4 +112,12 @@ class Backend extends \yii\base\Module {
 		}
 		return MediaController::$MEDIA_TYPE_UNKNOWN;
 	}
+	
+	public function getMediarepositoryBasePath(){
+		return Yii::getAlias('@webroot').DIRECTORY_SEPARATOR.'mediarepository';
+	}
+	
+	public function getThumbnailRepostoryPath(){
+		return Yii::getAlias('@webroot').DIRECTORY_SEPARATOR.'mediarepository'.DIRECTORY_SEPARATOR.'thumbnail_repository';
+	}
 }
