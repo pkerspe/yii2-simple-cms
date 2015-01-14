@@ -25,6 +25,7 @@ use schallschlucker\simplecms\controllers\backend\SettingsAndMaintenanceControll
 use yii\db\Expression;
 use yii\web\NotFoundHttpException;
 use yii\base\View;
+use schallschlucker\simplecms\controllers\backend\DefaultController;
 
 /**
  * The default controller of the CMS frontend to provide actions for displaying content/documents
@@ -46,9 +47,9 @@ class ShowController extends Controller {
 		$pageContent = null;
 		$isFallback = false;
 		
-		$menuItemForRoot = CmsMenuItem::findOne(['cms_hierarchy_item_id' => 0 , 'language' => $currentLanguageId]);
+		$menuItemForRoot = CmsMenuItem::findOne(['cms_hierarchy_item_id' => DefaultController::$ROOT_HIERARCHY_ITEM_ID , 'language' => $currentLanguageId]);
 		if($menuItemForRoot == null){
-			$menuItemForRoot = CmsMenuItem::findOne(['cms_hierarchy_item_id' => 0]);
+			$menuItemForRoot = CmsMenuItem::findOne(['cms_hierarchy_item_id' => DefaultController::$ROOT_HIERARCHY_ITEM_ID]);
 			$isFallback = true;
 		}
 		
