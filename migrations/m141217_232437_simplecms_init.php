@@ -36,9 +36,11 @@ class m141217_232437_simplecms_init extends Migration {
 	public function safeUp() {
 		$this->createTable ( '{{%cms_content_media}}', [
 			'id' => Schema::TYPE_INTEGER . "(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY",
+			'content_category_id' => Schema::TYPE_INTEGER . "(11) unsigned NOT COMMENT 'the id of the content category (folder in media browser) this item belongs to'",
 			'media_type' => Schema::TYPE_STRING . "(50) NOT NULL COMMENT 'the media type (AUDIO, VIDEO, IMAGE)'",
 			'file_name' => Schema::TYPE_STRING . "(255) NOT NULL COMMENT 'the name of the file in the file system on the server'",
 			'file_path' => Schema::TYPE_STRING . "(255) NOT NULL COMMENT 'the path in the servers media repository'",
+			'filesize_bytes' => Schema::TYPE_INTEGER . "(11) unsigned DEFAULT NULL COMMENT 'the size of the media file in bytes'",
 			'mime_type' => Schema::TYPE_STRING . "(30) NOT NULL COMMENT 'the mime type of the file'",
 			'dimension_width' => Schema::TYPE_SMALLINT . "(6) DEFAULT NULL COMMENT 'width of image or video if known'",
 			'dimension_height' => Schema::TYPE_SMALLINT . "(6) DEFAULT NULL COMMENT 'height of image or video if known'",
