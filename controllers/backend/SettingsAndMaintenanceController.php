@@ -48,7 +48,7 @@ class SettingsAndMaintenanceController extends Controller {
 				$updateCounter = 0;
 				$failedUpdateCounter = 0;
 				$checkedItems = 0;
-				SettingsAndMaintenanceController::fixItemPositionsForChildren ( 0, $updateCounter, $failedUpdateCounter, $checkedItems, true );
+				SettingsAndMaintenanceController::fixItemPositionsForChildren ( DefaultController::$ROOT_HIERARCHY_ITEM_ID, $updateCounter, $failedUpdateCounter, $checkedItems, true );
 				$result ['updateCounter'] = $updateCounter;
 				$result ['failedUpdateCounter'] = $failedUpdateCounter;
 				$result ['checkedItems'] = $checkedItems;

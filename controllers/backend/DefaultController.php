@@ -485,23 +485,20 @@ class DefaultController extends Controller {
 	 *        	the position (for specifiying the display order amongst all siblings) within the other siblings of the newly created item
 	 * @param integer $language
 	 *        	the language id of the menu to create
-	 * @param integer $contentType
-	 *        	the content type of the newly created item. Use the constants of CmsHierarchyItem class.
 	 * @see CmsHierarchyItem::DISPLAYSTATE_PUBLISHED_VISIBLE_IN_NAVIGATION
 	 * @see CmsHierarchyItem::DISPLAYSTATE_PUBLISHED_HIDDEN_IN_NAVIGATION
 	 * @see CmsHierarchyItem::DISPLAYSTATE_UNPUBLISHED
 	 * @return string
 	 */
-	public function actionCreateHierarchyItemJson($parentHierarchyItemId = -1, $newMenuName = null, $position = -1, $language = -1, $contentType = -1, $jsonEncode = true) {
+	public function actionCreateHierarchyItemJson($parentHierarchyItemId = -1, $newMenuName = null, $position = -1, $language = -1, $jsonEncode = true) {
 		$parentHierarchyItemId = intval ( $parentHierarchyItemId );
 		$position = intval ( $position );
 		$language = intval ( $language );
-		$contentType = intval ( $contentType ); // FIXME: variable is never used at the moment, so it could just as well be omitted
 		
 		$result = [ ];
 		$result ['message'] = '';
 		$result ['success'] = false;
-		if ($parentHierarchyItemId < 0 || $newMenuName == '' || $position <= 0 || $language < 1 || $contentType < 1) {
+		if ($parentHierarchyItemId < 0 || $newMenuName == '' || $position <= 0 || $language < 1 ) {
 			$result ['result'] = 'failed';
 			$result ['success'] = false;
 			$result ['message'] .= 'error, missing required parameters or invalid values given';

@@ -75,8 +75,7 @@ echo CmsBackendFunctionBarWidget::widget();
 	</div>
 </div>
 
-<div id="dialog-confirm" class="cms_menu_dialog"
-	title="Create new Menu Item">
+<div id="dialog-confirm" class="cms_menu_dialog" title="Create new Menu Item">
 	<div id="nodeDetails"></div>
 <?php
 $form = ActiveForm::begin ( [ 
@@ -84,22 +83,13 @@ $form = ActiveForm::begin ( [
 ] );
 echo Yii::t ( 'simplecms', 'Please enter the name for the new language version of this menu item' );
 ?>
-	<input type="input" id="newMenuName" name="newMenuName" value="" /> <input
-		type="hidden" id="position" name="position" value="" /> <input
-		type="hidden" id="language" name="language" value="" /> <input
-		type="hidden" id="parentHierarchyItemId" name="parentHierarchyItemId"
-		value="" />
-<?php
-echo Yii::t ( 'simplecms', 'Please select the content type:' );
-echo $form->field ( $model_wrapperform, 'contentType' )->radioList ( [ 
-		MenuItemAndContentForm::CONTENT_TYPE_PAGE => 'content page',
-		MenuItemAndContentForm::CONTENT_TYPE_DOCUMENT => 'linked document',
-		MenuItemAndContentForm::CONTENT_TYPE_URL => 'URL' 
-] )->label ( false );
-?>
+	<input type="input" id="newMenuName" name="newMenuName" value="" />
+	<input type="hidden" id="position" name="position" value="" />
+	<input type="hidden" id="language" name="language" value="" />
+	<input type="hidden" id="parentHierarchyItemId" name="parentHierarchyItemId" value="" />
 	<div class="form-group">
-		<?= Html::a(Yii::t('simplecms', 'Continue'), ['#'], ['class' => 'btn btn-primary','onclick' => 'performAjaxCallForNewMenu();'])?>
-		<?= Html::a(Yii::t('simplecms', 'Cancel'), ['#'], ['class' => 'btn btn-warning','onclick' => '$(\'#newMenuDialogForm\').trigger("reset");dialog.dialog("close");'])?>
+		<?= Html::a(Yii::t('simplecms', 'Continue'), ['#'], ['class' => 'btn btn-primary','onclick' => 'performAjaxCallForNewMenu();return false;'])?>
+		<?= Html::a(Yii::t('simplecms', 'Cancel'), ['#'], ['class' => 'btn btn-warning','onclick' => '$(\'#newMenuDialogForm\').trigger("reset");dialog.dialog("close");return false;'])?>
 	</div>
 <?php
 ActiveForm::end ();
@@ -198,9 +188,8 @@ function performAjaxCallForNewMenu(){
 	newMenuName = $("#newMenuName").val();
 	position = $("#position").val();
 	language = $("#language").val();
-	contentType = $( "#newMenuDialogForm input:radio:checked" ).val();
 	
-	console.log("sending ajax request for values: parent="+parentHierarchyItemId+", name="+newMenuName+", position= "+position+", lang="+language+", content="+contentType);
+	console.log("sending ajax request for values: parent="+parentHierarchyItemId+", name="+newMenuName+", position= "+position+", lang="+language);
 	
 	jQuery.ajax({
 		url: ajaxCreateNewHierarchyItemAndMenuUrl,
@@ -209,7 +198,6 @@ function performAjaxCallForNewMenu(){
 			newMenuName : newMenuName,
 			position : position,
 			language : language,
-			contentType : contentType
 		},
 		dataType: 'json',
 		success: function(result){
