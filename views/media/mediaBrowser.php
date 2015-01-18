@@ -194,7 +194,7 @@ $javaScript = <<<JS
 	}
 	
 	function moveMediaItem(mediaItemId,htmlListItemId){
-		alert('moving item id '+mediaItemId);
+		alert('Drag and drop this button to the desired folder in order to move the item');
 	}
 	
 	function uploadFile(){

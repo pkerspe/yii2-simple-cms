@@ -28,6 +28,8 @@ use yii\base\InvalidValueException;
 use yii\helpers\BaseFileHelper;
 use yii\db\Expression;
 use yii\base\InvalidParamException;
+use yii\base\UserException;
+use schallschlucker\simplecms\models\MediaVariationManagerUpload;
 
 /**
  * The controller for media elements in the cms (images/videos/audio files).
@@ -447,6 +449,90 @@ class MediaController extends Controller {
 					'mimeType' => $mediaModel->mime_type,
 					'inline' => true 
 				] )->send ();
+		}
+	}
+	
+	public function actionMediaVarationManager($mediaItemId){
+		$mediaItemId = intval ( $mediaItemId );
+		
+		$msg = '';
+		/* @var $mediaItem CmsContentMedia */
+		$mediaItem = CmsContentMedia::find()->where([ 'id' =>$mediaItemId ])->with('cmsContentMediaVariations')->one();
+		if($mediaItem){
+			$model = new MediaVariationManagerUpload();
+			//check for upload
+			if($model->load ( Yii::$app->request->post () ) && $model->validate()){
+				$model->file = UploadedFile::getInstances ( $model, 'file' );
+				if ($model->file != null) {
+					foreach ( $model->file as $file ) {
+						/* @VAR $file UploadedFile */
+						$targetPath = $this->getFullUploadPathForFile($file);
+						if($file->saveAs ( $targetPath )){
+							$pathInfo = pathinfo($targetPath);
+							$content = new CmsContentMediaVariation();
+							$content->init();
+							$content->mime_type = BaseFileHelper::getMimeType($targetPath);
+							$content->file_name = $pathInfo['basename'];
+							$content->file_path = $pathInfo['dirname'];
+							$content->parent_content_media_id = $mediaItemId;
+							$content->filesize_bytes = $file->size;
+							if($mediaItem->media_type == MediaController::$MEDIA_TYPE_IMAGE){
+								$dimensions = $this->getImageDimensions($targetPath);
+								if($dimensions != null){
+									$content->dimension_width = $dimensions['width']; 
+									$content->dimension_height = $dimensions['height'];
+								} else {
+									$msg .= 'Unable to detect image dimensions for image '.$content->file_name;
+								}
+							}
+							if(!$content->insert(true)){
+								/**
+								$this->layout = 'modalLayout';
+								return $this->render ( 'fileUpload', [
+									'model' => $model,
+									'errors' => $content->errors,
+									'mediaType' => $mediaType,
+									'msg' => $msg
+								] );
+								*/
+								throw new Exception('The upload of one or more files failed. Most likely validation of properties failed');
+							}
+						} else {
+							throw new Exception('The upload of one or more files failed.');
+						}
+					}
+				}
+			} else {		
+				$model->parentMediaId = $mediaItem->id;
+				switch($mediaItem->media_type){
+					case MediaController::$MEDIA_TYPE_AUDIO:
+						$this->layout = 'modalLayout';
+						return $this->render ( 'mediaVariationManager_audio', [
+							'mediaItem' => $mediaItem,
+							'model' => $model
+						] );
+						break;
+					case MediaController::$MEDIA_TYPE_VIDEO:
+						$this->layout = 'modalLayout';
+						return $this->render ( 'mediaVariationManager_video', [
+							'mediaItem' => $mediaItem,
+							'model' => $model
+						] );
+						break;
+					case MediaController::$MEDIA_TYPE_IMAGE:
+						$this->layout = 'modalLayout';
+						return $this->render ( 'mediaVariationManager_image', [
+							'mediaItem' => $mediaItem,
+							'model' => $model
+						] );
+						break;
+					default:
+						throw new UserException('The media item to manage variations for has an unknown media type');
+						break;
+				}
+			}
+		} else {
+			throw new UserException('The media item could not be found for the given id');
 		}
 	}
 	

@@ -55,6 +55,7 @@ class m141217_232437_simplecms_init extends Migration {
 		$this->createTable ( '{{%cms_content_media_variation}}', [
 			'id' => Schema::TYPE_INTEGER . "(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY",
 			'parent_content_media_id' => Schema::TYPE_INTEGER . "(11) unsigned NOT NULL COMMENT 'the parent item where this variation is beloning to'",
+			'filesize_bytes' => Schema::TYPE_INTEGER . "(11) unsigned NOT NULL COMMENT 'the size of the media file in bytes'",
 			'dimension_width' => Schema::TYPE_SMALLINT . "(5) unsigned DEFAULT NULL COMMENT 'width (if applicable) of this media item'",
 			'dimension_height' => Schema::TYPE_SMALLINT. "(5) unsigned DEFAULT NULL COMMENT 'height (if applicable) of this media item'",
 			'mime_type' => Schema::TYPE_STRING . "(30) COLLATE utf8_unicode_ci NOT NULL COMMENT 'mime_type of this variation'",
