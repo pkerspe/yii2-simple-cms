@@ -67,6 +67,7 @@ TEXT;
     <div class="collapse navbar-collapse" id="cms-navbar-collapse-1">
 		<ul class="nav navbar-nav">
 TEXT;
+		/* @var $simpleHierarchyItem SimpleHierarchyItem */
 		$simpleHierarchyItem = NavigationController::getRootHierarchyItemCached($this->languageId);
 		$areaDropDownClasses = '';
 		$areaDropDownAttributes = '';
