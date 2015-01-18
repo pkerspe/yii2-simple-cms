@@ -22,6 +22,7 @@ use Yii;
  * @property string $mime_type mime_type of this variation
  * @property string $file_name the name of the file in the file system on the server
  * @property string $file_path the path in the servers media repository
+ * @property integer $filesize_bytes the size of the media file in bytes
  *
  * @property CmsContentMedia $parentContentMedia
  */
@@ -41,8 +42,8 @@ class CmsContentMediaVariation extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['parent_content_media_id', 'mime_type', 'file_name', 'file_path'], 'required'],
-            [['parent_content_media_id', 'dimension_width', 'dimension_height'], 'integer'],
+            [['parent_content_media_id', 'mime_type', 'file_name', 'file_path','filesize_bytes'], 'required'],
+            [['parent_content_media_id', 'dimension_width', 'dimension_height','filesize_bytes'], 'integer'],
             [['mime_type'], 'string', 'max' => 30],
             [['file_name', 'file_path'], 'string', 'max' => 255]
         ];
@@ -56,6 +57,7 @@ class CmsContentMediaVariation extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('simplecms', 'ID'),
             'parent_content_media_id' => Yii::t('simplecms', 'Parent Content Media ID'),
+        	'filesize_bytes' => Yii::t('simplecms', 'Filesize'),
             'dimension_width' => Yii::t('simplecms', 'Dimension Width'),
             'dimension_height' => Yii::t('simplecms', 'Dimension Height'),
             'mime_type' => Yii::t('simplecms', 'Mime Type'),

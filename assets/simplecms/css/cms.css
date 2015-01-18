@@ -8,6 +8,10 @@ div#mediaTreeFunctions a {
 	width:auto;
 }
 
+.previewImgBorder img {
+	border:1px dotted black;
+}
+
 div.mediaBrowserPreviewContainer {
 	width: 500px;
 	background-color:#eee;
@@ -69,11 +73,51 @@ span.filename {
 }
 
 div.mediaDisplay {
-	max-width: 570px;
-	max-height: 300px;
-	/*overflow:auto;*/
+	width: 570px;
+	height: 300px;
+	overflow:auto;
 	border:1px solid grey;
+	text-align:center;
+	background-color:#eee;
 }
+
+div#imgWrapper {
+	display: inline;
+}
+
+div#mediaPreviewSettings {
+	float:right;
+}
+div.colorsetting {
+	width:15px;
+	height:15px;
+	border:1px solid black;
+	float:right;
+	margin-left:3px;
+	margin-top:3px;
+}
+
+div.bordertoggle {
+	width:15px;
+	height:15px;
+	border:1px dotted black;
+	float:right;
+	margin-left:3px;
+	margin-top:3px;
+}
+
+div.black {
+	background-color:#000;
+}
+
+div.grey {
+	background-color:#eee;
+}
+
+div.white {
+	background-color:#fff;
+}
+
 // end image browser settings
 
 span.error {
@@ -86,12 +130,11 @@ span.success {
 }
 
 div.mediaVariationButtons {
-	position:absolute;
-	top:0px;
+
 }
 
 div.mediaDetailsImageContainer {
-	padding-top: 46px;
+	padding-top: 10px;
 }
 
 div.mediaVariationButtons {
