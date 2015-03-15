@@ -21,7 +21,7 @@ Prefered way is using composer by adding the reuquirement to your composer.json 
     }
 
 
-After installation run migration for database table creation:
+After installation run migration for database table creation (it is assumed at this point, that the yii2 db module is configured properly in your configuration). Currently the scripts support only mysql databases, other databases might work as well but haven't been tested yet and thus are disabled in the migration script):
 
 	yii migrate --migrationPath=@schallschlucker/simplecms/migrations
 
