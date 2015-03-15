@@ -101,11 +101,27 @@ After the modules registered, you should be able to open the administration back
 
 http://yourserver/index.php?r=simplecms_backend
 
-or if pretty URLs are acitvated:
+or if pretty URLs are activated:
 
 http://yourserver/simplecms_backend
 
 Then you should see CMS Administration Backend with a root node in the page-tree.
+By right-clicking on the root node you can add new pages to the page tree.
+Each page has multiple language versions, so you can create common page tree structure for all different language versions.
+Via drag and drop you can rearange the positions and orders of the pages.
+Each page (except for the root node) can be set to one of three states:
+- visible: it will show up in the rendered navigation by the navigation widget
+- hidden: the page won't be shown in the navigation, yet it can be linked of found in the search
+- unpublished: the page will neither be shown in the navigation nor in the search results and cannot be linked
+
+Each page can have three different behavious/types:
+- content page: the page is a normal content whose content can be edited via the embeded WYSIWYG editor
+- linked document: the page is basically a link to a uploaded document (e.g. PDF) that will be rendered as a link in the navigation
+- URL: the page will directly link to any given URL. This can be used to create an alias of a page in the navigation or to link to an external URL and embedding this link in the normal navigation
+
+You can select one of these page types when creating a new page language version.
+
+
 
 # Please note:
 In order for the page administration to work you need to be logged in, otherwise an error will occur since the user id will be stored for auditing purposes upon page creation or modification.
