@@ -37,53 +37,66 @@ The backend provides administrative functions for maintaining the page tree stru
 Both modules can be deployed in the same application, but it is recommended to follow the frontend/backend approach to clearly separate the frontend (user view) from the administrative backend interface.
 
 	'components' => [
-	    ...
-	    'simplecmsLanguageManager' => [
-	        'class' => 'schallschlucker\simplecms\LanguageManager',
-	        'languageIdMappings' => [
-	        '1' => [
-	            'id' => 1,
-	            'code' => 'de',
-	            'displaytext' => [
-	                    'de' => 'deutsch',
-	                    'en' => 'german',
-	                    'pl' => 'niemiecki',
-	                    'tr' => 'alman',
-	            ],
-	        ],
-	        'de-DE' => [
-	            'alias' => '1'
-	        ],
-	        '2' => [
-	            'id' => 2,
-	            'code' => 'en',
-	            'displaytext' => [
-	                    'de' => 'englisch',
-	                    'en' => 'english',
-	                    'pl' => 'angielski',
-	                    'tr' => 'ingilizce',
-	            ],
-	        ],
-	        'en-US' => [
-	            'alias' => '2',
-	        ],
-	    ],
+		'simplecmsLanguageManager' => [
+       	    		'class' => 'schallschlucker\simplecms\LanguageManager',
+			'languageIdMappings' => [
+				'1' => [
+					'code' => 'de', 
+					'displaytext' => [
+						'de' => 'deutsch', 
+						'en' => 'german',
+						'pl' => 'niemiecki',
+						'tr' => 'alman',
+					],
+				],
+				'de-DE' => [
+					'alias' => '1'
+				],
+				'2' => [
+					'code' => 'en', 
+					'displaytext' => [
+						'de' => 'englisch', 
+						'en' => 'english',
+						'pl' => 'angielski',
+						'tr' => 'ingilizce',
+					],
+				],
+				'en-US' => [
+					'alias' => '2',
+				],
+				'3' => [
+					'code' => 'pl', 
+					'displaytext' => [
+						'de' => 'polnisch', 
+						'en' => 'polish',
+						'pl' => 'polski',
+						'tr' => 'lehçe',
+					],
+				],
+				'4' => [
+					'code' => 'tr', 
+					'displaytext' => [
+						'de' => 'türkisch', 
+						'en' => 'turkish',
+						'pl' => 'turecki',
+						'tr' => 'türk',
+					],
+				],
+			],
+       		],
 	],
 	'modules' => [
-	    ...
-	    'cms_backend' => [
-	            'class' => 'schallschlucker\simplecms\Backend',
-	        'languageManager' => 'simplecmsLanguageManager'
+		'simplecms_backend' => [
+	            	'class' => 'schallschlucker\simplecms\Backend',
+			'languageManager' => simplecmsLanguageManager
 	        ],
-	    'cms' => [
-	            'class' => 'schallschlucker\simplecms\Frontend',
-	        'languageManager' => 'simplecmsLanguageManager'
+		'simplecms_frontend' => [
+	            	'class' => 'schallschlucker\simplecms\Frontend',
+			'languageManager' => simplecmsLanguageManager
 	        ],
-	 
-	    ],
+	],
 
-After the modules registered, you should be able to open the backend by calling the "simplecms_backend" route
-e.g. with
+After the modules registered, you should be able to open the administration backend by calling the "simplecms_backend" route e.g. by calling:
 http://<your-server>/index.php?r=simplecms_backend
 
 Then you should see CMS Administration Backend with a root node in the page-tree.
