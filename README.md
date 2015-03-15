@@ -17,7 +17,7 @@ Installation instructions are located in the [installation guide](https://github
 Prefered way is using composer by adding the reuquirement to your composer.json and running composer update afterwards:
 
     "require": {
-        "schallschlucker/yii2-simple-cms": ">=0.1",
+        "schallschlucker/yii2-simple-cms": ">=0.2.4",
     }
 
 
