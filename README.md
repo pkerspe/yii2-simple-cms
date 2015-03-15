@@ -25,6 +25,12 @@ After installation run migration for database table creation (it is assumed at t
 
 	yii migrate --migrationPath=@schallschlucker/simplecms/migrations
 
+Finally create a folder where to store the uploaded images from the WYSIWYG editor. To do so, create a subfolder named "mediarepository" in the web folder of you application. If you use separated applications for backend and frontend, simply create a simlink to the sceond web folder to use the mediarepository there as well.
+Then set the access rights to this folder accordingly so that php is allowed to write to this folder.
+
+It is also possible to place the mediarepository outside of the web folder to limit access to uploaded files, but then each file needs to be read by php and delivered to the client which certainly has an impact on the performance, so this should only be used if the media data is somewhat sensitive and should only be availbale to logged in users.
+when the folder is not placed in the web folder, the module configuration needs to be changed (at the moment you need to edit the backend.php and frontend.php file in the vendor folder of simple-cms, in future versions we will document how to overwrite the path in the module configuration)
+
 #Usage
 
 the extension is split into two modules: the frontend and the backend module.
