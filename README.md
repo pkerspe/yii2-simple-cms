@@ -98,9 +98,12 @@ Content pages in simple cms can be created in multiple language, since simple cm
 	],
 
 After the modules registered, you should be able to open the administration backend by calling the "simplecms_backend" route e.g. by calling:
-http://<your-server>/index.php?r=simplecms_backend
+
+http://yourserver/index.php?r=simplecms_backend
+
 or if pretty URLs are acitvated:
-http://<your-server>/simplecms_backend
+
+http://yourserver/simplecms_backend
 
 Then you should see CMS Administration Backend with a root node in the page-tree.
 
