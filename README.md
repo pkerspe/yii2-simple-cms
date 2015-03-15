@@ -14,7 +14,7 @@ and [Project wiki](https://github.com/pkerspe/yii2-simple-cms/wiki) for more det
 
 Installation instructions are located in the [installation guide](https://github.com/pkerspe/yii2-simple-cms/wiki)
 
-Prefered way is by using composer:
+Prefered way is using composer by adding the reuquirement to your composer.json and running composer update afterwards:
 
     "require": {
         "schallschlucker/yii2-simple-cms": ">=0.1",
@@ -23,8 +23,7 @@ Prefered way is by using composer:
 
 After installation run migration for database table creation:
 
-	php yii migrate --migrationPath=@schallschlucker/simplecms/migrations
-
+	yii migrate --migrationPath=@schallschlucker/simplecms/migrations
 
 #Usage
 
@@ -35,6 +34,8 @@ Frontend provides the needed controllers to: - display page content - display do
 The backend provides administrative functions for maintaining the page tree structure (including drag and drop functionality, keyboard shortcuts and context menus for easy creation of new pages).
 
 Both modules can be deployed in the same application, but it is recommended to follow the frontend/backend approach to clearly separate the frontend (user view) from the administrative backend interface.
+
+Content pages in simple cms can be created in multiple language, since simple cms uses internal language id's which might differ from your applications language codes (i.e. ISO 2 letter code or 5 letter code) you need ti initalize the LanguageManager in the components section with a valid mapping to map you applications language codes to the simple cms language codes. Here is an example (which also uses aliases to e.g. map the application language code "de-DE" to the simple cms language code "1" etc.). You can add support for additional languages in simple cms just by adding new mappings.:
 
 	'components' => [
 		'simplecmsLanguageManager' => [
@@ -98,6 +99,8 @@ Both modules can be deployed in the same application, but it is recommended to f
 
 After the modules registered, you should be able to open the administration backend by calling the "simplecms_backend" route e.g. by calling:
 http://<your-server>/index.php?r=simplecms_backend
+or if pretty URLs are acitvated:
+http://<your-server>/simplecms_backend
 
 Then you should see CMS Administration Backend with a root node in the page-tree.
 
