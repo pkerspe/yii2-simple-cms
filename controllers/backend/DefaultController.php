@@ -310,7 +310,7 @@ class DefaultController extends Controller {
 			DefaultController::populateChildrenRecursive ( $rootItem, $itemIndex, $expandLevel, 1 );
 			return $rootItem;
 		} else {
-			throw new Exception('Missing root hierarchy item (with id = '.DefaultController::$ROOT_HIERARCHY_ITEM_ID.'). Can not build page tree.');
+			throw new \Exception('Missing root hierarchy item (with id = '.DefaultController::$ROOT_HIERARCHY_ITEM_ID.'). Can not build page tree.');
 		}
 		return null;
 	}
