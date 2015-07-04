@@ -67,9 +67,16 @@ span.filename, span.createdDate, span.createdBy, span.modifiedDate, span.modifie
 	width: auto;
 } 
 
+span.mediaId , span.dimensions {
+	width: 150px;
+}
+
 span.filename {
 	font-size:12px;
 	font-weight:bold;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
 }
 
 div.mediaDisplay {

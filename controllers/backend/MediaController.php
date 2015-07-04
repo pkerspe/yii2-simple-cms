@@ -770,7 +770,9 @@ class MediaController extends Controller {
 	public function actionThumbnail($mediaItemId) {
 		$mediaItemId = intval ( $mediaItemId );
 		$isWebaccessableFile = false;
-		/* @var $mediaModel CmsContentMedia */
+		/** 
+		 * @var $cmsContentMedia CmsContentMedia 
+		 */
 		$cmsContentMedia = CmsContentMedia::findOne ( $mediaItemId );
 		if ($cmsContentMedia == null) {
 			// TODO: do logging, maybe inform admin and display failure image instead

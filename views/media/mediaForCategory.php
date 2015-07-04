@@ -50,9 +50,10 @@ function showDetails(url){
 
 		<div class="thumbnailDisplay pull-left"><span class="helper"></span><a href="#" onclick="showDetails('<?php echo Url::toRoute(['media/details','mediaItemId' => $cmsContentMedia->id]) ?>');"><img class="thumbnailImg" src="<?php echo Url::toRoute(['media/thumbnail','mediaItemId' => $cmsContentMedia->id]) ?>" title="<?php echo $cmsContentMedia->meta_description; ?>"/></a></div>
 		<div class="thumbnailMetaData">
-			<span class="filename"><?php echo $cmsContentMedia->file_name; ?>  [id: <?php echo $cmsContentMedia->id ?>]</span>
+			<span class="filename"><?php echo $cmsContentMedia->file_name; ?></span>
+			<span class="mediaId pull-left">id: <?php echo $cmsContentMedia->id ?></span>
 			<span class="createdDate">Created: <?php echo $cmsContentMedia->created_datetime; ?></span>
-			<span class="dimensions"><span class="glyphicon glyphicon-resize-full" title="dimensions/length"></span> <?php echo $cmsContentMedia->dimension_width.'px x '.$cmsContentMedia->dimension_height.'px'; ?></span>
+			<span class="dimensions pull-left"><span class="glyphicon glyphicon-resize-full" title="dimensions/length"></span> <?php echo $cmsContentMedia->dimension_width.'px x '.$cmsContentMedia->dimension_height.'px'; ?></span>
 			<span class="filesize"><span class="glyphicon glyphicon-file" title="filesize"></span> <?php echo Yii::$app->formatter->asShortSize($cmsContentMedia->filesize_bytes); ?></span>
 		</div>
 	</div>
