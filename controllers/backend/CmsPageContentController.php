@@ -39,9 +39,10 @@ class CmsPageContentController extends Controller {
 	/**
 	 * Lists all CmsPageContent models.
 	 *
-	 * @return mixed @menuLabel list all page contents
-	 *         @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
-	 *         @functionalRight cmsBackendRead
+	 * @return mixed 
+	 * @menuLabel list all page contents
+	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @functionalRight cmsBackendRead
 	 */
 	public function actionIndex() {
 		$searchModel = new CmsPageContenttSearch ();

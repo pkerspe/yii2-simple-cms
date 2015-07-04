@@ -39,7 +39,7 @@ class CmsHierarchyController extends Controller {
 	/**
 	 * Lists all CmsHierarchyItem models.
 	 * 
-	 * @menuLabel List all hierarchy items
+	 * @menuLabel __HIDDEN__
 	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
 	 * @functionalRight cmsBackendRead
 	 * 

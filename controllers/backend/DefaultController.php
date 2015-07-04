@@ -36,7 +36,7 @@ class DefaultController extends Controller {
 	public static $ROOT_HIERARCHY_ITEM_ID = 1;
 	
 	/**
-	 * @menuLabel display root page of cms
+	 * @menuLabel display the CMS page tree
 	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
 	 */
 	public function actionIndex() {

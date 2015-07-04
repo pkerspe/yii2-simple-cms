@@ -67,6 +67,7 @@ class ShowController extends Controller {
 	
 	/**
 	 * show the page for a given cms menu item id
+	 * @menuLabel __HIDDEN__
 	 * @param integer $menuItemId
 	 * @throws NotFoundHttpException an exception when the menu with the given id does not exists or does not have a linked page content 
 	 * @return View
@@ -79,6 +80,7 @@ class ShowController extends Controller {
 	
 	/**
 	 * show the page for the given alias name
+	 * @menuLabel __HIDDEN__
 	 * @param String $menuItemAlias
 	 * @return View
 	 */
@@ -92,6 +94,7 @@ class ShowController extends Controller {
 	/**
 	 * 
 	 * @param CmsMenuItem $menuItem
+	 * @menuLabel __HIDDEN__
 	 * @throws NotFoundHttpException
 	 * @return View
 	 */
@@ -122,6 +125,7 @@ class ShowController extends Controller {
 	
 	/**
 	 * show the page for a given page content id 
+	 * @menuLabel __HIDDEN__
 	 * @param integer $pageContentId the cmsPageContent item id to be displayed
 	 * @throws NotFoundHttpException an exception when the page content with the given id does not exists or does not have a linked page content
 	 * @return View
@@ -142,9 +146,11 @@ class ShowController extends Controller {
 	
 	/**
 	 * send data of document to browser directly 
+	 * 
 	 * (either by sending redirect url to let apache handle the request 
 	 * [if the file is located in the web directory or a folder below the web directory], 
 	 * or by sending file via php [if the file is not located within the web directory folder structure])
+	 * @menuLabel __HIDDEN__
 	 * @param unknown $documentId
 	 * @throws NotFoundHttpException
 	 */
@@ -170,6 +176,7 @@ class ShowController extends Controller {
 	
 	/**
 	 * display the document in the chosen presentation style (Inline, Window or send as download response)
+	 * @menuLabel __HIDDEN__
 	 * @param unknown $documentId
 	 * @throws NotFoundHttpException
 	 * @return void|string

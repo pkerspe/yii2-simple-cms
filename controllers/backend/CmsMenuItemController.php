@@ -39,9 +39,10 @@ class CmsMenuItemController extends Controller {
 	/**
 	 * Lists all CmsMenuItem models.
 	 *
-	 * @return mixed @menuLabel list all menu items
-	 *         @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
-	 *         @functionalRight cmsBackendRead
+	 * @return mixed 
+	 * @menuLabel __HIDDEN__
+	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @functionalRight cmsBackendRead
 	 */
 	public function actionIndex() {
 		$searchModel = new CmsMenuItemSearch ();
@@ -57,9 +58,10 @@ class CmsMenuItemController extends Controller {
 	 * Displays a single CmsMenuItem model.
 	 *
 	 * @param integer $id        	
-	 * @return mixed @menuLabel __HIDDEN__
-	 *         @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
-	 *         @functionalRight cmsBackendRead
+	 * @return mixed 
+	 * @menuLabel __HIDDEN__
+	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @functionalRight cmsBackendRead
 	 */
 	public function actionView($id) {
 		return $this->render ( 'view', [ 
@@ -71,9 +73,10 @@ class CmsMenuItemController extends Controller {
 	 * Creates a new CmsMenuItem model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 *
-	 * @return mixed @menuLabel __HIDDEN__
-	 *         @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
-	 *         @functionalRight cmsBackendWrite
+	 * @return mixed 
+	 * @menuLabel __HIDDEN__
+	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @functionalRight cmsBackendWrite
 	 */
 	public function actionCreate() {
 		$model = new CmsMenuItem ();
@@ -95,9 +98,10 @@ class CmsMenuItemController extends Controller {
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 *
 	 * @param integer $id        	
-	 * @return mixed @menuLabel __HIDDEN__
-	 *         @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
-	 *         @functionalRight cmsBackendWrite
+	 * @return mixed 
+	 * @menuLabel __HIDDEN__
+	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @functionalRight cmsBackendWrite
 	 */
 	public function actionUpdate($id) {
 		$model = $this->findModel ( $id );
@@ -119,9 +123,10 @@ class CmsMenuItemController extends Controller {
 	 * If deletion is successful, the browser will be redirected to the 'index' page.
 	 *
 	 * @param integer $id        	
-	 * @return mixed @menuLabel __HIDDEN__
-	 *         @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
-	 *         @functionalRight cmsBackendWrite
+	 * @return mixed 
+	 * @menuLabel __HIDDEN__
+	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @functionalRight cmsBackendWrite
 	 */
 	public function actionDelete($id) {
 		$this->findModel ( $id )->delete ();

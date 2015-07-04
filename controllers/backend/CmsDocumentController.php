@@ -39,9 +39,10 @@ class CmsDocumentController extends Controller {
 	/**
 	 * Lists all CmsDocument models.
 	 *
-	 * @return mixed @menuLabel list all cms douments
-	 *         @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
-	 *         @functionalRight cmsBackendRead
+	 * @return mixed 
+	 * @menuLabel list all cms douments
+	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @functionalRight cmsBackendRead
 	 */
 	public function actionIndex() {
 		$searchModel = new CmsDocumentSearch ();
@@ -57,9 +58,10 @@ class CmsDocumentController extends Controller {
 	 * Displays a single CmsDocument model.
 	 *
 	 * @param integer $id        	
-	 * @return mixed @menuLabel __HIDDEN__
-	 *         @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
-	 *         @functionalRight cmsBackendRead
+	 * @return mixed 
+	 * @menuLabel __HIDDEN__
+	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @functionalRight cmsBackendRead
 	 */
 	public function actionView($id) {
 		return $this->render ( 'view', [ 
@@ -71,9 +73,10 @@ class CmsDocumentController extends Controller {
 	 * Creates a new CmsDocument model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 *
-	 * @return mixed @menuLabel crate new cms document
-	 *         @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
-	 *         @functionalRight cmsBackendWrite
+	 * @return mixed 
+	 * @menuLabel crate new cms document
+	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @functionalRight cmsBackendWrite
 	 */
 	public function actionCreate() {
 		$model = new CmsDocument ();
@@ -95,9 +98,10 @@ class CmsDocumentController extends Controller {
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 *
 	 * @param integer $id        	
-	 * @return mixed @menuLabel __HIDDEN__
-	 *         @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
-	 *         @functionalRight cmsBackendWrite
+	 * @return mixed 
+	 * @menuLabel __HIDDEN__
+	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @functionalRight cmsBackendWrite
 	 */
 	public function actionUpdate($id) {
 		$model = $this->findModel ( $id );
@@ -119,9 +123,10 @@ class CmsDocumentController extends Controller {
 	 * If deletion is successful, the browser will be redirected to the 'index' page.
 	 *
 	 * @param integer $id        	
-	 * @return mixed @menuLabel __HIDDEN__
-	 *         @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
-	 *         @functionalRight cmsBackendWrite
+	 * @return mixed 
+	 * @menuLabel __HIDDEN__
+	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @functionalRight cmsBackendWrite
 	 */
 	public function actionDelete($id) {
 		$this->findModel ( $id )->delete ();

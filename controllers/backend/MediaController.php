@@ -55,8 +55,8 @@ class MediaController extends Controller {
 	public $defaultAction = 'mediabrowser';
 	
 	/**
-	 * @menuLabel display root page of cms
-	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @menuLabel display media browser
+	 * @menuIcon <span class="glyphicon glyphicon-camera"></span>
 	 */
 	public function actionMediabrowser($mediatype = null, $activeCategoryId = null) {
 		return $this->renderPartial ( 'mediaBrowser', [ 
@@ -68,6 +68,7 @@ class MediaController extends Controller {
 	
 	/**
 	 * create a new media category item and return the result in json formated way
+	 * @menuLabel __HIDDEN__
 	 * @return View
 	 */
 	public function actionCreateCategoryItemJson($parentCategoryId, $name) {
@@ -107,6 +108,7 @@ class MediaController extends Controller {
 	
 	/**
 	 * delete a media item and return the result in json formated way
+	 * @menuLabel __HIDDEN__
 	 * @return View
 	 */
 	public function actionDeleteMediaItemJson($mediaItemId) {
@@ -167,6 +169,7 @@ class MediaController extends Controller {
 	
 	/**
 	 * move a media item to another category (=folder)
+	 * @menuLabel __HIDDEN__
 	 * @param integer $mediaItemId
 	 * @param integer $targetCategoryId
 	 */
@@ -211,7 +214,7 @@ class MediaController extends Controller {
 	}
 	
 	/**
-	 * 
+	 * @menuLabel __HIDDEN__
 	 * @param unknown $categoryItemId
 	 * @param unknown $newName the new name for the category (only character, numbers, spaces and _ - allowed. All other cahracters will be filtered out)
 	 * @return View
@@ -256,6 +259,7 @@ class MediaController extends Controller {
 	
 	/**
 	 * delete a media item variation and return the result in json formated way
+	 * @menuLabel __HIDDEN__
 	 * @return View
 	 */
 	public function actionDeleteMediaVariationItemJson($mediaVariationItemId) {
@@ -292,6 +296,7 @@ class MediaController extends Controller {
 	
 	/**
 	 * delete a media category if it is empty and has no child items and return the result in json formated way
+	 * @menuLabel __HIDDEN__
 	 * @return View
 	 */
 	public function actionDeleteContentCategoryItemJson($contentCategoryId) {
@@ -338,7 +343,8 @@ class MediaController extends Controller {
 	}
 	
 	/**
-	 *
+	 * Display the category tree in json format
+	 * @menuLabel __HIDDEN__
 	 * @return View
 	 */
 	public function actionCategoryTreeJson($mediaType = null) {
@@ -383,7 +389,8 @@ class MediaController extends Controller {
 	}
 	
 	/**
-	 * 
+	 * Display all media for a given category id
+	 * @menuLabel __HIDDEN__
 	 * @param unknown $categoryId
 	 * @return string
 	 */
@@ -401,7 +408,7 @@ class MediaController extends Controller {
 	
 	/**
 	 * send image data to browser
-	 * 
+	 * @menuLabel __HIDDEN__
 	 * @param integer $mediaItemId
 	 *        	the item id of the media item to be displayed
 	 * @param integer $variationId
@@ -452,6 +459,11 @@ class MediaController extends Controller {
 		}
 	}
 	
+	/**
+	 * display the media variation manager screen. Used in the media browser to display multiple version (e.g. Image formats) of a media item)
+	 * @menuLabel __HIDDEN__
+	 * @param unknown $mediaItemId
+	 */
 	public function actionMediaVarationManager($mediaItemId){
 		$mediaItemId = intval ( $mediaItemId );
 		
