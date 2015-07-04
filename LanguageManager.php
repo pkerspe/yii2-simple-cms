@@ -25,50 +25,56 @@ class LanguageManager extends Component {
 	public $languageIdMappings = [ 
 		'1' => [
 			'id' => 1,
-			'code' => 'de', 
-			'displaytext' => [
-				'de' => 'deutsch', 
-				'en' => 'german',
-				'pl' => 'niemiecki',
-				'tr' => 'alman',
-			],
-		],
-		'de-DE' => [
-			'alias' => '1'
-		],
-		'2' => [
-			'id' => 2,
-			'code' => 'en', 
-			'displaytext' => [
-				'de' => 'englisch', 
-				'en' => 'english',
-				'pl' => 'angielski',
-				'tr' => 'ingilizce',
-			],
-		],
-		'en-US' => [
-			'alias' => '2',
-		],
-		'3' => [
+        	'code' => 'de_DE', 
+            'displaytext' => [
+                'de_DE' => 'deutsch', 
+	            'en_US' => 'german',
+    	        'pl_PL' => 'niemiecki',
+        	    'tr_TR' => 'alman',
+            ],
+        ],
+        'de_DE' => [
+            'alias' => '1'
+        ],
+        'de-DE' => [
+        	'alias' => '1'
+        ],
+        '2' => [
+	        'id' => 2,
+			'code' => 'en_US', 
+    	    'displaytext' => [
+        	    'de_DE' => 'englisch', 
+            	'en_US' => 'english',
+                'pl_PL' => 'angielski',
+                'tr_TR' => 'ingilizce',
+	        ],
+    	],
+        'en_US' => [
+            'alias' => '2',
+        ],
+        'en-US' => [
+            'alias' => '2',
+	    ],
+    	'3' => [
 			'id' => 3,
-			'code' => 'pl', 
-			'displaytext' => [
-				'de' => 'polnisch', 
-				'en' => 'polish',
-				'pl' => 'polski',
-				'tr' => 'lehçe',
-			],
-		],
-		'4' => [
-			'id' => 4,
-			'code' => 'tr', 
-			'displaytext' => [
-				'de' => 'türkisch', 
-				'en' => 'turkish',
-				'pl' => 'turecki',
-				'tr' => 'türk',
-			],
-		],
+        	'code' => 'pl_PL', 
+            'displaytext' => [
+                'de_DE' => 'polnisch', 
+	            'en_US' => 'polish',
+    	        'pl_PL' => 'polski',
+        	    'tr_TR' => 'lehçe',
+            ],
+        ],
+	    '4' => [
+    	    'id' => 4,
+			'code' => 'tr_TR', 
+        	'displaytext' => [
+            	'de_DE' => 'türkisch', 
+                'en_US' => 'turkish',
+                'pl_PL' => 'turecki',
+	            'tr_TR' => 'türk',
+    	    ],
+	   ],
 	];
 	
 	public function getConfiguredLanguageIdToCodeMapping() {
