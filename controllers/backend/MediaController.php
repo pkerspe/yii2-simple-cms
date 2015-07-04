@@ -552,6 +552,7 @@ class MediaController extends Controller {
 	 * generate the abosolute path for a uploaded media file where to store the file.
 	 * The folder structure is not the same as the virtual structure that is shown in the media browser. Instead for a new uploaded file a folder following the pattern '.../YYYY/MM/DD' will be created.
 	 * Uses the value of  @see Frontend->getMediarepositoryBasePath() 
+	 * 
 	 * @param UploadedFile $file
 	 * @return string the full path to the storage folder for this file (note: the folder itself will NOT only be created automatically if the optional parameter createFolder is set to true!)
 	 */
@@ -579,6 +580,7 @@ class MediaController extends Controller {
 	
 	/**
 	 * upload new media files and link to a given content category id
+	 * @menuLabel __HIDDEN__
 	 * @return string
 	 */
 	public function actionUpload($targetCategoryId,$mediaType = null) {
@@ -654,7 +656,7 @@ class MediaController extends Controller {
 	
 	/**
 	 * Show details page for a media itemd
-	 * 
+	 * @menuLabel __HIDDEN__
 	 * @param integer $mediaItemId        	
 	 */
 	public function actionDetails($mediaItemId) {
@@ -757,7 +759,7 @@ class MediaController extends Controller {
 	/**
 	 * display a thumbnail version for the media browser.
 	 * Generate it if none could be found in thumbnail repository
-	 * 
+	 * @menuLabel __HIDDEN__
 	 * @param integer $mediaItemId        	
 	 * @throws NotFoundHttpException
 	 */
