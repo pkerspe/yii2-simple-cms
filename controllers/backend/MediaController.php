@@ -270,7 +270,7 @@ class MediaController extends Controller {
 		$mediaVariationItemId = intval($mediaVariationItemId);
 		/* @var $contentMediaVariation CmsContentMediaVariation */
 		$contentMediaVariation = CmsContentMediaVariation::findOne($mediaVariationItemId);
-		if($contentMedia == null){
+		if($contentMediaVariation == null){
 			$result['success'] = false;
 			$result['message'] .= 'The media item variation id seems to be invalid (id = '.$mediaVariationItemId.' could not be found)';
 		} else {
@@ -423,7 +423,7 @@ class MediaController extends Controller {
 			$variationId = intval ( $variationId );
 			$cmsContentMediaVariation = CmsContentMediaVariation::findOne ( $variationId );
 			if ($cmsContentMediaVariation == null) {
-				throw new NotFoundHttpException ( 'Media item could not be found', 404 );
+				throw new NotFoundHttpException( 'Media item could not be found', 404 );
 			}
 		}
 		$isWebaccessableFile = false;
@@ -507,10 +507,10 @@ class MediaController extends Controller {
 									'msg' => $msg
 								] );
 								*/
-								throw new Exception('The upload of one or more files failed. Most likely validation of properties failed');
+								throw new \Exception('The upload of one or more files failed. Most likely validation of properties failed. '.$msg);
 							}
 						} else {
-							throw new Exception('The upload of one or more files failed.');
+							throw new \Exception('The upload of one or more files failed.');
 						}
 					}
 				}
@@ -556,7 +556,7 @@ class MediaController extends Controller {
 	 * @param UploadedFile $file
 	 * @return string the full path to the storage folder for this file (note: the folder itself will NOT only be created automatically if the optional parameter createFolder is set to true!)
 	 */
-	private function getFullUploadPathForFile($file,$createFolder = false){
+	private function getFullUploadPathForFile($file){
 		$currentDate = new \DateTime();
 		$cleanedFileName = str_replace(' ', '_', $file->name);
 		$formatedPath = $currentDate->format('Y/m/d');
@@ -566,7 +566,7 @@ class MediaController extends Controller {
 		//check if folder exists, create if not
 		if(!file_exists($targetFolder)){
 			if(!mkdir($targetFolder,0755,true)){
-				throw new Exception('Could not create target folder: '.$targetFolder);
+				throw new \Exception('Could not create target folder: '.$targetFolder);
 			}
 		}
 		
@@ -602,7 +602,6 @@ class MediaController extends Controller {
 			}
 			
 			if ($model->file && $model->validate ()) {
-				$cmsMediaContentItemsArray = [];
 				foreach ( $model->file as $file ) {
 					/* @VAR $file UploadedFile */
 					$targetPath = $this->getFullUploadPathForFile($file);
@@ -637,9 +636,8 @@ class MediaController extends Controller {
 							] );
 							//throw new Exception('The upload of one or more files failed. Most likely validation of properties failed');
 						}
-						$cmsMediaContentItemsArray[] = $content;
 					} else {
-						throw new Exception('The upload of one or more files failed.');
+						throw new \Exception('The upload of one or more files failed.');
 					}
 				}
 				//reload browser for current folder
@@ -665,7 +663,7 @@ class MediaController extends Controller {
 			'id' => $mediaItemId 
 		] )->with ( 'cmsContentMediaVariations' )->one ();
 		if ($cmsContentMedia == null) {
-			throw new NotFoundHttpException ( 'Media item could not be found', 404 );
+			throw new NotFoundHttpException( 'Media item could not be found', 404 );
 		}
 		return $this->renderPartial ( 'mediaDetails', [ 
 			'cmsContentMedia' => $cmsContentMedia 
@@ -686,11 +684,17 @@ class MediaController extends Controller {
 	}
 	
 	/**
-	 *
-	 * @param CmsContentMedia $cmsContentMedia        	
-	 * @param unknown $thumbWidth        	
+	 * create a thumbnail / resized version of the given media item.
+	 * The width and height values define a bounding box in which the image will be resized to fit into while keeping the original widht-height relation.
+	 * @param CmsContentMedia $cmsContentMedia the src item to create a resized / thumbnail version for
+	 * @param interger $thumbWidth the target max width in px
+	 * @param interger $thumbHeight the target max height in px
 	 */
 	private function createThumbnail($cmsContentMedia, $thumbMaxWidth, $thumbMaxHeight) {
+	    if(!function_exists("imagecreatefromjpeg") || !function_exists("imagecreatefrompng") || !function_exists("imagecreatefromgif") ){
+	        throw new \Exception("The Thumbnail function required gd extension to be installed, since it uses imagecreatefrompng, imagecreatefromjpeg, imagecreatefromgif functions for resizing images. Please install the gd lib function");
+	    }
+	    
 		$filePath = $cmsContentMedia->file_path . DIRECTORY_SEPARATOR . $cmsContentMedia->file_name;
 		switch ($cmsContentMedia->mime_type) {
 			case 'image/jpeg' :
@@ -703,7 +707,7 @@ class MediaController extends Controller {
 				$img = imagecreatefromgif ( $filePath );
 				break;
 			default :
-				throw new NotSupportedException ( 'The mime-type ' . $cmsContentMedia->mime_type . ' is not supported for thumbnail generation at the moment' );
+				throw new NotSupportedException( 'The mime-type ' . $cmsContentMedia->mime_type . ' is not supported for thumbnail generation at the moment' );
 				break;
 		}
 		$width = imagesx ( $img );
@@ -770,12 +774,12 @@ class MediaController extends Controller {
 		$cmsContentMedia = CmsContentMedia::findOne ( $mediaItemId );
 		if ($cmsContentMedia == null) {
 			// TODO: do logging, maybe inform admin and display failure image instead
-			throw new NotFoundHttpException ( 'Media item could not be found', 404 );
+			throw new NotFoundHttpException( 'Media item could not be found', 404 );
 		}
 		//check if thumbnail folder exists
 		if(!is_dir($this->module->getThumbnailRepostoryPath())){
 			if(!mkdir($this->module->getThumbnailRepostoryPath(),0777,true)){
-				throw new Exception ( 'Thumbnail folder not found and automatic generation failed. Check access rights for base folder.' );
+				throw new \Exception ( 'Thumbnail folder not found and automatic generation failed. Check access rights for base folder.' );
 			}
 		}
 		// check if thumbnail exists
@@ -784,7 +788,7 @@ class MediaController extends Controller {
 			// generate thumbnail
 			$filePath = $this->createThumbnail ( $cmsContentMedia, MediaController::$MEDIA_THUMBNAIL_WIDTH, MediaController::$MEDIA_THUMBNAIL_HEIGHT );
 			if (! $filePath) {
-				throw new Exception ( 'Thumbnail not found, but automatic generation failed.' );
+				throw new \Exception ( 'Thumbnail not found, but automatic generation failed.' );
 			}
 		}
 		$webRootFolder = Yii::getAlias ( '@webroot' );
