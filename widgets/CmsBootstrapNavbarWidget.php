@@ -17,6 +17,7 @@ use schallschlucker\simplecms\controllers\backend\DefaultController;
 use yii\helpers\Url;
 use schallschlucker\simplecms\controllers\frontend\NavigationController;
 use schallschlucker\simplecms\models\SimpleHierarchyItem;
+use schallschlucker\simplecms\Frontend;
 /**
  * A widget to render a complete bootrstrap navbar for all published cms menu items.
  * Only areas and their children will be rendered (two level navigation) due to the fact, that bootstrap does not support more levels.
@@ -32,9 +33,11 @@ class CmsBootstrapNavbarWidget extends Widget {
 	public $displayRootItem = true;
 	
 	public function init() {
-		if($this->languageId == null)
-			$this->languageId = Yii::$app->controller->module->getLanguageManager()->getLanguageIdForString(Yii::$app->language);
-		
+		if($this->languageId == null){
+		    if(Yii::$app->getModule('simplecms_frontend') == null)
+		        throw new \Exception('Could not find module with name simplecms_frontend. Make sure you included the moduel in your configuration');
+			$this->languageId = Frontend::getLanguageManagerStatic()->getLanguageIdForString(Yii::$app->language);
+		}
 		parent::init ();
 	}
 	

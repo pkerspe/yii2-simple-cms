@@ -65,12 +65,12 @@ class NavigationController extends Controller {
 	public static function getRootHierarchyItemCached($currentLanguageId,$hideMissingLanguages = true, $removeHierarchyItemsWithNoContent = true){
 		Yii::beginProfile(__METHOD__,'CMS-NAVIGATION');
 		$cacheKey = NavigationController::$BASE_CACHE_KEY_FRONTEND_NAVIGATION.$currentLanguageId.'-'.$hideMissingLanguages.'-'.$removeHierarchyItemsWithNoContent;
-		$simpleHierarchyItem  = Yii::$app->controller->module->getCachedValue($cacheKey,false);
+		$simpleHierarchyItem  = Yii::$app->getModule('simplecms_frontend')->getCachedValue($cacheKey,false);
 		if($simpleHierarchyItem === false){
 			Yii::info('no cached page tree found for given parameters, will rebuild tree from database');
 			$simpleHierarchyItem  = DefaultController::getMenuTree($currentLanguageId, 9999, $hideMissingLanguages, $removeHierarchyItemsWithNoContent, [CmsHierarchyItem::DISPLAYSTATE_PUBLISHED_VISIBLE_IN_NAVIGATION]);
 			$simpleHierarchyItem->finalizeForOutput();
-			Yii::$app->controller->module->setCacheValue($cacheKey,$simpleHierarchyItem,NavigationController::$FRONTEND_NAVIGATION_CACHE_LIVETIME_SECONDS);
+			Yii::$app->getModule('simplecms_frontend')->setCacheValue($cacheKey,$simpleHierarchyItem,NavigationController::$FRONTEND_NAVIGATION_CACHE_LIVETIME_SECONDS);
 		}
 		Yii::endProfile(__METHOD__);
 		return $simpleHierarchyItem;

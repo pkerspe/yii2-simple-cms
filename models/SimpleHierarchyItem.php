@@ -3,6 +3,7 @@ namespace schallschlucker\simplecms\models;
 
 use Yii;
 use yii\helpers\Url;
+use schallschlucker\simplecms\Frontend;
 /**
  * helper class for less memory consuming representation of an hierarhcy item with capability of representing a tree structure (parent/child relations)
  * @author Paul Kerspe
@@ -93,18 +94,18 @@ class SimpleHierarchyItem {
 			$this->document_id = $cmsHierarchyItemDetailsArray ['menu_item'] ['document_id'];
 			$this->direct_url = $cmsHierarchyItemDetailsArray ['menu_item'] ['direct_url'];
 			$this->languageId = $cmsHierarchyItemDetailsArray ['menu_item'] ['language'];
-			$this->languageCode = Yii::$app->controller->module->getLanguageManager()->getMappingForIdResolveAlias ( $cmsHierarchyItemDetailsArray ['menu_item'] ['language'] )['code'];
+			$this->languageCode = Frontend::getLanguageManagerStatic()->getMappingForIdResolveAlias ( $cmsHierarchyItemDetailsArray ['menu_item'] ['language'] )['code'];
 		}
 		$this->expanded = $displayExpanded;
 		$this->displayState = $cmsHierarchyItemDetailsArray ['display_state'];
 		$this->isFallbackLanguage = (isset ( $cmsHierarchyItemDetailsArray ['displaying_fallback_language'] ) && $cmsHierarchyItemDetailsArray ['displaying_fallback_language']);
 
 		foreach ( $cmsHierarchyItemDetailsArray ['available_menu_items_all_languages'] as $menuItem ) {
-			$this->addAvailableLanguageCodes ( Yii::$app->controller->module->getLanguageManager()->getMappingForIdResolveAlias ( $menuItem ['language'] )['code'], $menuItem ['id'] );
+			$this->addAvailableLanguageCodes ( Frontend::getLanguageManagerStatic()->getMappingForIdResolveAlias ( $menuItem ['language'] )['code'], $menuItem ['id'] );
 		}
 
 		// create an array with all languages, where the available languages are marked explicitly (this is used to display the existing and non existing language versions in the frontend
-		foreach ( Yii::$app->controller->module->getLanguageManager()->getAllConfiguredLanguageCodes () as $languageId => $languageCode ) {
+		foreach ( Frontend::getLanguageManagerStatic()->getAllConfiguredLanguageCodes () as $languageId => $languageCode ) {
 			$this->allLanguagesWithMarker [] = [
 				'code' => $languageCode,
 				'language_id' => $languageId,
@@ -120,7 +121,7 @@ class SimpleHierarchyItem {
 		if ($simpleHierarchyItem instanceof SimpleHierarchyItem) {
 			$this->children [] = $simpleHierarchyItem;
 		} else {
-			throw new Exception ( 'Wrong object type given as child element.' );
+			throw new \Exception ( 'Wrong object type given as child element.' );
 		}
 	}
 	/**
