@@ -19,17 +19,18 @@ use yii\base\InvalidConfigException;
  * @author Paul Kerspe
  */
 class Frontend extends \yii\base\Module {
-	const VERSION = '0.1';
+	const VERSION = '0.2';
 	public $controllerNamespace = 'schallschlucker\simplecms\controllers\frontend';
 	public $defaultRoute='show';
 	public $languageManager;
 	public $cache;
 	
 	/**
-	 * @var string The prefix for user module URL.
+	 * @var string The prefix for the frontend module URL.
 	 * @See [[GroupUrlRule::prefix]]
 	 */
-	public $urlPrefix = 'cms';
+	public $urlPrefix = 'cms'; //for the url in the forntend to be called
+	public $routePrefix = 'simplecms_frontend'; //to map to the module id given in the config
 	
 	/**
 	 *

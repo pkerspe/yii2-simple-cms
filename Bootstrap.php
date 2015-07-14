@@ -25,24 +25,24 @@ class Bootstrap implements BootstrapInterface
      */
     public function bootstrap($app)
     {
-        if (!$app->hasModule('simplecms_frontend')) {
-            $app->setModule('simplecms_frontend', [
-                'class' => 'schallschlucker\simplecms\Frontend'
-            ]);
-        }
+//         if (!$app->hasModule('simplecms_frontend')) {
+//             $app->setModule('simplecms_frontend', [
+//                 'class' => 'schallschlucker\simplecms\Frontend'
+//             ]);
+//         }
 
         /** @var $module Module */
-        $module = $app->getModule('simplecms_frontend');
+         $module = $app->getModule('simplecms_frontend');
+		 
 
-        if (!$app instanceof \yii\console\Application) {
-            $configUrlRule = [
-                'prefix' => $module->urlPrefix,
-                'rules'  => $module->urlRules
-            ];
-
-            $app->get('urlManager')->rules[] = new GroupUrlRule($configUrlRule);
-
-        }
+         if (!$app instanceof \yii\console\Application) {
+             $configUrlRule = [
+                 'prefix' => $module->urlPrefix,
+				 'routePrefix' => $module->routePrefix,
+                 'rules'  => $module->urlRules
+             ];
+             $app->get('urlManager')->rules[] = new GroupUrlRule($configUrlRule);
+         }
         $app->get('i18n')->translations['simplecms*'] = [
         	'class'    => 'yii\i18n\PhpMessageSource',
         	'basePath' => __DIR__ . '/messages',

@@ -45,7 +45,7 @@ Content pages in simple cms can be created in multiple language, since simple cm
 
 	'components' => [
 		'simplecmsLanguageManager' => [
-       	    		'class' => 'schallschlucker\simplecms\LanguageManager',
+       	    'class' => 'schallschlucker\simplecms\LanguageManager',
 			'languageIdMappings' => [
 				'1' => [
 					'code' => 'de', 
@@ -94,13 +94,14 @@ Content pages in simple cms can be created in multiple language, since simple cm
 	],
 	'modules' => [
 		'simplecms_backend' => [
-	            	'class' => 'schallschlucker\simplecms\Backend',
+	        'class' => 'schallschlucker\simplecms\Backend',
 			'languageManager' => simplecmsLanguageManager
 	        ],
 		'simplecms_frontend' => [
-	            	'class' => 'schallschlucker\simplecms\Frontend',
+			 'urlPrefix' => 'cms', //the context alias for the module if you do not want to use simplecms_frotend in your URLs to call the pretty URL aliases
+	        'class' => 'schallschlucker\simplecms\Frontend',
 			'languageManager' => simplecmsLanguageManager
-	        ],
+	    ],
 	],
 
 After the modules registered, you should be able to open the administration backend by calling the "simplecms_backend" route e.g. by calling:

@@ -142,13 +142,13 @@ class SimpleHierarchyItem {
 	public function getFormattedUrl(){
 		if($this->content_id != null){
 			if($this->alias != null && $this->alias != ''){
-				return Url::toRoute(['show/alias','menuItemAlias' => $this->alias]);
+				return Url::toRoute(['/'.Yii::$app->getModule('simplecms_frontend')->routePrefix.'/show/alias','menuItemAlias' => $this->alias]);
 			} else {
-				return Url::toRoute(['show/page','menuItemId' => $this->menu_id]);
+				return Url::toRoute(['/'.Yii::$app->getModule('simplecms_frontend')->routePrefix.'/show/page','menuItemId' => $this->menu_id]);
 			}
 		}
 		else if($this->document_id)
-			return Url::toRoute(['show/document','documentId' => $this->document_id]);
+			return Url::toRoute(['/'.Yii::$app->getModule('simplecms_frontend')->routePrefix.'/show/document','documentId' => $this->document_id]);
 		else
 			return $this->direct_url;
 	}

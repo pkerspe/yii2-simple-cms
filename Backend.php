@@ -21,7 +21,7 @@ use schallschlucker\simplecms\controllers\backend\MediaController;
  * @author Paul Kerspe
  */
 class Backend extends \yii\base\Module {
-	const VERSION = '0.1';
+	const VERSION = '0.2';
 	
 	public $controllerNamespace = 'schallschlucker\simplecms\controllers\backend';
 	public $languageManager;
