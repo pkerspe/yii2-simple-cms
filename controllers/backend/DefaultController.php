@@ -308,7 +308,7 @@ class DefaultController extends Controller {
 		
 		//auto create root item if it does not exist
 		if(!isset($itemIndex [DefaultController::$ROOT_HIERARCHY_ITEM_ID])){
-		    return DefaultController::autoCreateRootItemInAllConfiguredLanguages();
+		    return DefaultController::autoCreateRootItemInAllConfiguredLanguages($language);
 		} else if(isset($itemIndex [DefaultController::$ROOT_HIERARCHY_ITEM_ID])){
 			$rootItem = new SimpleHierarchyItem ( $itemIndex [DefaultController::$ROOT_HIERARCHY_ITEM_ID], ($expandLevel > 0), 0 );
 			unset ( $itemIndex [DefaultController::$ROOT_HIERARCHY_ITEM_ID] );
@@ -323,9 +323,10 @@ class DefaultController extends Controller {
 	/**
 	 * generate a root item in all configured languages wuth default name and content.
 	 * This is used in case the database is not setup properly for some reason to prevent an error message being shown due to missing root item.
+	 * @param language integer the language id to get the menu item for the hierarchy item for
 	 * @return \schallschlucker\simplecms\models\SimpleHierarchyItem
 	 */
-	public static function autoCreateRootItemInAllConfiguredLanguages(){
+	public static function autoCreateRootItemInAllConfiguredLanguages($language){
 	    //FIXME: maybe modify this function to only create a default language instead, some people might not want to have the root item in all configured languages for some reason
 	    
 	    /* @var $languageManager LanguageManager */
@@ -381,7 +382,9 @@ class DefaultController extends Controller {
 	        }
 	    }
 	    
-	    $rootItem = new SimpleHierarchyItem ( $rootMenuItemArray, 1, 0 );
+	    $rootHierarchyItem['menu_item'] = $availableLanguages[$language]; 
+	    
+	    $rootItem = new SimpleHierarchyItem ( $rootHierarchyItem, 1, 0 );
 	    return $rootItem;
 	}
 	
