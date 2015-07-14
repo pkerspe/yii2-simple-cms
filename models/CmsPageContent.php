@@ -13,8 +13,8 @@ namespace schallschlucker\simplecms\models;
 
 use Yii;
 use yii\db\Expression;
-use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
+use schallschlucker\simplecms\behaviours\CmsBlameableBehavior;
 
 /**
  * This is the model class for table "cms_page_content".
@@ -44,7 +44,7 @@ class CmsPageContent extends \yii\db\ActiveRecord {
 				'value' => new Expression ( 'NOW()' ) 
 			],
 			[ 
-				'class' => BlameableBehavior::className (),
+				'class' => CmsBlameableBehavior::className (),
 				'createdByAttribute' => 'createdby_userid',
 				'updatedByAttribute' => 'modification_userid' 
 			] 

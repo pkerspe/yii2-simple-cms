@@ -23,6 +23,8 @@ use schallschlucker\simplecms\models\CmsMaintenanceForm;
 use schallschlucker\simplecms\controllers\backend\SettingsAndMaintenanceController;
 use yii\db\Expression;
 use schallschlucker\simplecms\models\SimpleHierarchyItem;
+use schallschlucker\simplecms\LanguageManager;
+use schallschlucker\simplecms\Frontend;
 
 /**
  * The default controller of the CMS Backend.
@@ -304,15 +306,83 @@ class DefaultController extends Controller {
 			}
 		}
 		
-		if(isset($itemIndex [DefaultController::$ROOT_HIERARCHY_ITEM_ID])){
+		//auto create root item if it does not exist
+		if(!isset($itemIndex [DefaultController::$ROOT_HIERARCHY_ITEM_ID])){
+		    return DefaultController::autoCreateRootItemInAllConfiguredLanguages();
+		} else if(isset($itemIndex [DefaultController::$ROOT_HIERARCHY_ITEM_ID])){
 			$rootItem = new SimpleHierarchyItem ( $itemIndex [DefaultController::$ROOT_HIERARCHY_ITEM_ID], ($expandLevel > 0), 0 );
 			unset ( $itemIndex [DefaultController::$ROOT_HIERARCHY_ITEM_ID] );
 			DefaultController::populateChildrenRecursive ( $rootItem, $itemIndex, $expandLevel, 1 );
 			return $rootItem;
 		} else {
-			throw new \Exception('Missing root hierarchy item (with id = '.DefaultController::$ROOT_HIERARCHY_ITEM_ID.'). Can not build page tree.');
+			throw new \Exception('Missing root hierarchy item (with id = '.DefaultController::$ROOT_HIERARCHY_ITEM_ID.'), Autocreation failed also. Can not build page tree.');
 		}
 		return null;
+	}
+	
+	/**
+	 * generate a root item in all configured languages wuth default name and content.
+	 * This is used in case the database is not setup properly for some reason to prevent an error message being shown due to missing root item.
+	 * @return \schallschlucker\simplecms\models\SimpleHierarchyItem
+	 */
+	public static function autoCreateRootItemInAllConfiguredLanguages(){
+	    //FIXME: maybe modify this function to only create a default language instead, some people might not want to have the root item in all configured languages for some reason
+	    
+	    /* @var $languageManager LanguageManager */
+	    $languageManager = Frontend::getLanguageManagerStatic();
+	    $rootMenuItemArray = [];
+	    
+	    //check if item exists and maybe is just missing menu items
+	    $rootHierarchyItem = CmsHierarchyItem::findOne(DefaultController::$ROOT_HIERARCHY_ITEM_ID);
+	    
+	    if($rootHierarchyItem == null){
+    	    $rootHierarchyItem = new CmsHierarchyItem();
+    	    $rootHierarchyItem->display_state = CmsHierarchyItem::DISPLAYSTATE_PUBLISHED_VISIBLE_IN_NAVIGATION;
+    	    $rootHierarchyItem->id = DefaultController::$ROOT_HIERARCHY_ITEM_ID;
+    	    $rootHierarchyItem->position = 1;
+    	    if(!$rootHierarchyItem->save(false))
+    	        throw new \Exception("failed while trying to auto create missing root hierarchy item. This error was caused whily trying to auto create a root hierarchy item for the cms, since none exists at the moment. Please make sure a hierarchy item with the ID ".DefaultController::$ROOT_HIERARCHY_ITEM_ID." exists, for the cms to work.");
+	    }
+	    
+	    $existingCmsMenu = $rootHierarchyItem->getCmsMenus()->all();
+	    $availableLanguages = [];
+	    
+	    foreach ($existingCmsMenu as $tempMenuItem)
+	        $availableLanguages[$tempMenuItem->language] = $tempMenuItem;
+	    
+	    foreach($languageManager->getAllConfiguredLanguageCodes() as $key => $code){
+	        if(!array_key_exists($key,$availableLanguages)){
+    	        $pageContent = new CmsPageContent();
+    	        $pageContent->content = "Auto generated page content. This page content has been created by the Cms Backend due to the fact that no root item was existing in the database.";
+    	        $pageContent->created_datetime = date('Y-m-d-H:i:s');
+    	        $pageContent->createdby_userid = "1";
+    	        $pageContent->description = "root page of yii2 simplecms plugin tree structure";
+    	        $pageContent->language = $key;
+    	        $pageContent->isNewRecord = true;
+    	        if(!$pageContent->save(false))
+    	            throw new \Exception("failed while trying to auto create page content for missing root hierarchy item. This error was caused whily trying to auto create a root hierarchy item for the cms, since none exists at the moment. Please make sure a hierarchy item with the ID ".DefaultController::$ROOT_HIERARCHY_ITEM_ID." exists, for the cms to work.");
+    	        
+    	        $menuItem = new CmsMenuItem();
+    	        $menuItem->alias = 'root';
+    	        $menuItem->name = 'Root';
+    	        $menuItem->cms_hierarchy_item_id = DefaultController::$ROOT_HIERARCHY_ITEM_ID;
+    	        $menuItem->created_datetime = date('Y-m-d-H:i:s');
+    	        $menuItem->createdby_userid = "1"; //TODO should we get the current user id here? Or is there some kind of a system user id to indidcate auto creation
+    	        $menuItem->isNewRecord = true;
+    	        $menuItem->language = $key;
+    	        $menuItem->page_content_id = $pageContent->id;
+    	        
+    	        if(!$menuItem->save(false))
+    	           throw new \Exception("failed while trying to auto create menu item for root hierarchy item. This error was caused whily trying to auto create a root hierarchy item for the cms, since none exists at the moment. Please make sure a hierarchy item with the ID ".DefaultController::$ROOT_HIERARCHY_ITEM_ID." exists, for the cms to work.");
+               
+    	        $availableLanguages[$key] = $menuItem;
+    	        
+    	        $rootMenuItemArray[] = $menuItem;
+	        }
+	    }
+	    
+	    $rootItem = new SimpleHierarchyItem ( $rootMenuItemArray, 1, 0 );
+	    return $rootItem;
 	}
 	
 	/**

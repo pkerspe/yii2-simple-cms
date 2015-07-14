@@ -23,8 +23,7 @@ $this->params ['breadcrumbs'] [] = $this->title;
 		<div class="alert alert-success"><?= $message ?></div>
 	<?php } ?>
 
-	<span
-		class="flag flag_<?= $languageCode['code'] ?> flag-big pull-right"></span>
+	<span class="flag flag_<?= $languageCode['code'] ?> flag-big pull-right"></span>
 	<h1><?= $this->title ?></h1>
 
 <?php

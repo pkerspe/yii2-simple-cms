@@ -11,6 +11,7 @@
 namespace schallschlucker\simplecms\models;
 
 use Yii;
+use schallschlucker\simplecms\models\CmsMenuItem;
 
 /**
  * This is the model class for table "cms_hierarchy_item".
@@ -95,7 +96,7 @@ class CmsHierarchyItem extends \yii\db\ActiveRecord {
 	 * @return \yii\db\ActiveQuery
 	 */
 	public function getCmsMenus() {
-		return $this->hasMany ( CmsMenu::className (), [ 
+		return $this->hasMany ( CmsMenuItem::className (), [ 
 			'cms_hierarchy_item_id' => 'id' 
 		] );
 	}

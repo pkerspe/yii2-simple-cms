@@ -62,17 +62,17 @@ class LanguageManager extends Component {
                 'de_DE' => 'polnisch', 
 	            'en_US' => 'polish',
     	        'pl_PL' => 'polski',
-        	    'tr_TR' => 'lehçe',
+        	    'tr_TR' => 'lehï¿½e',
             ],
         ],
 	    '4' => [
     	    'id' => 4,
 			'code' => 'tr_TR', 
         	'displaytext' => [
-            	'de_DE' => 'türkisch', 
+            	'de_DE' => 'tï¿½rkisch', 
                 'en_US' => 'turkish',
                 'pl_PL' => 'turecki',
-	            'tr_TR' => 'türk',
+	            'tr_TR' => 'tï¿½rk',
     	    ],
 	   ],
 	];
@@ -136,7 +136,7 @@ class LanguageManager extends Component {
 		if (isset ( $this->languageIdMappings [$languageId] )) {
 			return $this->languageIdMappings [$languageId];
 		}
-		throw new InvalidConfigException ( 'error: the given language parameter with value \'' . $languageId . '\' is not valid. Configured the language ID in the module configuration.' );
+		throw new InvalidConfigException ( 'error: the given language parameter with value \'' . $languageId . '\' is not a valid language id. PLease configure the language ID in the module configuration.' );
 	}
 	
 	public function getConfiguredIdLanguagesMappingTranslated($languageIdToGetTranslationsFor) {
