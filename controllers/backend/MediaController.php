@@ -36,7 +36,7 @@ use schallschlucker\simplecms\models\MediaVariationManagerUpload;
  * Default action is actionMediabrowser, which renders an all in one administration mask for creating and maintaining media elements.
  *
  * @menuLabel CMS Administration
- * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+ * @menuIcon <i class="fa fa-files-o"></i>
  */
 class MediaController extends Controller {
 	public static $MEDIA_TYPE_AUDIO = 'AUDIO';

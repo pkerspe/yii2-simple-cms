@@ -20,7 +20,7 @@ use yii\filters\VerbFilter;
 /**
  * CmsPageContentController implements the CRUD actions for CmsPageContent model.
  * @menuLabel CMS Administration
- * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+ * @menuIcon <i class="fa fa-files-o"></i>
  */
 class CmsPageContentController extends Controller {
 	public function behaviors() {

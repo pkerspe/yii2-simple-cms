@@ -20,7 +20,7 @@ use yii\filters\VerbFilter;
 /**
  * CmsHierarchyController implements the CRUD actions for CmsHierarchyItem model.
  * @menuLabel CMS Administration
- * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+ * @menuIcon <i class="fa fa-files-o"></i>
  */
 class CmsHierarchyController extends Controller {
 	public function behaviors() {
@@ -75,7 +75,7 @@ class CmsHierarchyController extends Controller {
 	 * Creates a new CmsHierarchyItem model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 *
-	 * @menuLabel Create new hierarchy item
+	 * @menuLabel __HIDDEN__
 	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
 	 * @functionalRight cmsBackendWrite
 	 * 

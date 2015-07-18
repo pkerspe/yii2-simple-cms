@@ -31,7 +31,7 @@ use schallschlucker\simplecms\Frontend;
  * Default action is actionIndex, which renders an all in one administration mask for creating and maintaining the page tree.
  *
  * @menuLabel CMS Administration
- * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+ * @menuIcon <i class="fa fa-files-o"></i>
  */
 class DefaultController extends Controller {
 	
