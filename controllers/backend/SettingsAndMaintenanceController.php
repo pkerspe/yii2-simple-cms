@@ -27,8 +27,8 @@ use yii\db\Expression;
  * The settings and maintenance controller of the CMS Backend.
  * Default action is actionIndex, which renders an all in one administration mask for creating and maintaining the page tree.
  *
- * @menuLabel CMS Settings and Maintenance
- * @menuIcon <span class="glyphicon glyphicon-cog"></span>
+ * @menuLabel CMS Administration
+ * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
  */
 class SettingsAndMaintenanceController extends Controller {
 
@@ -36,7 +36,7 @@ class SettingsAndMaintenanceController extends Controller {
 	/**
 	 * cms maintenance page
 	 * @menuLabel Maintenance functions
-	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @menuIcon <span class="glyphicon glyphicon-cog"></span>
 	 * @functionalRight cmsBackendWrite
 	 * @return string
 	 */
@@ -67,7 +67,7 @@ class SettingsAndMaintenanceController extends Controller {
 	 * basically a test action for development puposes only
 	 *
 	 * @menuLabel Profiling test page
-	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
+	 * @menuIcon <i class="fa fa-cogs"></i>
 	 * @functionalRight cmsBackendRead
 	 *
 	 * @return \yii\web\Response|string

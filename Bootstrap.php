@@ -25,15 +25,16 @@ class Bootstrap implements BootstrapInterface
      */
     public function bootstrap($app)
     {
-//         if (!$app->hasModule('simplecms_frontend')) {
-//             $app->setModule('simplecms_frontend', [
-//                 'class' => 'schallschlucker\simplecms\Frontend'
-//             ]);
-//         }
+        if (!$app->hasModule('simplecms_frontend')) {
+            $app->setModule('simplecms_frontend', [
+                'class' => 'schallschlucker\simplecms\Frontend'
+            ]);
+        }
 
         /** @var $module Module */
          $module = $app->getModule('simplecms_frontend');
-		 
+		 if($module == null)
+		     throw new \Exception("Could not find module simplecms_frontend. Please make sure it is configured in your main configuration");
 
          if (!$app instanceof \yii\console\Application) {
              $configUrlRule = [
