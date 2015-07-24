@@ -40,29 +40,32 @@ class CmsSitemapWidget extends Widget {
 		parent::init ();
 	}
 	
-	public function renderChildrenRecursive($simpleHierarchyItem, $currentLevel, $maxLevel, $output){
+	public function renderChildrenRecursive($simpleHierarchyItem, $currentLevel, $maxLevel, &$widgetHtml){
 	    if($currentLevel >= $maxLevel)
 	        return;
 	    
 	    if(count($simpleHierarchyItem->children) > 0){
-	        $output .= '<ul class="cms-sitemap-level-'.$currentLevel.'">';
+	        $widgetHtml .= '<ul class="cms-sitemap-level-'.$currentLevel.'">';
 	        foreach($simpleHierarchyItem->getAllChildren() as $childItem){
 	            /* @var $areaItem SimpleHierarchyItem */
-	            $output .= '<li class="cms-sitemap-level-'.$currentLevel.'">'.$childItem->getLinkTag();
+	            $widgetHtml .= '<li class="cms-sitemap-level-'.$currentLevel.'">'.$childItem->getLinkTag();
 	            if(count($childItem->children) > 0){
-	                $this->renderChildrenRecursive($childItem, $currentLevel+1, $maxLevel, $output);
+	                $this->renderChildrenRecursive($childItem, $currentLevel+1, $maxLevel, $widgetHtml);
 	            }
-	            $output .= '</li>';
+	            $widgetHtml .= '</li>';
 	        }
-	        $output .= '</ul>';
+	        $widgetHtml .= '</ul>';
 	    }
+		return $widgetHtml;
 	}
 	
 	public function run() {
 		$widgetHtml = '<ul class="cms-sitemap-level-0">'.PHP_EOL;
 		
 		/* @var $rootHierarchyItem SimpleHierarchyItem */
-		$rootHierarchyItem = NavigationController::getRootHierarchyItemCached($this->languageId);
+		
+		echo $this->languageId;
+		$rootHierarchyItem = NavigationController::getRootHierarchyItemCached($this->languageId,false,false);
 		
 		if($this->displayRootItem){
 			$widgetHtml .= '<li class="cms-sitemap-level-0">'.$rootHierarchyItem->getLinkTag();
