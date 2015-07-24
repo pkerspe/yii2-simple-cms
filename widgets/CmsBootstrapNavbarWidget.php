@@ -25,12 +25,21 @@ use schallschlucker\simplecms\Frontend;
  * @param $languageId integer the id of the language to render the navigation for (the language of the menu items). If paramete is omitted, the current app language (as returned by Yii::$app->language) is used and converted to languageid via the configured languageManager
  * @param $enableHoverDropDown boolean true inidcates that area items should be clickable and dorpdown menu will be display on hover state. false results in area items not being links but instead only open the submenu drawer on click.
  * @param $displayRootItem boolean true displays the root item, false supresses the root item
+ * @param $navElementClasses string cass classes to set for nav element
+ * @param $navbarBrand string text / link to set as navbar brand to display in small screen size drop down menu
+ * @param $appendedNavBlock string hmtl code append after last LI within UL
+ * @param $appendAfterUL string html code to append after UL in nav bar
  */
 class CmsBootstrapNavbarWidget extends Widget {
 	
 	public $languageId;
 	public $enableHoverDropDown = false;
 	public $displayRootItem = true;
+	public $navElementClasses = 'navbar navbar-default';
+	public $mainULElementClasses = 'nav navbar-nav';
+	public $navbarBrand = '';
+	public $appendedNavBlock = '';
+	public $appendAfterUL = '';
 	
 	public function init() {
 		if($this->languageId == null){
@@ -53,10 +62,9 @@ class CmsBootstrapNavbarWidget extends Widget {
 			</style>
 TEXT;
 		}
-		
-		$widgetHtml .= <<<TEXT
 
-<nav class="navbar navbar-default">
+		$widgetHtml .= <<<TEXT
+<nav class="$this->navElementClasses">
   <div class="container-fluid">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#cms-navbar-collapse-1">
@@ -65,10 +73,13 @@ TEXT;
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
+TEXT;
+	  $widgetHtml .= $this->navbarBrand;
+	  $widgetHtml .= <<<TEXT
     </div>
 
     <div class="collapse navbar-collapse" id="cms-navbar-collapse-1">
-		<ul class="nav navbar-nav">
+		<ul class="$this->mainULElementClasses">
 TEXT;
 		/* @var $simpleHierarchyItem SimpleHierarchyItem */
 		$simpleHierarchyItem = NavigationController::getRootHierarchyItemCached($this->languageId);
@@ -96,7 +107,9 @@ TEXT;
 		}
 		
 		$widgetHtml .= <<<TEXT
+		$this->appendedNavBlock
       	</ul>
+        $this->appendAfterUL
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
