@@ -23,6 +23,7 @@ class Frontend extends \yii\base\Module {
 	public $controllerNamespace = 'schallschlucker\simplecms\controllers\frontend';
 	public $defaultRoute='show';
 	public $languageManager;
+	public $renderTopMenuNavbar = true;
 	public $cache;
 	
 	/**

@@ -6,9 +6,12 @@ use schallschlucker\simplecms\widgets\CmsBootstrapNavbarWidget;
 /* @var $this yii\web\View */
 /* @var $pageContentModel schallschlucker\simplecms\models\CmsPageContent */
 /* @var $isfallbacklanguage boolean */
+/* @var $renderTopMenuNavbar boolean */
 
-$widget = new CmsBootstrapNavbarWidget(['displayRootItem'=>true,'enableHoverDropDown'=>true]);
-echo $widget->run();
+if($renderTopMenuNavbar){
+    $widget = new CmsBootstrapNavbarWidget(['displayRootItem'=>true,'enableHoverDropDown'=>true]);
+    echo $widget->run();
+}
 
 if($pageContentModel->css != null && $pageContentModel->css != ''){
 	$this->registerCss ( $pageContentModel->css,[],'cmsCustonCssCode' );
