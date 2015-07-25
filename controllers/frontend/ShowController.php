@@ -118,6 +118,12 @@ class ShowController extends Controller {
 		if($pageContent->description != null && trim($pageContent->description) != '')
 			$this->view->registerMetaTag(['name' => 'description','content' => $pageContent->description]);
 		
+		//set title tag either by htmlTitle Attribute if any or using the name of the menu item
+		$pageTitle = Yii::$app->controller->module->htmlTitlePrefix;
+		$pageTitle .= (isset($pageContent->htmlTitle) && $pageContent->htmlTitle != "") ? $pageContent->htmlTitle : $menuItem->name;
+	    $pageTitle .= Yii::$app->controller->module->htmlTitleSuffix;
+		$this->view->title = $pageTitle;
+		
 		return $this->render ( 'page', [
 			'pageContentModel' => $pageContent,
 			'isfallbacklanguage' => $isFallback,

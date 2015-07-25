@@ -101,7 +101,9 @@ Content pages in simple cms can be created in multiple language, since simple cm
 			'urlPrefix' => 'cms', //the context alias for the module if you do not want to use simplecms_frotend in your URLs to call the pretty URL aliases
 	        'class' => 'schallschlucker\simplecms\Frontend',
 			'languageManager' => simplecmsLanguageManager,
-			'renderTopMenuNavbar' => true, //boolean to indicate if a bootstrap navbar dropdown navigation (using CmsBootstrapNavbarWidget) should be rendered by the view. Set to false of you build your own navigation using one of the widgets provided by simplecms (e.g. CmsBootstrapNavbarWidget or CmsSitemapWidget) 
+			'renderTopMenuNavbar' => true, //boolean to indicate if a bootstrap navbar dropdown navigation (using CmsBootstrapNavbarWidget) should be rendered by the view. Set to false of you build your own navigation using one of the widgets provided by simplecms (e.g. CmsBootstrapNavbarWidget or CmsSitemapWidget)  (optional, default is true)
+			'htmlTitlePrefix' => '', //string to prepend to html title tag (optional, default is empty)
+			'htmlTitleSuffix' => '' //string to append to generated html title tag (optional, default is empt)
 	    ],
 	],
 

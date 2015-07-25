@@ -25,6 +25,8 @@ class Frontend extends \yii\base\Module {
 	public $languageManager;
 	public $renderTopMenuNavbar = true;
 	public $cache;
+	public $htmlTitlePrefix = '';
+	public $htmlTitleSuffix = '';
 	
 	/**
 	 * @var string The prefix for the frontend module URL.

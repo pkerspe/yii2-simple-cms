@@ -21,6 +21,7 @@ use schallschlucker\simplecms\behaviours\CmsBlameableBehavior;
  *
  * @property integer $id
  * @property integer $language the language id of this page content
+ * @property string $htmlTitle value to override the html title tag. If empy the menu item name will be used instead. Title will be prefixed/suffixed with configured string from module config is set (check Frontnend module parameters htmlTitlePrefix and htmlTitleSuffix)
  * @property string $metatags_general metatags to be rendered in the frontend view page
  * @property string $meta_keywords keywords to be used in the search as well as in the metatags in the frontend
  * @property string $description a short description of the contents of this page. Used in Metatags as well as to display a preview of the page content in the search results or teaser lists
@@ -83,7 +84,8 @@ class CmsPageContent extends \yii\db\ActiveRecord {
 				[ 
 					'content',
 					'javascript',
-					'css' 
+					'css',
+				    'htmlTitle',
 				],
 				'string' 
 			],
@@ -97,14 +99,15 @@ class CmsPageContent extends \yii\db\ActiveRecord {
 			[ 
 				[ 
 					'metatags_general',
-					'description' 
+					'description'
 				],
 				'string',
 				'max' => 500 
 			],
 			[ 
 				[ 
-					'meta_keywords' 
+					'meta_keywords',
+				    'htmlTitle',
 				],
 				'string',
 				'max' => 255 
@@ -119,6 +122,7 @@ class CmsPageContent extends \yii\db\ActiveRecord {
 		return [ 
 			'id' => Yii::t ( 'simplecms', 'ID' ),
 			'language' => Yii::t ( 'simplecms', 'Language' ),
+		    'htmlTitle' => Yii::t ( 'simplecms', 'HTML Title' ),
 			'metatags_general' => Yii::t ( 'simplecms', 'Metatags General' ),
 			'meta_keywords' => Yii::t ( 'simplecms', 'Meta Keywords' ),
 			'description' => Yii::t ( 'simplecms', 'Description' ),
