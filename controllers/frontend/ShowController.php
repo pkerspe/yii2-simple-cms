@@ -130,22 +130,22 @@ class ShowController extends Controller {
 	    $pageTitle .= Yii::$app->controller->module->htmlTitleSuffix;
 		$this->view->title = $pageTitle;
 		
-		Yii::$app->view->params['currentHierarchyItemId'] = $menuItem->cmsHierarchyItem->id;
-		
+		Yii::$app->view->params['currentHierarchyItemId'] = $menuItem->cms_hierarchy_item_id;
 		
 		if(Yii::$app->controller->module->assembleBreadcrumbInformation){
 			$breadcrumbArray = [];
     		Yii::beginProfile(__METHOD__,'CMS-BREADCRUMB-NAVIGATION');
     		//check if item is root already, if not recurse through route back to route
-    		if($menuItem->cmsHierarchyItem->id != DefaultController::$ROOT_HIERARCHY_ITEM_ID){
+    		if($menuItem->cms_hierarchy_item_id != DefaultController::$ROOT_HIERARCHY_ITEM_ID){
         		$tempMenuItemInPath = $menuItem;
-    		    $breadcrumbArray[$tempMenuItemInPath->cmsHierarchyItem->id] = $tempMenuItemInPath;
-        		while ($tempMenuItemInPath->cmsHierarchyItem->parent_id != DefaultController::$ROOT_HIERARCHY_ITEM_ID){
+    		    $breadcrumbArray[$tempMenuItemInPath->cms_hierarchy_item_id] = $tempMenuItemInPath;
+				$hierarchyItem = $tempMenuItemInPath->cmsHierarchyItem;
+        		while ($hierarchyItem->parent_id != DefaultController::$ROOT_HIERARCHY_ITEM_ID){
         		    /* @var $parentCmsHierarchyItem CmsHierarchyItem */
-        		    $parentCmsHierarchyItem = $tempMenuItemInPath->cmsHierarchyItem->getParent()->with('cmsMenus')->one();
-        		    $cmsMenuItems = $parentCmsHierarchyItem->getCmsMenus()->all();
-        		    $tempMenuItemInPath = $cmsMenuItems[0]; //FIXME: get correct lang version
-        		    $breadcrumbArray[$parentCmsHierarchyItem->id] = $tempMenuItemInPath;
+        		    $parentCmsHierarchyItem = $hierarchyItem->getParent()->with('cmsMenus')->one();
+        		    $cmsMenuItem = $parentCmsHierarchyItem->cmsMenus[0];
+					$hierarchyItem = $cmsMenuItem->cmsHierarchyItem;
+        		    $breadcrumbArray[$parentCmsHierarchyItem->id] = $cmsMenuItem; //FIXME: get correct lang version
         		}
     		}
     		Yii::endProfile(__METHOD__);

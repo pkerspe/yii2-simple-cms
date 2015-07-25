@@ -15,6 +15,7 @@ use Yii;
 use yii\db\Expression;
 use yii\behaviors\TimestampBehavior;
 use schallschlucker\simplecms\behaviours\CmsBlameableBehavior;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "cms_menu_item".
@@ -199,5 +200,23 @@ class CmsMenuItem extends \yii\db\ActiveRecord {
 		return $this->hasOne ( CmsPageContent::className (), [ 
 			'id' => 'page_content_id' 
 		] );
+	}
+	
+	/**
+	 * get an absolute URL to call this menu item
+	 * @return string
+	 */
+	public function getFormattedUrl(){
+        if($this->page_content_id != null){
+            if($this->alias != null && $this->alias != ''){
+                return Url::toRoute(['/'.Yii::$app->getModule('simplecms_frontend')->routePrefix.'/show/alias','menuItemAlias' => $this->alias]);
+            } else {
+                return Url::toRoute(['/'.Yii::$app->getModule('simplecms_frontend')->routePrefix.'/show/page','menuItemId' => $this->id]);
+            }
+        }
+        else if($this->document_id)
+            return Url::toRoute(['/'.Yii::$app->getModule('simplecms_frontend')->routePrefix.'/show/document','documentId' => $this->document_id]);
+        else
+            return $this->direct_url;
 	}
 }
