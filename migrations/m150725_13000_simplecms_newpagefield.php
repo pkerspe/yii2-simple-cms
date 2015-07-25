@@ -34,13 +34,13 @@ class m150725_13000_simplecms_newpagefield extends Migration {
 	
 	
 	public function safeUp() {
-	    echo "Creating new database field htmlTitle in cms_page_content table\n";
-	    $this->addColumn('{{%cms_page_content}}', 'htmlTitle', Schema::TYPE_STRING.'(255) DEFAULT NULL COMMENT \'optional html title tag text for this page\'');
+	    echo "Creating new database field html_title in cms_page_content table\n";
+	    $this->addColumn('{{%cms_page_content}}', 'html_title', Schema::TYPE_STRING.'(255) DEFAULT NULL COMMENT \'optional html title tag text for this page\'');
 	}
 	
 	public function down() {
-	    echo "removing database field htmlTitle in cms_page_content table\n";
-		$this->dropColumn( '{{%cms_page_content}}' , 'htmlTitle');
+	    echo "removing database field html_title in cms_page_content table\n";
+		$this->dropColumn( '{{%cms_page_content}}' , 'html_title');
 	}
 }
 ?>

@@ -120,7 +120,7 @@ class ShowController extends Controller {
 		
 		//set title tag either by htmlTitle Attribute if any or using the name of the menu item
 		$pageTitle = Yii::$app->controller->module->htmlTitlePrefix;
-		$pageTitle .= (isset($pageContent->htmlTitle) && $pageContent->htmlTitle != "") ? $pageContent->htmlTitle : $menuItem->name;
+		$pageTitle .= (isset($pageContent->html_title) && $pageContent->html_title != "") ? $pageContent->html_title : $menuItem->name;
 	    $pageTitle .= Yii::$app->controller->module->htmlTitleSuffix;
 		$this->view->title = $pageTitle;
 		
