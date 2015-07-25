@@ -29,6 +29,7 @@ use schallschlucker\simplecms\Frontend;
  * @param $navbarBrand string text / link to set as navbar brand to display in small screen size drop down menu
  * @param $appendedNavBlock string hmtl code append after last LI within UL
  * @param $appendAfterUL string html code to append after UL in nav bar
+ * @param $this->pathToRoot Array assoc array where key is hierarchy item id and value is menu item
  */
 class CmsBootstrapNavbarWidget extends Widget {
 	
@@ -40,6 +41,9 @@ class CmsBootstrapNavbarWidget extends Widget {
 	public $navbarBrand = '';
 	public $appendedNavBlock = '';
 	public $appendAfterUL = '';
+	public $activeItemId = -1;
+	public $activeItemLiClass = 'active';
+	public $pathToRoot = [];
 	
 	public function init() {
 		if($this->languageId == null){
@@ -51,6 +55,7 @@ class CmsBootstrapNavbarWidget extends Widget {
 	}
 	
 	public function run() {
+		$activeLiClassAttribute = ' class="'.$this->activeItemLiClass.'"';
 		$widgetHtml = '';
 		if($this->enableHoverDropDown){
 		$widgetHtml .= <<<TEXT
@@ -87,7 +92,7 @@ TEXT;
 		$areaDropDownAttributes = '';
 		
 		if($this->displayRootItem){
-			$widgetHtml .= '<li>'.$simpleHierarchyItem->getLinkTag().'</li>';
+			$widgetHtml .= '<li'.(($this->activeItemId == $simpleHierarchyItem->id || key_exists($simpleHierarchyItem->id, $this->pathToRoot))? $activeLiClassAttribute : '').'>'.$simpleHierarchyItem->getLinkTag().'</li>';
 		}
 		
 		if(!$this->enableHoverDropDown){
@@ -96,13 +101,13 @@ TEXT;
 		}
 		foreach($simpleHierarchyItem->getAllChildren() as $areaItem){
 			if(count($areaItem->children) > 0){
-				$widgetHtml .= '<li class="dropdown">'.$areaItem->getLinkTag($areaDropDownClasses,$areaDropDownAttributes.' role="button" aria-expanded="false"','<span class="caret"></span>').'<ul class="dropdown-menu" role="menu">';
+				$widgetHtml .= '<li class="dropdown'.(($this->activeItemId == $areaItem->id || key_exists($areaItem->id, $this->pathToRoot))? ' '.$this->activeItemLiClass: '').'">'.$areaItem->getLinkTag($areaDropDownClasses,$areaDropDownAttributes.' role="button" aria-expanded="false"','<span class="caret"></span>').'<ul class="dropdown-menu" role="menu">';
 				foreach($areaItem->getAllChildren() as $areaChildItem){
-					$widgetHtml .= '<li>'.$areaChildItem->getLinkTag().'</li>';
+					$widgetHtml .= '<li'.(($this->activeItemId == $areaChildItem->id || key_exists($areaChildItem->id, $this->pathToRoot))? $activeLiClassAttribute : '').'>'.$areaChildItem->getLinkTag().'</li>';
 				}
 				$widgetHtml .= '</ul></li>';
 			} else {
-				$widgetHtml .= '<li>'.$areaItem->getLinkTag().'</li>';
+				$widgetHtml .= '<li'.(($this->activeItemId == $areaItem->id || key_exists($areaItem->id, $this->pathToRoot))? $activeLiClassAttribute : '').'>'.$areaItem->getLinkTag().'</li>';
 			}
 		}
 		
