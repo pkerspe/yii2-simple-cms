@@ -27,7 +27,7 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'css')->textarea()?>
 
         <?= $form->field($model, 'description')->textarea(['maxlength' => 500])?>
-        <?= $form->field($model, 'html_title')->textarea(['maxlength' => 255])?>?>
+        <?= $form->field($model, 'html_title')?>
         <?= $form->field($model, 'meta_keywords')->textarea(['maxlength' => 255])?>
         <?= $form->field($model, 'metatags_general')->textarea(['maxlength' => 500])?>
     
