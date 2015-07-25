@@ -17,7 +17,7 @@ use schallschlucker\simplecms\controllers\backend\MediaController;
  *
  * @author Paul Kerspe
  */
-class m150725_13000_simplecms_newpagefield extends Migration {
+class m150725_130000_simplecms_newpagefield extends Migration {
 	
 	/**
 	 *
