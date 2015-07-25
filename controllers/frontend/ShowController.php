@@ -127,6 +127,7 @@ class ShowController extends Controller {
 		return $this->render ( 'page', [
 			'pageContentModel' => $pageContent,
 			'isfallbacklanguage' => $isFallback,
+            'renderTopMenuNavbar' => Yii::$app->controller->module->renderTopMenuNavbar,
 		] );
 	}
 	
