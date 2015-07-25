@@ -27,6 +27,7 @@ class Frontend extends \yii\base\Module {
 	public $cache;
 	public $htmlTitlePrefix = '';
 	public $htmlTitleSuffix = '';
+	public $assembleBreadcrumbInformation = true; //assemble breadcrumb navigation in ShowController pageAction and store to view parameter $this->params['breadcrumbHierarchyItemPath']
 	
 	/**
 	 * @var string The prefix for the frontend module URL.

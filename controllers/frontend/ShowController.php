@@ -59,6 +59,12 @@ class ShowController extends Controller {
 		if($pageContent == null)
 			throw new NotFoundHttpException('No content could be found for the given id',404);
 		
+		Yii::$app->view->params['currentHierarchyItemId'] = $menuItem->cmsHierarchyItem->id;
+		
+		if(Yii::$app->controller->module->assembleBreadcrumbInformation){
+            Yii::$app->view->params['breadcrumbHierarchyItemPath'] = [];
+		}
+		
 		return $this->render ( 'page', [ 
 			'pageContentModel' => $pageContent,
 			'isfallbacklanguage' => $isFallback,
@@ -124,10 +130,31 @@ class ShowController extends Controller {
 	    $pageTitle .= Yii::$app->controller->module->htmlTitleSuffix;
 		$this->view->title = $pageTitle;
 		
+		Yii::$app->view->params['currentHierarchyItemId'] = $menuItem->cmsHierarchyItem->id;
+		
+		
+		if(Yii::$app->controller->module->assembleBreadcrumbInformation){
+			$breadcrumbArray = [];
+    		Yii::beginProfile(__METHOD__,'CMS-BREADCRUMB-NAVIGATION');
+    		//check if item is root already, if not recurse through route back to route
+    		if($menuItem->cmsHierarchyItem->id != DefaultController::$ROOT_HIERARCHY_ITEM_ID){
+        		$tempMenuItemInPath = $menuItem;
+    		    $breadcrumbArray[$tempMenuItemInPath->cmsHierarchyItem->id] = $tempMenuItemInPath;
+        		while ($tempMenuItemInPath->cmsHierarchyItem->parent_id != DefaultController::$ROOT_HIERARCHY_ITEM_ID){
+        		    /* @var $parentCmsHierarchyItem CmsHierarchyItem */
+        		    $parentCmsHierarchyItem = $tempMenuItemInPath->cmsHierarchyItem->getParent()->with('cmsMenus')->one();
+        		    $cmsMenuItems = $parentCmsHierarchyItem->getCmsMenus()->all();
+        		    $tempMenuItemInPath = $cmsMenuItems[0]; //FIXME: get correct lang version
+        		    $breadcrumbArray[$parentCmsHierarchyItem->id] = $tempMenuItemInPath;
+        		}
+    		}
+    		Yii::endProfile(__METHOD__);
+			Yii::$app->view->params['breadcrumbHierarchyItemPath'] = $breadcrumbArray;
+		}
 		return $this->render ( 'page', [
 			'pageContentModel' => $pageContent,
 			'isfallbacklanguage' => $isFallback,
-            'renderTopMenuNavbar' => Yii::$app->controller->module->renderTopMenuNavbar,
+            'renderTopMenuNavbar' => Yii::$app->controller->module->renderTopMenuNavbar
 		] );
 	}
 	
