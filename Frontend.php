@@ -85,8 +85,10 @@ class Frontend extends \yii\base\Module {
 	public static function getLanguageManagerStatic(){
 	    //FIXME: currently this function is used in backend and frontend, this is not very clean and should be changed
 	    try {
-	       return Yii::$app->getModule('simplecms_frontend')->getLanguageManager();
-	    } catch (InvalidConfigException $e){
+	        if(Yii::$app->getModule('simplecms_frontend') != null)
+	           return Yii::$app->getModule('simplecms_frontend')->getLanguageManager();
+	        return Yii::$app->getModule('simplecms_backend')->getLanguageManager();	        
+	    } catch (\Exception $e){
 	        return Yii::$app->getModule('simplecms_backend')->getLanguageManager();
 	    }
 	}
