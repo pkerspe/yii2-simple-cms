@@ -1,7 +1,8 @@
 <?php
 use yii\helpers\Html;
+use yii\web\View;
 use yii\grid\GridView;
-use common\components\navigation\CmsBackendFunctionBarWidget;
+use schallschlucker\simplecms\widgets\CmsBackendFunctionBarWidget;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\modules\pn_cms\models\CmsPageContenttSearch */
