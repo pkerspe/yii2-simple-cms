@@ -20,6 +20,11 @@ if($isfallbacklanguage){
 	echo '<p class="fallbackwarning">'.Yii::t('simplecms', 'The page could not be found in the requested language, displaying fallback language instead').'</p>';
 }
 
+if (Yii::$app->controller->module->showBreadcrumbs) {
+    $this->params['breadcrumbs'][]  = ['label'=>\Yii::t('app', Yii::$app->controller->module->rootBreadcrumb), 'url'=>['/docs']];
+    $this->params['breadcrumbs'][]  = $this->title;
+}
+
 echo $pageContentModel->content;
 
 if($pageContentModel->javascript != null && trim($pageContentModel->javascript) != ''){

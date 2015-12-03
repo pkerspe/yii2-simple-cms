@@ -35,6 +35,8 @@ class Frontend extends \yii\base\Module {
 	 */
 	public $urlPrefix = 'cms'; //for the url in the forntend to be called
 	public $routePrefix = 'simplecms_frontend'; //to map to the module id given in the config
+    public $showBreadcrumbs = false;
+    public $rootBreadcrumb = 'CMS Home';
 	
 	/**
 	 *
