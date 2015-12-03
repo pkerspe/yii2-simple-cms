@@ -60,7 +60,7 @@ class CmsMenuItem extends \yii\db\ActiveRecord {
 	 * @inheritdoc
 	 */
 	public static function tableName() {
-		return 'cms_menu_item';
+		return '{{%cms_menu_item}}';
 	}
 	
 	/**

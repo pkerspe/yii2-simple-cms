@@ -57,7 +57,7 @@ class CmsDocument extends \yii\db\ActiveRecord {
 	 * @inheritdoc
 	 */
 	public static function tableName() {
-		return 'cms_document';
+		return '{{%cms_document}}';
 	}
 	
 	/**
