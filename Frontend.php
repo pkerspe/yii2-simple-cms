@@ -45,7 +45,7 @@ class Frontend extends \yii\base\Module {
 	public $urlRules = [ 
 		'home' => 'show/homepage',
 		'page/<menuItemId:\d+>' => 'show/page',
-		'c/<menuItemAlias:\w+>' => 'show/alias',
+		'c/<menuItemAlias:[\w-]+>' => 'show/alias',
 	];
 	
 	/**
