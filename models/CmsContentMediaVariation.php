@@ -33,7 +33,7 @@ class CmsContentMediaVariation extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'cms_content_media_variation';
+        return '{{%cms_content_media_variation}}';
     }
 
     /**

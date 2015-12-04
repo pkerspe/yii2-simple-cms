@@ -59,7 +59,7 @@ class ShowController extends Controller {
 		if($pageContent == null)
 			throw new NotFoundHttpException('No content could be found for the given id',404);
 		
-		Yii::$app->view->params['currentHierarchyItemId'] = $menuItem->cmsHierarchyItem->id;
+		Yii::$app->view->params['currentHierarchyItemId'] = $menuItemForRoot->cmsHierarchyItem->id;
 		
 		if(Yii::$app->controller->module->assembleBreadcrumbInformation){
             Yii::$app->view->params['breadcrumbHierarchyItemPath'] = [];

@@ -59,7 +59,7 @@ class CmsContentMedia extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'cms_content_media';
+        return '{{%cms_content_media}}';
     }
 
     /**

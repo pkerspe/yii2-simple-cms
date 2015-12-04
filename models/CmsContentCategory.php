@@ -29,7 +29,7 @@ class CmsContentCategory extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'cms_content_category';
+        return '{{%cms_content_category}}';
     }
 
     /**

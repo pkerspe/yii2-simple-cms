@@ -56,7 +56,7 @@ class CmsPageContent extends \yii\db\ActiveRecord {
 	 * @inheritdoc
 	 */
 	public static function tableName() {
-		return 'cms_page_content';
+		return '{{%cms_page_content}}';
 	}
 	
 	/**
