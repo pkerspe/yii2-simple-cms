@@ -104,7 +104,8 @@ Content pages in simple cms can be created in multiple language, since simple cm
 	'modules' => [
 		'simplecms_backend' => [
 	        'class' => 'schallschlucker\simplecms\Backend',
-			'languageManager' => simplecmsLanguageManager
+			'languageManager' => 'simplecmsLanguageManager',
+			'cache' => 'cache',
 	        ],
 		'simplecms_frontend' => [
 			'urlPrefix' => 'cms', //the context alias for the module if you do not want to use simplecms_frotend in your URLs to call the pretty URL aliases
@@ -112,11 +113,16 @@ Content pages in simple cms can be created in multiple language, since simple cm
 			'languageManager' => simplecmsLanguageManager,
 			'renderTopMenuNavbar' => true, //boolean to indicate if a bootstrap navbar dropdown navigation (using CmsBootstrapNavbarWidget) should be rendered by the view. Set to false of you build your own navigation using one of the widgets provided by simplecms (e.g. CmsBootstrapNavbarWidget or CmsSitemapWidget)  (optional, default is true)
 			'htmlTitlePrefix' => '', //string to prepend to html title tag (optional, default is empty)
-			'htmlTitleSuffix' => '' //string to append to generated html title tag (optional, default is empt)
+			'htmlTitleSuffix' => '', //string to append to generated html title tag (optional, default is empt)
+			'cache' => 'cache' //NOTE: remove this line if you do not have a cache component configured. Caching will reduce the load on the server a lot when building page trees, so it is highly recommended to user a proper cache implementation like memcached etc.
 	    ],
+        'media_manager' => [
+            'class' => 'schallschlucker\simplecms\MediaManager',
+            'mediarepositoryPath' => '/var/www/virtualhosts/www.einzelpflegefachkraft.de/curassist-app/mediarepository/',
+        ],
 	],
 
-After the modules registered, you should be able to open the administration backend by calling the "simplecms_backend" route e.g. by calling:
+After the modules are registered, you should be able to open the administration backend by calling the "simplecms_backend" route e.g. by calling:
 
 http://yourserver/index.php?r=simplecms_backend
 
@@ -124,10 +130,10 @@ or if pretty URLs are activated:
 
 http://yourserver/simplecms_backend
 
-Then you should see CMS Administration Backend with a root node in the page-tree.
+Then you should see the Simple CMS Administration Backend with a root node in the page-tree.
 By right-clicking on the root node you can add new pages to the page tree.
 Each page has multiple language versions, so you can create common page tree structure for all different language versions.
-Via drag and drop you can rearange the positions and orders of the pages.
+Via drag and drop you can rearange the positions of the pages within the page tree.
 Each page (except for the root node) can be set to one of three states:
 - visible: it will show up in the rendered navigation by the navigation widget
 - hidden: the page won't be shown in the navigation, yet it can be linked of found in the search
