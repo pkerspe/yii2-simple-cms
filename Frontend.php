@@ -22,7 +22,6 @@ class Frontend extends \yii\base\Module {
 	const VERSION = '0.2';
 	public $controllerNamespace = 'schallschlucker\simplecms\controllers\frontend';
 	public $defaultRoute='show';
-	public $mediarepositoryPath;
 	public $languageManager;
 	public $renderTopMenuNavbar = true;
 	public $cache;
@@ -59,9 +58,6 @@ class Frontend extends \yii\base\Module {
 			} elseif (is_array ( $config ['components'] [$name] ) && ! isset ( $config ['components'] [$name] ['class'] )) {
 				$config ['components'] [$name] ['class'] = $component ['class'];
 			}
-		}
-		if( empty($this->mediarepositoryPath) ){
-		    $this->mediarepositoryPath = Yii::getAlias('@webroot').DIRECTORY_SEPARATOR.'mediarepository';
 		}
 		parent::__construct ( $id, $parent, $config );
 	}

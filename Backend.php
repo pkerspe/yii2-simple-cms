@@ -20,17 +20,11 @@ use yii\base\InvalidConfigException;
  * @author Paul Kerspe
  */
 class Backend extends \yii\base\Module {
-	const VERSION = '0.2';
+	const VERSION = '0.3';
 	
 	public $controllerNamespace = 'schallschlucker\simplecms\controllers\backend';
-	public $mediarepositoryPath;
 	public $languageManager;
 	public $cache;
-	public $mimetypeMediaTypeMapping = [
-		'IMAGE' => ['image/jpeg','image/gif','image/png'],
-		'AUDIO' => ['audio/wav','audio/mpeg3','audio/x-mpeg-3','audio/x-mpequrl'],
-		'VIDEO' => ['video/mpeg','video/quicktime','video/vdo','application/x-troff-msvideo','video/msvideo'],
-	];
 	
 	/**
 	 *
@@ -50,9 +44,6 @@ class Backend extends \yii\base\Module {
 			} elseif (is_array ( $config ['components'] [$name] ) && ! isset ( $config ['components'] [$name] ['class'] )) {
 				$config ['components'] [$name] ['class'] = $component ['class'];
 			}
-		}
-		if( empty($this->mediarepositoryPath) ){
-		    $this->mediarepositoryPath = Yii::getAlias('@webroot').DIRECTORY_SEPARATOR.'mediarepository';
 		}
 		parent::__construct ( $id, $parent, $config );
 	}
