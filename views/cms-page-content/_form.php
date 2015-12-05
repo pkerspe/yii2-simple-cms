@@ -19,17 +19,21 @@ use yii\widgets\ActiveForm;
 	<?php } else { ?>
 		<span class="pull-right"><?= $model->getAttributeLabel('createdby_userid') .': '. $model->createdby_userid ?><br />
 		<?= $model->getAttributeLabel('created_datetime') .': '. $model->created_datetime ?></span>
-	<div><?= $model->getAttributeLabel('modification_userid') .': '. $model->modification_userid ?></div>
-	<div><?= $model->getAttributeLabel('modification_datetime') .': '. $model->modification_datetime ?></div>
+    <div><?= $model->getAttributeLabel('modification_userid') .': '. $model->modification_userid ?></div>
+    <div><?= $model->getAttributeLabel('modification_datetime') .': '. $model->modification_datetime ?></div>
 	<?php  } ?>
         <?= $form->field($model, 'content')->textarea(['class' => 'ckeditor'])?>
-        <?= $form->field($model, 'javascript')->textarea()?>
-        <?= $form->field($model, 'css')->textarea()?>
-
-        <?= $form->field($model, 'description')->textarea(['maxlength' => 500])?>
+	    <?= $form->field($model, 'render_subpage_teasers')->checkbox()?>
+	    
+	    <h3>Meta tags:</h3>
+	    <?= $form->field($model, 'description')->textarea(['maxlength' => 500])?>
         <?= $form->field($model, 'html_title')?>
         <?= $form->field($model, 'meta_keywords')->textarea(['maxlength' => 255])?>
         <?= $form->field($model, 'metatags_general')->textarea(['maxlength' => 500])?>
+	    
+        <h3>Advanced settings:</h3>
+        <?= $form->field($model, 'javascript')->textarea()?>
+        <?= $form->field($model, 'css')->textarea()?>
     
         <div class="form-group">
             <?= Html::submitButton('Submit', ['class' => 'btn btn-primary'])?>

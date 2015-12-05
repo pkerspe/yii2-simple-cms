@@ -22,21 +22,28 @@ use yii\widgets\ActiveForm;
 	<?php } else { ?>
 		<span class="pull-right"><?= $model->getAttributeLabel('createdby_userid') .': '. $model->createdby_userid ?><br />
 		<?= $model->getAttributeLabel('created_datetime') .': '. $model->created_datetime ?></span>
-	<div><?= $model->getAttributeLabel('modification_userid') .': '. $model->modification_userid ?></div>
-	<div><?= $model->getAttributeLabel('modification_datetime') .': '. $model->modification_datetime ?></div>
+    <div><?= $model->getAttributeLabel('modification_userid') .': '. $model->modification_userid ?></div>
+    <div><?= $model->getAttributeLabel('modification_datetime') .': '. $model->modification_datetime ?></div>
 	<?php  } ?>
-        <?= $form->field($model, 'name')?>
-		<?= $form->field($model, 'alias')?>
-		<?= $form->field($model, 'link_target')?>
-		<?= $form->field($model, 'link_css_class')?>
+	
+	<div class="row inline-form">
+        <div class="col-md-6">
+            <?= $form->field($model, 'name')?>
+            <?= $form->field($model, 'link_target')?>
+        </div>
+        <div class="col-md-6">
+            <?= $form->field($model, 'alias')?>
+            <?= $form->field($model, 'link_css_class')?>
+	   </div>
+    </div>
 
-	<?php if(!isset($hideDirectUrl) || !$hideDirectUrl ) { ?>
+    <?php if(!isset($hideDirectUrl) || !$hideDirectUrl ) { ?>
         <?= $form->field($model, 'direct_url')?>
     <?php } ?>
-        <div class="form-group">
+    <div class="form-group">
             <?= Html::submitButton('Submit', ['class' => 'btn btn-primary'])?>
-        </div>
-    <?php if(!isset($embededForm) ) ActiveForm::end(); ?>
+    </div>
+<?php if(!isset($embededForm) ) ActiveForm::end(); ?>
 
 </div>
 <!-- _form -->

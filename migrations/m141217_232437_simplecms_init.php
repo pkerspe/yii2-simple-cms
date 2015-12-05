@@ -11,7 +11,7 @@
 use yii\db\Schema;
 use yii\base\InvalidConfigException;
 use schallschlucker\simplecms\migrations\Migration;
-use schallschlucker\simplecms\controllers\backend\MediaController;
+use schallschlucker\simplecms\controllers\mediacontroller\MediaController;
 
 /**
  *
