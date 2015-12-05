@@ -2,7 +2,7 @@
 use yii\widgets\ActiveForm;
 use yii\bootstrap\ActiveField;
 use schallschlucker\simplecms\models\MediaBrowserImageUpload;
-use schallschlucker\simplecms\controllers\backend\MediaController;
+use schallschlucker\simplecms\controllers\mediacontroller\MediaController;
 /* @VAR $model MediaBrowserImageUpload */
 
 if(isset($errors) && count($errors) > 0){

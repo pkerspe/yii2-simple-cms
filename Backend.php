@@ -13,7 +13,6 @@ namespace schallschlucker\simplecms;
 
 use Yii;
 use yii\base\InvalidConfigException;
-use schallschlucker\simplecms\controllers\backend\MediaController;
 
 /**
  * The simple cms backend module
@@ -24,6 +23,7 @@ class Backend extends \yii\base\Module {
 	const VERSION = '0.2';
 	
 	public $controllerNamespace = 'schallschlucker\simplecms\controllers\backend';
+	public $mediarepositoryPath;
 	public $languageManager;
 	public $cache;
 	public $mimetypeMediaTypeMapping = [
@@ -50,6 +50,9 @@ class Backend extends \yii\base\Module {
 			} elseif (is_array ( $config ['components'] [$name] ) && ! isset ( $config ['components'] [$name] ['class'] )) {
 				$config ['components'] [$name] ['class'] = $component ['class'];
 			}
+		}
+		if( empty($this->mediarepositoryPath) ){
+		    $this->mediarepositoryPath = Yii::getAlias('@webroot').DIRECTORY_SEPARATOR.'mediarepository';
 		}
 		parent::__construct ( $id, $parent, $config );
 	}
@@ -102,22 +105,5 @@ class Backend extends \yii\base\Module {
 			}
 		}	
 		return $fallbackValue;
-	}
-	
-	
-	public function getMediaTypeForMimeType($mimeTypeString){
-		foreach($this->mimetypeMediaTypeMapping as $mediaType => $mimetypes){
-			/* @var $mimetypes array */
-			if(in_array($mimeTypeString,$mimetypes)) return $mediaType;
-		}
-		return MediaController::$MEDIA_TYPE_UNKNOWN;
-	}
-	
-	public function getMediarepositoryBasePath(){
-		return Yii::getAlias('@webroot').DIRECTORY_SEPARATOR.'mediarepository';
-	}
-	
-	public function getThumbnailRepostoryPath(){
-		return Yii::getAlias('@webroot').DIRECTORY_SEPARATOR.'mediarepository'.DIRECTORY_SEPARATOR.'thumbnail_repository';
 	}
 }

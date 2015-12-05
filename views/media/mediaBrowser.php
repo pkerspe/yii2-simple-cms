@@ -6,7 +6,7 @@ use yii\web\View;
 use schallschlucker\simplecms\models\SimpleMediaCategory;
 use schallschlucker\simplecms\assets\FancytreeAsset;
 use schallschlucker\simplecms\assets\SimpleCmsAsset;
-use schallschlucker\simplecms\controllers\backend\MediaController;
+use schallschlucker\simplecms\controllers\mediacontroller\MediaController;
 
 /* @var $this yii\web\View */
 FancytreeAsset::register ( $this );

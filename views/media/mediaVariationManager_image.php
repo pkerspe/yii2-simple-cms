@@ -6,7 +6,7 @@ use yii\web\View;
 use schallschlucker\simplecms\assets\SimpleCmsAsset;
 use schallschlucker\simplecms\models\CmsContentMedia;
 use schallschlucker\simplecms\models\CmsContentMediaVariation;
-use schallschlucker\simplecms\controllers\backend\MediaController;
+use schallschlucker\simplecms\controllers\mediacontroller\MediaController;
 
 /* @var $this yii\web\View */
 /* @var $mediaItem CmsContentMedia */
