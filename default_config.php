@@ -22,6 +22,13 @@ $config['modules']['simplecms_backend'] = [
     ],
 ];
 
+$config['components']['urlManager'] = [
+    'enablePrettyUrl' => true,
+    'showScriptName' => false,
+    'rules' => [
+    ],
+];
+
 $config['components']['simplecmsLanguageManager'] = [
     'class' => 'schallschlucker\simplecms\LanguageManager',
     'languageIdMappings' => [
