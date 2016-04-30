@@ -90,13 +90,13 @@ class SettingsAndMaintenanceController extends Controller {
 	 * @menuIcon <span class="glyphicon glyphicon-list-alt"></span>
 	 * @functionalRight cmsBackendWrite
 	 *
-	 * @param unknown $startItemId
+	 * @param int $startItemId
 	 *        	the item id where to create the dummy structure below
-	 * @param unknown $languageId
+	 * @param int $languageId
 	 *        	the language id for which to create the new menu items
-	 * @param unknown $maxdepth
+	 * @param int $maxdepth
 	 *        	the maximum directory/acnestors depth to create new items for (this is a maximum level depth, due to the fact that a random function is used to either create children or siblings, it cannot be guaranteed if the level depth is reached)
-	 * @param unknown $maxitemCount
+	 * @param int $maxitemCount
 	 *        	the number of items to create
 	 * @return \yii\web\Response|string
 	 */
@@ -151,7 +151,7 @@ class SettingsAndMaintenanceController extends Controller {
 				}
 				return $currentItemCount + 1;
 			} else {
-				// random decission if a sibling or child should be created
+				// random decision if a sibling or child should be created
 				if (rand ( 0, 1 )) {
 					// create sibling
 					$name = 'auto generated test menu ' . $currentItemCount;
@@ -179,13 +179,13 @@ class SettingsAndMaintenanceController extends Controller {
 	 * This should be called once a new item is inserted amongst other siblings or just to perform an integrity check and avoid duplicate position values amongst siblings.
 	 * This function is quite expensive due to the sql calls (espcially in recusrion mode) so it must not be used in often called functions.
 	 *
-	 * @param unknown $parentItemId
+	 * @param int $parentItemId
 	 *        	the item id to get the children for an set the position values
 	 * @param boolean $recurseTree
 	 *        	recurse into the subtree structure
-	 * @param unknown $updateCounter        	
-	 * @param unknown $failedUpdateCounter        	
-	 * @param unknown $checkedItems        	
+	 * @param int $updateCounter
+	 * @param int $failedUpdateCounter
+	 * @param int $checkedItems
 	 */
 	public static function fixItemPositionsForChildren($parentItemId, &$updateCounter, &$failedUpdateCounter, &$checkedItems, $recurseTree = false) {
 		$childItems = CmsHierarchyItem::find ()->where ( [ 

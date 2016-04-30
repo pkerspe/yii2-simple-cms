@@ -241,21 +241,19 @@ class DefaultController extends Controller {
 			'message' => $message 
 		] );
 	}
-	
+
 	/**
 	 * get the complete menu / hierarchy tree for the cms navigation structure
 	 *
 	 * @functionalRight cmsBackendRead
 	 *
-	 * @param
-	 *        	language integer the language id to get the cms menu items for
-	 * @param
-	 *        	expandLevel integer the level depth, until which the folders should be marked as expanded ($expanded = true)
-	 * @param
-	 *        	hideMissingLanguages boolean hide or show hierarchy items that do not have a translation (cms menu item) in the requested language
-	 * @param
-	 *        	filterDisplayState array an array if integers indicating which displayStates should be filtered from the results (@see CmsHierarchyItem::DISPLAYSTATE_PUBLISHED_VISIBLE_IN_NAVIGATION)
-	 * @return SimpleHierarchyItem an SimpleHierarchyItem instance, containing all subnodes in a node-tree structure (children property holds children of each node)
+	 * @param int $language the language id to get the cms menu items for
+	 * @param int $expandLevel expandLevel integer the level depth, until which the folders should be marked as expanded ($expanded = true)
+	 * @param bool $hideMissingLanguages hideMissingLanguages boolean hide or show hierarchy items that do not have a translation (cms menu item) in the requested language
+	 * @param bool $removeHierarchyItemsWithNoContent
+	 * @param array $filterDisplayState filterDisplayState array an array if integers indicating which displayStates should be filtered from the results (@see CmsHierarchyItem::DISPLAYSTATE_PUBLISHED_VISIBLE_IN_NAVIGATION)
+	 * @return SimpleHierarchyItem a SimpleHierarchyItem instance, containing all sub-nodes in a node-tree structure (children property holds children of each node)
+	 * @throws \Exception
 	 */
 	public static function getMenuTree($language, $expandLevel, $hideMissingLanguages, $removeHierarchyItemsWithNoContent = false, $filterDisplayState = []) {
 		$language = intval ( $language );
