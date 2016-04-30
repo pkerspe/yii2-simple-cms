@@ -126,8 +126,8 @@ class m141217_232437_simplecms_init extends Migration {
 		//root hierarchy item
 		$this->insert('{{%cms_hierarchy_item}}', ['id' => 1, 'parent_id' => NULL ,'position' => 1,'display_state' => 1]);
 		//root item page content
-		$this->insert('{{%cms_page_content}}', ['id' => 1, 'language' => 2,'content' => 'This is the root page','created_datetime' => '2015-01-01','createdby_userid' => '1']);
-		$this->insert('{{%cms_page_content}}', ['id' => 2, 'language' => 1,'content' => 'Dies ist die Startseite','created_datetime' => '2015-01-01','createdby_userid' => '1']);
+		$this->insert('{{%cms_page_content}}', ['id' => 1, 'language' => 2,'content' => '<h1>Congratulations, you installed simple-cms successfully.</h1><p>This is the root page</p>','created_datetime' => '2016-01-01','createdby_userid' => '1']);
+		$this->insert('{{%cms_page_content}}', ['id' => 2, 'language' => 1,'content' => '<h1>Gl&uuml;ckwunsch, Sie haben simple-cms erfolgreich instlliert.</h1><p>Dies ist die Startseite</p>','created_datetime' => '2016-01-01','createdby_userid' => '1']);
 		//root menu item
 		$this->insert('{{%cms_menu_item}}', ['id' => 1, 'cms_hierarchy_item_id' => 1 ,'language' => 2,'page_content_id' => 1,'name' => 'root','created_datetime' => '2015-01-01','createdby_userid' => '1']);
 		$this->insert('{{%cms_menu_item}}', ['id' => 2, 'cms_hierarchy_item_id' => 1 ,'language' => 1,'page_content_id' => 2,'name' => 'root','created_datetime' => '2015-01-01','createdby_userid' => '1']);
