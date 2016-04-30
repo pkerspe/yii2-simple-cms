@@ -28,9 +28,6 @@ $config['modules']['simplecms_backend'] = [
     'class' => 'schallschlucker\simplecms\Backend',
     'cache' => 'cache',
     'languageManager' => 'simplecmsLanguageManager',
-    'as access' => [
-        'class' => 'mdm\admin\components\AccessControl',
-    ],
 ];
 
 $config['components']['urlManager'] = [
