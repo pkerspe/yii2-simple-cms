@@ -1,4 +1,5 @@
 <?php
+/** omit this db setup if you have db already configured in your main configuration */
 $config['components']['db'] = [
     'class' => 'yii\db\Connection',
     'dsn' => 'mysql:host=localhost;dbname=yii2basic',
@@ -6,6 +7,15 @@ $config['components']['db'] = [
     'password' => 'yiitest',
     'charset' => 'utf8',
 ];
+
+/** omit this module if you are not using mdm admin module */
+$config['modules']['admin'] = [
+    'class' => 'mdm\admin\Module',
+    'layout' => 'left-menu',
+];
+
+
+/** here comes the actual simple cms configuration parts  */
 
 $config['modules']['simplecms_frontend'] = [
     'urlPrefix' => 'cms', //the context alias for the module if you do not want to use simple cms_frotend in your path
