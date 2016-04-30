@@ -1,5 +1,5 @@
 <?php
-$config['modules']['db'] = [
+$config['components']['db'] = [
     'class' => 'yii\db\Connection',
     'dsn' => 'mysql:host=localhost;dbname=yii2basic',
     'username' => 'yiitest',
