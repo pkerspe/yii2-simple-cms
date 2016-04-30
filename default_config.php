@@ -21,7 +21,7 @@ $config['modules']['simplecms_frontend'] = [
     'urlPrefix' => 'cms', //the context alias for the module if you do not want to use simple cms_frotend in your path
     'class' => 'schallschlucker\simplecms\Frontend',
     'languageManager' => 'simplecmsLanguageManager',
-    'renderTopMenuNavbar' => false,
+    'renderTopMenuNavbar' => true,
     'htmlTitlePrefix' => 'simple-cms: ',
     'cache' => 'cache'
 ];
