@@ -8,13 +8,6 @@ $config['components']['db'] = [
     'charset' => 'utf8',
 ];
 
-/** omit this module if you are not using mdm admin module */
-$config['modules']['admin'] = [
-    'class' => 'mdm\admin\Module',
-    'layout' => 'left-menu',
-];
-
-
 /** here comes the actual simple cms configuration parts  */
 
 $config['modules']['simplecms_frontend'] = [

@@ -28,8 +28,8 @@
 	"require" : {
 		"php" : ">=5.5.0",
 		"yiisoft/yii2-jui" : "~2",
-		"yiisoft/yii2-bootstrap" : "~2",
-		"mdmsoft/yii2-admin" : "^2.0"
+      //"mdmsoft/yii2-admin" : "^2.0",
+      "yiisoft/yii2-bootstrap" : "~2"
 	},
 	"extra" : {
 		"bootstrap" : "schallschlucker\\simplecms\\Bootstrap"
