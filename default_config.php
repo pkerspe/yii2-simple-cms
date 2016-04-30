@@ -1,4 +1,12 @@
 <?php
+$config['modules']['db'] = [
+    'class' => 'yii\db\Connection',
+    'dsn' => 'mysql:host=localhost;dbname=yii2basic',
+    'username' => 'yiitest',
+    'password' => 'yiitest',
+    'charset' => 'utf8',
+];
+
 $config['modules']['simplecms_frontend'] = [
     'urlPrefix' => 'cms', //the context alias for the module if you do not want to use simple cms_frotend in your path
     'class' => 'schallschlucker\simplecms\Frontend',
