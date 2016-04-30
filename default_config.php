@@ -1,11 +1,9 @@
 <?php
-/** omit this db setup if you have db already configured in your main configuration */
-$config['components']['db'] = [
-    'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=yii2basic',
-    'username' => 'yiitest',
-    'password' => 'yiitest',
-    'charset' => 'utf8',
+$config['components']['urlManager'] = [
+    'enablePrettyUrl' => true,
+    'showScriptName' => false,
+    'rules' => [
+    ],
 ];
 
 /** here comes the actual simple cms configuration parts  */
@@ -28,13 +26,6 @@ $config['modules']['simplecms_backend'] = [
     'class' => 'schallschlucker\simplecms\Backend',
     'cache' => 'cache',
     'languageManager' => 'simplecmsLanguageManager',
-];
-
-$config['components']['urlManager'] = [
-    'enablePrettyUrl' => true,
-    'showScriptName' => false,
-    'rules' => [
-    ],
 ];
 
 $config['components']['simplecmsLanguageManager'] = [
