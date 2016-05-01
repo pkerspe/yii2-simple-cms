@@ -1,11 +1,12 @@
 <?php
+/*
 $config['components']['urlManager'] = [
     'enablePrettyUrl' => true,
     'showScriptName' => false,
     'rules' => [
     ],
 ];
-
+*
 /** here comes the actual simple cms configuration parts  */
 
 $config['modules']['simplecms_frontend'] = [
