@@ -40,7 +40,7 @@ class CmsSubpageTeaserWidget extends Widget {
 	public function renderSubpageTeasers(&$widgetHtml){
 	    /* @var $cmsHierarchyItem CmsHierarchyItem */
 	    $cmsHierarchyItem = $this->cmsHierarchyItem;
-	    $cmsChildHierarchyItems = $cmsHierarchyItem->getCmsHierarchyItems()->where(['display_state' => CmsHierarchyItem::DISPLAYSTATE_PUBLISHED_VISIBLE_IN_NAVIGATION])->all();
+	    $cmsChildHierarchyItems = $cmsHierarchyItem->getCmsHierarchyItems()->where(['display_state' => CmsHierarchyItem::DISPLAYSTATE_PUBLISHED_VISIBLE_IN_NAVIGATION])->orderBy("position asc")->all();
 	    
 	    if(count($cmsChildHierarchyItems) > 0){
 	        $widgetHtml .= '<ul class="cms-subpage-teaser-list">'.PHP_EOL;
