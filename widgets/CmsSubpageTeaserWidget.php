@@ -59,7 +59,9 @@ class CmsSubpageTeaserWidget extends Widget {
 						$widgetHtml .= '<span class="cms-subpage-teaser-item-date"><a href="' . $cmsMenus[0]->getFormattedUrl() . '">' . date_format(date_create($pageContent->created_datetime), "d.m.Y") . '</a></span>';
 					}
 					$widgetHtml .= '<span class="cms-subpage-teaser-item-title"><a href="'.$cmsMenus[0]->getFormattedUrl().'">'.$cmsMenuItem->name.'</a></span>';
-					$widgetHtml .= '<span class="cms-subpage-teaser-item-description">'.$pageContent->description.'</span>';
+                    if(!empty($pageContent) && property_exists($pageContent,'description')) {
+                        $widgetHtml .= '<span class="cms-subpage-teaser-item-description">' . $pageContent->description . '</span>';
+                    }
 					$widgetHtml .= '<span class="cms-subpage-teaser-item-morelink"><a href="'.$cmsMenus[0]->getFormattedUrl().'">'.Yii::t('simplecms', 'read more...').'</a></span>';
 					$widgetHtml .= '</li>'.PHP_EOL;
 				}
