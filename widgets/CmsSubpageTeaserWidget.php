@@ -60,7 +60,15 @@ class CmsSubpageTeaserWidget extends Widget {
 					}
 					$widgetHtml .= '<span class="cms-subpage-teaser-item-title"><a href="'.$cmsMenus[0]->getFormattedUrl().'">'.$cmsMenuItem->name.'</a></span>';
                     if(!empty($pageContent)) {
-                        $widgetHtml .= '<span class="cms-subpage-teaser-item-description">' . $pageContent->description . '</span>';
+                        if(!empty($pageContent->teaser_image_id)){
+                            $widgetHtml .= '<span class="cms-subpage-teaser-item-image"><img src="/media_manager/media/get-media?mediaItemId=' . $pageContent->teaser_image_id . '"></span>';
+                        }
+
+                        if(!empty($pageContent->teaser_text)){
+                            $widgetHtml .= '<span class="cms-subpage-teaser-item-description">' . $pageContent->teaser_text . '</span>';
+                        } else {
+                            $widgetHtml .= '<span class="cms-subpage-teaser-item-description">' . $pageContent->description . '</span>';
+                        }
                     }
 					$widgetHtml .= '<span class="cms-subpage-teaser-item-morelink"><a href="'.$cmsMenus[0]->getFormattedUrl().'">'.Yii::t('simplecms', 'read more...').'</a></span>';
 					$widgetHtml .= '</li>'.PHP_EOL;
