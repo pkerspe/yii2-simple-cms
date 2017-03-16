@@ -317,13 +317,16 @@ class DefaultController extends Controller {
 		}
 		return null;
 	}
-	
-	/**
-	 * generate a root item in all configured languages wuth default name and content.
-	 * This is used in case the database is not setup properly for some reason to prevent an error message being shown due to missing root item.
-	 * @param language integer the language id to get the menu item for the hierarchy item for
-	 * @return \schallschlucker\simplecms\models\SimpleHierarchyItem
-	 */
+
+    /**
+     * generate a root item in all configured languages wuth default name and content.
+     * This is used in case the database is not setup properly for some reason to prevent an error message being shown due to missing root item.
+     *
+     * @param int $language
+     * @return SimpleHierarchyItem
+     * @throws \Exception
+     * @internal param int $language the language id to get the menu item for the hierarchy item for
+     */
 	public static function autoCreateRootItemInAllConfiguredLanguages($language){
 	    //FIXME: maybe modify this function to only create a default language instead, some people might not want to have the root item in all configured languages for some reason
 	    
