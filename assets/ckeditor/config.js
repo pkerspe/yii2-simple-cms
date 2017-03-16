@@ -3,6 +3,8 @@
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
+
+
 CKEDITOR.editorConfig = function( config ) {
 	// Define changes to default configuration here.
 	// For complete reference see:
@@ -36,8 +38,8 @@ CKEDITOR.editorConfig = function( config ) {
 	// Simplify the dialog windows.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
 
-	//custom simple cms allowed contents, also required by faqItem plugin
-	config.extraAllowedContent = 'div(*); ol(*); li(*); span(*)';
-	//custom simple cms faqItem plugin
+	config.extraAllowedContent = 'div[*](*); ol[*](*); li[*](*); span[*](*); h4[*](*); a[*](*)';
+
+	//custome simple cms faqItem plugin
 	config.extraPlugins = 'faqItem';
 };
