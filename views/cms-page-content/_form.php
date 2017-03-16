@@ -30,6 +30,8 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'teaser_text')->textarea(['maxlength' => 500]) ?>
     <!-- TODO: render a  image selector button to open the media browser and display preview of current selected image if any -->
     <?= $form->field($model, 'teaser_image_id') ?>
+    <?= $form->field($model, 'teaser_name') ?>
+    <?= $form->field($model, 'teaser_link') ?>
 
     <h3>Meta tags:</h3>
     <?= $form->field($model, 'description')->textarea(['maxlength' => 500]) ?>
