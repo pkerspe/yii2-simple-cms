@@ -34,6 +34,8 @@ use yii\db\Expression;
  * @property integer       $createdby_userid      user id of the user who created the page content element
  * @property string        $teaser_text           some teaser text (max 500 chars) for the page that can be used in widgets
  * @property integer       $teaser_image_id       the id of the teaser image media item to be displayed e.g. in sub page list widgets
+ * @property string        $teaser_name       	  Name of the teaser to be displayed e.g. as link text
+ * @property string        $teaser_link       	  Custom link for the teaser if we do not want to link to the page itsself
  *
  * @property CmsMenuItem[] $cmsMenuItems
  */
@@ -107,7 +109,9 @@ class CmsPageContent extends \yii\db\ActiveRecord
                 [
                     'metatags_general',
                     'description',
-                    'teaser_text'
+                    'teaser_text',
+                    'teaser_name',
+                    'teaser_link'
                 ],
                 'string',
                 'max' => 500
@@ -143,7 +147,9 @@ class CmsPageContent extends \yii\db\ActiveRecord
             'created_datetime'      => Yii::t('simplecms', 'Created Datetime'),
             'createdby_userid'      => Yii::t('simplecms', 'Createdby Userid'),
             'teaser_image_id'       => Yii::t('simplecms', 'Teaser Image'),
-            'teaser_text'           => Yii::t('simplecms', 'Teaser Text')
+            'teaser_text'           => Yii::t('simplecms', 'Teaser Text'),
+            'teaser_name'           => Yii::t('simplecms', 'Teaser Name'),
+            'teaser_link'           => Yii::t('simplecms', 'Teaser Link'),
         ];
     }
 
