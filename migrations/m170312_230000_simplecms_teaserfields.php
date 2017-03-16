@@ -37,12 +37,16 @@ class m170312_230000_simplecms_teaserfields extends Migration {
 	    echo "Creating new database fields teaser_image_id and teaser_text in cms_page_content table\n";
 	    $this->addColumn('{{%cms_page_content}}', 'teaser_image_id', Schema::TYPE_INTEGER.'(11) DEFAULT NULL COMMENT \'the id of the teaser image media item to be displayed e.g. in sub page list widgets\'');
         $this->addColumn('{{%cms_page_content}}', 'teaser_text', Schema::TYPE_STRING.'(500) DEFAULT NULL COMMENT \'some teaser text (max 500 chars) for the page that can be used in widgets\'');
+        $this->addColumn('{{%cms_page_content}}', 'teaser_link', Schema::TYPE_STRING.'(500) DEFAULT NULL COMMENT \'custom link for teaser if read-more link should not link to the page itsself\'');
+        $this->addColumn('{{%cms_page_content}}', 'teaser_name', Schema::TYPE_STRING.'(500) DEFAULT NULL COMMENT \'name of the teaser to be displayed e.g. as link text\'');
 	}
 	
 	public function down() {
 	    echo "removing database fields teaser_image_id and teaser_text in cms_page_content table\n";
 		$this->dropColumn( '{{%cms_page_content}}' , 'teaser_image_id');
         $this->dropColumn( '{{%cms_page_content}}' , 'teaser_text');
+        $this->dropColumn( '{{%cms_page_content}}' , 'teaser_link');
+        $this->dropColumn( '{{%cms_page_content}}' , 'teaser_name');
 	}
 }
 ?>
