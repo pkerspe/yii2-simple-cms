@@ -38,7 +38,9 @@ class CmsPageContenttSearch extends CmsPageContent {
 					'description',
 					'content',
 					'javascript',
-					'css' 
+					'css',
+                    'teaser_text',
+                    'teaser_image_id'
 				],
 				'safe' 
 			] 
