@@ -40,6 +40,10 @@ CKEDITOR.editorConfig = function( config ) {
 
 	config.extraAllowedContent = 'div[*](*); ol[*](*); li[*](*); span[*](*); h4[*](*); a[*](*); section[*](*);';
 
+	// ALLOW empy (no text) <i> and <span> tags for glyphicon
+	config.protectedSource.push(/<span[^>]*><\/span>/g);
+	config.protectedSource.push(/<i[^>]*><\/i>/g);
+
 	//custome simple cms faqItem plugin
 	config.extraPlugins = 'faqItem';
 };
