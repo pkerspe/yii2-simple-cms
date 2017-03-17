@@ -38,7 +38,7 @@ CKEDITOR.editorConfig = function( config ) {
 	// Simplify the dialog windows.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
 
-	config.extraAllowedContent = 'div[*](*); ol[*](*); li[*](*); span[*](*); h4[*](*); a[*](*); section[*](*); span[*](*);';
+	config.extraAllowedContent = 'div[*](*); ol[*](*); li[*](*); span[*](*); h4[*](*); a[*](*); section[*](*);';
 
 	//custome simple cms faqItem plugin
 	config.extraPlugins = 'faqItem';
