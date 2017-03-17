@@ -38,7 +38,7 @@ CKEDITOR.editorConfig = function( config ) {
 	// Simplify the dialog windows.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
 
-	config.extraAllowedContent = 'div[*](*); ol[*](*); li[*](*); span[*](*); h4[*](*); a[*](*); section[*](*);';
+	config.extraAllowedContent = 'div[*](*); ol[*](*); li[*](*); span[*](*); h4[*](*); a[*](*); section[*](*); img[*](*);';
 
 	// ALLOW empy (no text) <i> and <span> tags for glyphicon
 	config.protectedSource.push(/<span[^>]*><\/span>/g);
