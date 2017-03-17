@@ -20,8 +20,8 @@ CKEDITOR.plugins.add('faqItem', {
                 }
 
                 var identifier = (new Date()).getTime();
-                var panelItem = '<div class="panel panel-default faq-item" id="faqEntry' + identifier + '"><div class="panel-heading" role="tab" id="heading' + identifier + '"><h4 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#accordion' + identifier + '" href="#collapse' + identifier + '" aria-expanded="true" aria-controls="collapse' + identifier + '">Faq Question #</a></h4></div>' +
-                    '<div id="collapse' + identifier + '" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading' + identifier + '"><div class="panel-body">Faq Answer #</div></div>';
+                var panelItem = '<div class="panel panel-default faq-item" id="faqEntry' + identifier + '"><div class="panel-heading" role="tab" id="heading' + identifier + '"><h4 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#accordion' + identifier + '" href="#collapse' + identifier + '" aria-expanded="true" aria-controls="collapse' + identifier + '">Faq Question # <span class="glyphicon glyphicon-chevron-down">&nbsp;</span></a></h4></div>' +
+                    '<div id="collapse' + identifier + '" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading' + identifier + '"><div class="panel-body">Faq Answer #</div></div>';
 
                 if (parentListContainer == null) {
                     //create new list container and item
