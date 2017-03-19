@@ -26,11 +26,11 @@ CKEDITOR.plugins.add('collapsibleItem', {
             editables: {
                 title: {
                     selector: '.collapsible-item-title-link-text',
-                    allowedContent: 'strong em span'
+                    allowedContent: 'strong em u span'
                 },
                 content: {
                     selector: '.collapsible-item-body',
-                    allowedContent: 'p br ul ol li strong em table img'
+                    allowedContent: 'p;br;span[*];ul;ol;li;strong;em;u;table(*)[*];tbody;thead;tr;td;th;hr;a;a(!href,*)[*];img(*)[*];'
                 }
             },
             allowedContent: 'div(!collapsible-item*,panel*,collapse)[*];h4(!collapsible-item*,panel*)[*];a(!collapsible-item*,collapsed,panel*)[*];span(!glyphicon*)[*];',
