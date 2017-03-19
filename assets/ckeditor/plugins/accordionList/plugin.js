@@ -1,6 +1,7 @@
 CKEDITOR.plugins.add('accordionList', {
     requires: 'widget,collapsibleItem',
-    icons: 'accordionList',
+    icons: 'accordionlist',
+    hidpi: true,
     init: function (editor) {
         editor.widgets.add('accordionList', {
             button: 'Insert a new Accordion List',
@@ -10,10 +11,10 @@ CKEDITOR.plugins.add('accordionList', {
             editables: {
                 content: {
                     selector: 'div.accordion-list-items',
-                    allowedContent: 'div(!collapsible-item*,panel*,collapse)[*];h4(!collapsible-item*,panel*)[*];a(!collapsible-item*,panel*,collapsed)[*];span(!glyphicon*)[*];'
+                    allowedContent: 'div(!collapsible-item*,panel*,collapse)[*];h4(!collapsible-item*,panel*)[*];a(!collapsible-item*,panel*,collapsed)[*];span(!glyphicon*)[*];p;br;span[*];ul;ol;li;strong;em;u;table[*];tbody;theader;tr;td;th;hr;a;a(!href,*)[*];'
                 }
             },
-            allowedContent: 'div(!accordion-list*)[*]',
+            allowedContent: 'div(!accordion-list*)[*];',
             requiredContent: 'div(accordion-list)',
             upcast: function (element) {
                 return element.name == 'div' && element.hasClass('accordion-list');
@@ -30,12 +31,12 @@ CKEDITOR.plugins.add('accordionList', {
                 editorForElement.setActiveEnterMode(CKEDITOR.ENTER_BR, CKEDITOR.ENTER_BR);
 
                 //prevent entering any data via keyboard, since we only want nested widgets in here
-                $(editable.$).on('keydown', function (event) {
-                    if(event.target.id.indexOf(idPrefix) == 0){
-                        return false;
+                editable.on('keydown', function (event) {
+                    console.log("down",event);
+                    if(event.data.$.target.id.indexOf(idPrefix) == 0){
+                        event.data.$.preventDefault();
+                        event.data.$.stopPropagation();
                     }
-                    //allow keystrokes for all nested elements (widgets)
-                    return event;
                 });
             },
             data: function () {
