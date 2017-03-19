@@ -1,4 +1,4 @@
-function getCollapsibleItem() {
+﻿function getCollapsibleItem() {
     var collapsibleItem =
         '<div class="panel panel-default collapsible-item" id="collapbsible-1">' +
         '   <div class="panel-heading collapsible-item-heading" role="tab" id="headingCollapbsible">' +
