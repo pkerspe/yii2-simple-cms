@@ -1,0 +1,28 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<base target="_self">
+<title>Image Dialog</title>
+<script type="text/javascript">
+
+	function onClose(){
+		var imgUrl = "http://ilmubarokah.files.wordpress.com/2014/02/myblog2.png?w=360";
+			var result="<img src="+imgUrl+" style='width:auto;heigth:auto;'>";
+			var element = window.opener.CKEDITOR.dom.element.createFromHtml( result );
+			var CKEDITOR   = window.opener.CKEDITOR;
+			for ( var i in CKEDITOR.instances ){
+			   var currentInstance = i;
+			   break;
+			}
+			var oEditor   = window.opener.CKEDITOR.instances[currentInstance];
+			oEditor.insertElement(element);
+			window.close();
+		}
+
+</script>
+</head>
+<body>
+<img src="http://ilmubarokah.files.wordpress.com/2014/02/myblog2.png?w=360">
+<input type="button" value="insert" onClick="return onClose()">
+</body>
+</html>
