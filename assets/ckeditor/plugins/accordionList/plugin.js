@@ -10,7 +10,7 @@ CKEDITOR.plugins.add('accordionList', {
             editables: {
                 content: {
                     selector: 'div.accordion-list-items',
-                    allowedContent: 'div(!collapsible-item*,panel*,collapse)[*];h4(!collapsible-item*,panel*)[*];a(!collapsible-item*,panel*,collapsed)[*]'
+                    allowedContent: 'div(!collapsible-item*,panel*,collapse)[*];h4(!collapsible-item*,panel*)[*];a(!collapsible-item*,panel*,collapsed)[*];span(!glyphicon*)[*];'
                 }
             },
             allowedContent: 'div(!accordion-list*)[*]',

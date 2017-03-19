@@ -3,7 +3,8 @@ function getCollapsibleItem() {
         '<div class="panel panel-default collapsible-item" id="collapbsible-1">' +
         '   <div class="panel-heading collapsible-item-heading" role="tab" id="headingCollapbsible">' +
         '       <h4 class="panel-title collapsible-item-title">' +
-        '           <a class="collapsed collapsible-item-title-link" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseCollapbsible" aria-expanded="false" aria-controls="collapseCollapbsible">Title Text</a>' +
+        '           <a class="collapsed collapsible-item-title-link-icon pull-right" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseCollapbsible" aria-expanded="false" aria-controls="collapseCollapbsible"><span class="glyphicon glyphicon-chevron-down">&nbsp;</span></a>' +
+        '           <a class="collapsed collapsible-item-title-link" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseCollapbsible" aria-expanded="false" aria-controls="collapseCollapbsible"><span class="collapsible-item-title-link-text">Title Text</span></a>' +
         '       </h4>' +
         '   </div>' +
         '   <div id="collapseCollapbsible" class="panel-collapse collapse collapsible-item-collapse" role="tabpanel" aria-labelledby="headingCollapbsible">' +
@@ -13,7 +14,7 @@ function getCollapsibleItem() {
     return collapsibleItem;
 }
 
-CKEDITOR.dtd.$editable.a = 1;
+CKEDITOR.dtd.$editable.span = 1;
 
 CKEDITOR.plugins.add('collapsibleItem', {
     requires: 'widget',
@@ -24,15 +25,15 @@ CKEDITOR.plugins.add('collapsibleItem', {
             template: getCollapsibleItem(),
             editables: {
                 title: {
-                    selector: '.collapsible-item-title-link',
-                    allowedContent: 'strong em'
+                    selector: '.collapsible-item-title-link-text',
+                    allowedContent: 'strong em span'
                 },
                 content: {
                     selector: '.collapsible-item-body',
                     allowedContent: 'p br ul ol li strong em table img'
                 }
             },
-            allowedContent: 'div(!collapsible-item*,panel*,collapse)[*];h4(!collapsible-item*,panel*)[*];a(!collapsible-item*,collapsed,panel*)[*];',
+            allowedContent: 'div(!collapsible-item*,panel*,collapse)[*];h4(!collapsible-item*,panel*)[*];a(!collapsible-item*,collapsed,panel*)[*];span(!glyphicon*)[*];',
             requiredContent: 'div(collapsible-item);',
             upcast: function (element) {
                 return element.name == 'div' && element.hasClass('collapsible-item');
@@ -69,15 +70,21 @@ CKEDITOR.plugins.add('collapsibleItem', {
                 heading.setAttribute('id', 'heading' + this.data.itemId);
 
                 var itemLink = this.element.find('.collapsible-item-title-link').$[0];
+                var itemIconLink = this.element.find('.collapsible-item-title-link-icon').$[0];
                 var newLink = '#collapse' + this.data.itemId;
                 itemLink.setAttribute('aria-controls', 'collapse' + this.data.itemId);
                 itemLink.setAttribute('href', newLink);
                 itemLink.setAttribute('data-cke-saved-href', newLink); //this must be updated as well, otherwise editor will always fallback to old value
+                itemIconLink.setAttribute('aria-controls', 'collapse' + this.data.itemId);
+                itemIconLink.setAttribute('href', newLink);
+                itemIconLink.setAttribute('data-cke-saved-href', newLink);
 
                 if(this.data.accordionId != "") {
                     this.element.find('.collapsible-item-title-link').$[0].setAttribute('data-parent', "#" + this.data.accordionId);
+                    this.element.find('.collapsible-item-title-link-icon').$[0].setAttribute('data-parent', "#" + this.data.accordionId);
                 } else {
                     this.element.find('.collapsible-item-title-link').$[0].removeAttribute('data-parent');
+                    this.element.find('.collapsible-item-title-link-icon').$[0].removeAttribute('data-parent');
                 }
 
                 this.element.find('.collapsible-item-collapse').$[0].setAttribute('id', 'collapse' + this.data.itemId);
@@ -95,7 +102,8 @@ CKEDITOR.plugins.add('collapsibleItem', {
             '.collapsible-item-title, .collapsible-item-body {box-shadow: 0 1px 1px #ddd inset;border: 1px solid #cccccc;border-radius: 5px;background: #fff;}' +
             '.collapsible-item-title {margin: 0 0 8px;padding: 5px 8px;}' +
             '.collapsible-item-body {padding: 0 8px;}' +
-            '.collapsible-item-title-link {min-width:50px;display:inline-block;min-height:20px;width:100%;height:100%;}'
+            '.collapsible-item-title-link-text {min-width:50px;display:inline-block;min-height:20px;height:100%;}' +
+            '.collapsible-item-title-link-icon {display:inline-block;float:right;}'
         );
     }
 });
