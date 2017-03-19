@@ -1,9 +1,7 @@
 /**
- * @license Copyright (c) 2003-2014, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2017, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
-
-
 
 CKEDITOR.editorConfig = function( config ) {
 	// Define changes to default configuration here.
@@ -45,5 +43,5 @@ CKEDITOR.editorConfig = function( config ) {
 	config.protectedSource.push(/<i[^>]*><\/i>/g);
 
 	//custome simple cms faqItem plugin
-	config.extraPlugins = 'faqItem';
+	config.extraPlugins = 'accordionList,collapsibleItem';
 };

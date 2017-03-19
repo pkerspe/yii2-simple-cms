@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2017, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -13,10 +13,10 @@
  * (1) http://ckeditor.com/builder
  *     Visit online builder to build CKEditor from scratch.
  *
- * (2) http://ckeditor.com/builder/0275d3f1e139395541dc94f2cf187fbe
+ * (2) http://ckeditor.com/builder/ff58b54bc36e54ce8e54901fbf42944e
  *     Visit online builder to build CKEditor, starting with the same setup as before.
  *
- * (3) http://ckeditor.com/builder/download/0275d3f1e139395541dc94f2cf187fbe
+ * (3) http://ckeditor.com/builder/download/ff58b54bc36e54ce8e54901fbf42944e
  *     Straight download link to the latest version of CKEditor (Optimized) with the same setup as before.
  *
  * NOTE:
@@ -25,26 +25,28 @@
  */
 
 var CKBUILDER_CONFIG = {
-	skin: 'bootstrapck',
+	skin: 'kama',
 	preset: 'standard',
 	ignore: [
-		'.bender',
-		'bender.js',
-		'bender-err.log',
-		'bender-out.log',
-		'dev',
 		'.DS_Store',
+		'.bender',
+		'.editorconfig',
 		'.gitattributes',
 		'.gitignore',
-		'gruntfile.js',
 		'.idea',
 		'.jscsrc',
 		'.jshintignore',
 		'.jshintrc',
 		'.mailmap',
+		'README.md',
+		'bender-err.log',
+		'bender-out.log',
+		'bender.js',
+		'dev',
+		'gruntfile.js',
+		'less',
 		'node_modules',
 		'package.json',
-		'README.md',
 		'tests'
 	],
 	plugins : {
@@ -52,6 +54,8 @@ var CKBUILDER_CONFIG = {
 		'about' : 1,
 		'basicstyles' : 1,
 		'blockquote' : 1,
+		'bootstrapTabs' : 1,
+		'ckawesome' : 1,
 		'clipboard' : 1,
 		'contextmenu' : 1,
 		'custimage' : 1,
@@ -61,6 +65,7 @@ var CKBUILDER_CONFIG = {
 		'find' : 1,
 		'floatingspace' : 1,
 		'format' : 1,
+		'glyphicons' : 1,
 		'horizontalrule' : 1,
 		'htmlwriter' : 1,
 		'image' : 1,
@@ -69,6 +74,7 @@ var CKBUILDER_CONFIG = {
 		'list' : 1,
 		'magicline' : 1,
 		'maximize' : 1,
+		'oembed' : 1,
 		'pastefromword' : 1,
 		'pastetext' : 1,
 		'removeformat' : 1,
@@ -84,8 +90,7 @@ var CKBUILDER_CONFIG = {
 		'toolbar' : 1,
 		'undo' : 1,
 		'widget' : 1,
-		'wsc' : 1,
-		'wysiwygarea' : 1
+		'wsc' : 1
 	},
 	languages : {
 		'af' : 1,
