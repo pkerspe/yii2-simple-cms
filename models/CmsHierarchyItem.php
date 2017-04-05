@@ -19,85 +19,122 @@ use schallschlucker\simplecms\models\CmsMenuItem;
  * @property integer $id the id of the navigation item
  * @property integer $parent_id the id of the parent item in the hierarchy
  * @property integer $position the position of the item within its siblings (for defining the order of the navigation items when being displayed)
- * @property integer $display_state a status that influences the display status of this item in the navigation. 
- *          
+ * @property integer $display_state a status that influences the display status of this item in the navigation.
+ *
  * @property CmsHierarchyItem $parent
  * @property CmsHierarchyItem[] $cmsHierarchyItems
  * @property CmsMenu[] $cmsMenus
  */
 class CmsHierarchyItem extends \yii\db\ActiveRecord {
-	const DISPLAYSTATE_MIN_VALUE = 1;
-	const DISPLAYSTATE_MAX_VALUE = 3;
-	/**
-	 * @var integer the display state for items that are is fully visible in the navigation and the search results
-	 */
-	const DISPLAYSTATE_PUBLISHED_VISIBLE_IN_NAVIGATION = 1;
-	/**
-	 * @var integer the display state for items that are not to be displayed in the navigation, yet the items can be displayed by direct links and will be displayed in the search results
-	 */
-	const DISPLAYSTATE_PUBLISHED_HIDDEN_IN_NAVIGATION = 2;
-	/**
-	 * @var integer the display state for an item that is not yet published and thus not visible in the frontend (neither navigation nor direct linking or search results)
-	 */
-	const DISPLAYSTATE_UNPUBLISHED = 3;
-	
-	/**
-	 * @inheritdoc
-	 */
-	public static function tableName() {
-		return '{{%cms_hierarchy_item}}';
-	}
-	
-	/**
-	 * @inheritdoc
-	 */
-	public function rules() {
-		return [
-			[['parent_id','position'],'integer'],
-			[['display_state'],'integer','min' => CmsHierarchyItem::DISPLAYSTATE_MIN_VALUE,'max' => CmsHierarchyItem::DISPLAYSTATE_MAX_VALUE],
-			[['position'],'required'] 
-		];
-	}
-	
-	/**
-	 * @inheritdoc
-	 */
-	public function attributeLabels() {
-		return [ 
-			'id' => Yii::t ( 'simplecms', 'ID' ),
-			'parent_id' => Yii::t ( 'simplecms', 'Parent ID' ),
-			'position' => Yii::t ( 'simplecms', 'Position' ),
-			'display_state' => Yii::t ( 'simplecms', 'Display State' ) 
-		];
-	}
-	
-	/**
-	 *
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getParent() {
-		return $this->hasOne ( CmsHierarchyItem::className (), [ 
-			'id' => 'parent_id' 
-		] );
-	}
-	
-	/**
-	 *
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getCmsHierarchyItems() {
-		return $this->hasMany ( CmsHierarchyItem::className (), [ 
-			'parent_id' => 'id' 
-		] );
-	}
-	
-	/**
-	 *
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getCmsMenus() {
-		return $this->hasMany ( CmsMenuItem::className (), [ 
-			'cms_hierarchy_item_id' => 'id' 
-		] );
-	}
+    const DISPLAYSTATE_MIN_VALUE = 1;
+    const DISPLAYSTATE_MAX_VALUE = 3;
+    /**
+     * @var integer the display state for items that are is fully visible in the navigation and the search results
+     */
+    const DISPLAYSTATE_PUBLISHED_VISIBLE_IN_NAVIGATION = 1;
+    /**
+     * @var integer the display state for items that are not to be displayed in the navigation, yet the items can be displayed by direct links and will be displayed in the search results
+     */
+    const DISPLAYSTATE_PUBLISHED_HIDDEN_IN_NAVIGATION = 2;
+    /**
+     * @var integer the display state for an item that is not yet published and thus not visible in the frontend (neither navigation nor direct linking or search results)
+     */
+    const DISPLAYSTATE_UNPUBLISHED = 3;
+
+    /**
+     * @inheritdoc
+     */
+    public static function tableName() {
+        return '{{%cms_hierarchy_item}}';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules() {
+        return [
+            [['parent_id','position'],'integer'],
+            [['display_state'],'integer','min' => CmsHierarchyItem::DISPLAYSTATE_MIN_VALUE,'max' => CmsHierarchyItem::DISPLAYSTATE_MAX_VALUE],
+            [['position'],'required']
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels() {
+        return [
+            'id' => Yii::t ( 'simplecms', 'ID' ),
+            'parent_id' => Yii::t ( 'simplecms', 'Parent ID' ),
+            'position' => Yii::t ( 'simplecms', 'Position' ),
+            'display_state' => Yii::t ( 'simplecms', 'Display State' )
+        ];
+    }
+
+    /**
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getParent() {
+        return $this->hasOne ( CmsHierarchyItem::className (), [
+            'id' => 'parent_id'
+        ] );
+    }
+
+    /**
+     * get child nodes query
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCmsHierarchyItems() {
+        return $this->hasMany ( CmsHierarchyItem::className (), [
+            'parent_id' => 'id'
+        ] );
+    }
+
+    /**
+     * get cms menu items query
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCmsMenus() {
+        return $this->hasMany ( CmsMenuItem::className (), [
+            'cms_hierarchy_item_id' => 'id'
+        ] );
+    }
+
+
+    /**
+     * delete the hierarchy item with all its menu items (if any)
+     * @return bool
+     */
+    public function delete()
+    {
+        $transaction = static::getDb()->beginTransaction();
+        //check for child elements
+        $childItems = $this->getCmsHierarchyItems()->all();
+        foreach($childItems as $childHierarchyItem){
+            /* @var $childHierarchyItem CmsHierarchyItem */
+            if($childHierarchyItem->delete() === false){
+                $transaction->rollBack();
+                return false;
+            }
+        }
+
+        //delete page content entry if any and then delete menu item itself
+        $cmsMenus = $this->getCmsMenus()->all();
+        foreach($cmsMenus as $cmsMenuItem){
+            /* @var $cmsMenuItem CmsMenuItem */
+            if($cmsMenuItem->delete() === false){
+                $transaction->rollBack();
+                return false;
+            }
+        }
+
+        if (parent::delete()) {
+            $transaction->commit();
+            return true;
+        } else {
+            $transaction->rollBack();
+            return false;
+        }
+    }
 }

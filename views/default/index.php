@@ -1,135 +1,140 @@
 <?php
+use schallschlucker\simplecms\assets\FancytreeAsset;
+use schallschlucker\simplecms\assets\SimpleCmsAsset;
+use schallschlucker\simplecms\controllers\backend\DefaultController;
+use schallschlucker\simplecms\models\CmsHierarchyItem;
+use schallschlucker\simplecms\models\MenuItemAndContentForm;
+use schallschlucker\simplecms\widgets\CmsBackendFunctionBarWidget;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\View;
-use schallschlucker\simplecms\assets\FancytreeAsset;
-use schallschlucker\simplecms\assets\SimpleCmsAsset;
-use schallschlucker\simplecms\models\CmsHierarchyItem;
-use schallschlucker\simplecms\models\MenuItemAndContentForm;
-use schallschlucker\simplecms\widgets\CmsBackendFunctionBarWidget;
-use schallschlucker\simplecms\controllers\backend\DefaultController;
 
 /* @var $this yii\web\View */
 /* @var $model schallschlucker\simplecms\models\CmsAdministrationMainTreeViewForm */
 /* @var $model_wrapperform schallschlucker\simplecms\models\MenuItemAndContentForm */
 
-FancytreeAsset::register ( $this );
-SimpleCmsAsset::register ( $this );
+FancytreeAsset::register($this);
+SimpleCmsAsset::register($this);
 
-$this->title = Yii::t ( 'simplecms', 'CMS Administration' );
+$this->title = Yii::t('simplecms', 'CMS Administration');
 $this->params ['breadcrumbs'] [] = [
-	'label' => Yii::t ( 'simplecms', 'CMS Administration' ),
-	'url' => [
-		'default/index'
-	]
+    'label' => Yii::t('simplecms', 'CMS Administration'),
+    'url'   => [
+        'default/index'
+    ]
 ];
 $this->params ['breadcrumbs'] [] = $this->title;
 
 echo CmsBackendFunctionBarWidget::widget();
 ?>
 
-<div class="pn_cms-default-index">
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<div class="cms-administration-main-tree-view-form">
-				<?php $form = ActiveForm::begin(['options' => ['class'=>'form-inline']]); ?>
+    <div class="pn_cms-default-index">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="cms-administration-main-tree-view-form">
+                    <?php $form = ActiveForm::begin(['options' => ['class' => 'form-inline']]); ?>
 
-				<?= $field = $form->field($model, 'treeDisplayLanguageId')->dropDownList($this->context->module->getLanguageManager()->getConfiguredIdLanguagesMappingTranslated(\Yii::$app->language),['class'=>'input-small']); ?>
+                    <?= $field = $form->field($model, 'treeDisplayLanguageId')->dropDownList($this->context->module->getLanguageManager()->getConfiguredIdLanguagesMappingTranslated(\Yii::$app->language), ['class' => 'input-small']); ?>
 
-				<?= $form->field($model, 'expandFolderDepth')->dropDownList([9999=>'all',1=>Yii::t('simplecms','expand folders until {0,ordinal} level',1),2=>Yii::t('simplecms', 'expand folders until {0,ordinal} level',2),3=>Yii::t('simplecms', 'expand folders until {0,ordinal} level',3),4=>Yii::t('simplecms', 'expand folders until {0,ordinal} level',4),5=>Yii::t('simplecms', 'expand folders until {0,ordinal} level',5)],['class'=>'input-small'])?>
+                    <?= $form->field($model, 'expandFolderDepth')->dropDownList([9999 => 'all', 1 => Yii::t('simplecms', 'expand folders until {0,ordinal} level', 1), 2 => Yii::t('simplecms', 'expand folders until {0,ordinal} level', 2), 3 => Yii::t('simplecms', 'expand folders until {0,ordinal} level', 3), 4 => Yii::t('simplecms', 'expand folders until {0,ordinal} level', 4), 5 => Yii::t('simplecms', 'expand folders until {0,ordinal} level', 5)], ['class' => 'input-small']) ?>
 
-				<?= $field = $form->field($model, 'hideItemsWithMissingLanguage')->checkbox(); ?>
-				
-				<div class="form-group">
-					<?= Html::submitButton(Yii::t('simplecms', 'Refresh') , ['class' => 'btn btn-success btn-xs'])?>
-				</div>
+                    <?= $field = $form->field($model, 'hideItemsWithMissingLanguage')->checkbox(); ?>
 
-				<?php ActiveForm::end(); ?>
-			</div>
-		</div>
+                    <div class="form-group">
+                        <?= Html::submitButton(Yii::t('simplecms', 'Refresh'), ['class' => 'btn btn-success btn-xs']) ?>
+                    </div>
 
-		<table id="menuHierarchyTree"
-			class="table table-condensed table-hover">
-			<colgroup>
-				<col width="400px">
-				<col width="15px">
-				<col width="50px">
-				<col width="200px">
-				<col width="300px">
-			</colgroup>
+                    <?php ActiveForm::end(); ?>
+                </div>
+            </div>
 
-			<thead>
-				<tr>
-					<th><?= Yii::t('simplecms', 'menu item name') ?></th>
-					<th><?= Yii::t('simplecms', 'type') ?></th>
-					<th><?= Yii::t('simplecms', 'displayed' ) ?></th>
-					<th><?= Yii::t('simplecms', 'item languages') ?></th>
-					<th><?= Yii::t('simplecms', 'status') ?></th>
-				</tr>
-			</thead>
+            <table id="menuHierarchyTree"
+                   class="table table-condensed table-hover">
+                <colgroup>
+                    <col width="400px">
+                    <col width="15px">
+                    <col width="50px">
+                    <col width="200px">
+                    <col width="300px">
+                </colgroup>
 
-			<tbody>
-			</tbody>
-		</table>
-	</div>
-</div>
+                <thead>
+                <tr>
+                    <th><?= Yii::t('simplecms', 'menu item name') ?></th>
+                    <th><?= Yii::t('simplecms', 'type') ?></th>
+                    <th><?= Yii::t('simplecms', 'displayed') ?></th>
+                    <th><?= Yii::t('simplecms', 'item languages') ?></th>
+                    <th><?= Yii::t('simplecms', 'status') ?></th>
+                </tr>
+                </thead>
 
-<div id="dialog-confirm" class="cms_menu_dialog" title="Create new Menu Item">
-	<div id="nodeDetails"></div>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="dialog-confirm" class="cms_menu_dialog" title="Create new Menu Item">
+        <div id="nodeDetails"></div>
+        <?php
+        $form = ActiveForm::begin([
+            'id' => 'newMenuDialogForm'
+        ]);
+        echo Yii::t('simplecms', 'Please enter the name for the new language version of this menu item');
+        ?>
+        <input type="input" id="newMenuName" name="newMenuName" value=""/>
+        <input type="hidden" id="position" name="position" value=""/>
+        <input type="hidden" id="language" name="language" value=""/>
+        <input type="hidden" id="parentHierarchyItemId" name="parentHierarchyItemId" value=""/>
+        <div class="form-group">
+            <?= Html::a(Yii::t('simplecms', 'Continue'), ['#'], ['class' => 'btn btn-primary', 'onclick' => 'performAjaxCallForNewMenu();return false;']) ?>
+            <?= Html::a(Yii::t('simplecms', 'Cancel'), ['#'], ['class' => 'btn btn-warning', 'onclick' => '$(\'#newMenuDialogForm\').trigger("reset");dialog.dialog("close");return false;']) ?>
+        </div>
+        <?php
+        ActiveForm::end();
+        ?>
+    </div>
+    <div
+        class="well"><?php echo(Yii::t('simplecms', 'You can drag and drop menu items to rearange them (use the menu name for dragging). Right clicking on the menu name reveals a context menu to create new menu items.')); ?></div>
 <?php
-$form = ActiveForm::begin ( [ 
-		'id' => 'newMenuDialogForm' 
-] );
-echo Yii::t ( 'simplecms', 'Please enter the name for the new language version of this menu item' );
-?>
-	<input type="input" id="newMenuName" name="newMenuName" value="" />
-	<input type="hidden" id="position" name="position" value="" />
-	<input type="hidden" id="language" name="language" value="" />
-	<input type="hidden" id="parentHierarchyItemId" name="parentHierarchyItemId" value="" />
-	<div class="form-group">
-		<?= Html::a(Yii::t('simplecms', 'Continue'), ['#'], ['class' => 'btn btn-primary','onclick' => 'performAjaxCallForNewMenu();return false;'])?>
-		<?= Html::a(Yii::t('simplecms', 'Cancel'), ['#'], ['class' => 'btn btn-warning','onclick' => '$(\'#newMenuDialogForm\').trigger("reset");dialog.dialog("close");return false;'])?>
-	</div>
-<?php
-ActiveForm::end ();
-?>
-</div>
-<div class="well"><?php echo(Yii::t('simplecms','You can drag and drop menu items to rearange them (use the menu name for dragging). Right clicking on the menu name reveals a context menu to create new menu items.')); ?></div>
-<?php
-$jsonLangMapping = json_encode ( $this->context->module->getLanguageManager()->getConfiguredLanguageIdToCodeMapping () );
-$jsonTreeSourceUrl = Url::to ( [ 
-		'default/page-tree-json',
-		'language' => $model->treeDisplayLanguageId,
-		'expandLevel' => $model->expandFolderDepth,
-		'hideMissingLanguages' => $model->hideItemsWithMissingLanguage 
-] );
-$updateSiblingsPositionUrl = Url::to ( [ 
-		'default/set-item-position-within-siblings-json' 
-] );
-$ajaxUpdateParentAndPositionUrl = Url::to ( [ 
-		'default/set-item-parent-and-position-json' 
-] );
-$ajaxCreateNewHierarchyItemAndMenuUrl = Url::to ( [ 
-		'default/create-hierarchy-item-json' 
-] );
-$updateDisplayStateUrl = Url::to ( [ 
-		'default/set-display-state-json' 
-] );
+$jsonLangMapping = json_encode($this->context->module->getLanguageManager()->getConfiguredLanguageIdToCodeMapping());
+$jsonTreeSourceUrl = Url::to([
+    'default/page-tree-json',
+    'language'             => $model->treeDisplayLanguageId,
+    'expandLevel'          => $model->expandFolderDepth,
+    'hideMissingLanguages' => $model->hideItemsWithMissingLanguage
+]);
+$updateSiblingsPositionUrl = Url::to([
+    'default/set-item-position-within-siblings-json'
+]);
+$ajaxUpdateParentAndPositionUrl = Url::to([
+    'default/set-item-parent-and-position-json'
+]);
+$ajaxCreateNewHierarchyItemAndMenuUrl = Url::to([
+    'default/create-hierarchy-item-json'
+]);
+$updateDisplayStateUrl = Url::to([
+    'default/set-display-state-json'
+]);
 
-$translation1 = Yii::t ( 'simplecms', 'Create new entry for language code: ' );
-$translation2 = Yii::t ( 'simplecms', 'Edit language version for language code: ' );
-$translation3 = Yii::t ( 'simplecms', 'Item not available in requested language, displaying a fallback language instead.' );
+$ajaxDeleteHierarchyItemWithContentUrl = Url::to([
+    'default/delete-hierarchy-item-json'
+]);
 
-$editMenuItemUrlWithReplace = Url::toRoute ( [ 
-		'default/edit-menu-language-version',
-		'menuItemId' => '_ID_' 
-] );
-$createMenuItemUrlWithReplace = Url::toRoute ( [ 
-		'default/create-menu-language-version',
-		'hierarchyItemId' => '_HIERARCHY_ITEM_ID_',
-		'languageId' => '_LANGUAGE_ID_' 
-] );
+$translation1 = Yii::t('simplecms', 'Create new entry for language code: ');
+$translation2 = Yii::t('simplecms', 'Edit language version for language code: ');
+$translation3 = Yii::t('simplecms', 'Item not available in requested language, displaying a fallback language instead.');
+
+$editMenuItemUrlWithReplace = Url::toRoute([
+    'default/edit-menu-language-version',
+    'menuItemId' => '_ID_'
+]);
+$createMenuItemUrlWithReplace = Url::toRoute([
+    'default/create-menu-language-version',
+    'hierarchyItemId' => '_HIERARCHY_ITEM_ID_',
+    'languageId'      => '_LANGUAGE_ID_'
+]);
 
 $displayStatusHidden = CmsHierarchyItem::DISPLAYSTATE_PUBLISHED_HIDDEN_IN_NAVIGATION;
 $displayStatusVisible = CmsHierarchyItem::DISPLAYSTATE_PUBLISHED_VISIBLE_IN_NAVIGATION;
@@ -150,6 +155,7 @@ var ajaxUpdateDisplayStateUrl = '$updateDisplayStateUrl';
 var ajaxUpdateSiblingsPositionUrl = '$updateSiblingsPositionUrl';
 var ajaxUpdateParentAndPositionUrl = '$ajaxUpdateParentAndPositionUrl';
 var ajaxCreateNewHierarchyItemAndMenuUrl = '$ajaxCreateNewHierarchyItemAndMenuUrl';
+var ajaxDeleteHierarchyItemWithContent = '$ajaxDeleteHierarchyItemWithContentUrl';
 function getAllConfiguredLanguages(){
 	var langMapping = $jsonLangMapping;
 	return langMapping;
@@ -157,7 +163,7 @@ function getAllConfiguredLanguages(){
 var rootHierarchyNodeId = $rootNodeId;
 JS;
 
-$this->registerJs ( $languageIdMappingFunction, View::POS_END, 'cmsTreeViewSettingsAndHelper' );
+$this->registerJs($languageIdMappingFunction, View::POS_END, 'cmsTreeViewSettingsAndHelper');
 
 $pageTreeScript = <<<'JS'
 var dialog;
@@ -177,8 +183,39 @@ function fillNewMenuFormAnd(parentNode,newItemPosition){
 	$("#language").val(parentNode.data.languageId);
 	$("#position").val(newItemPosition);
 	
-	console.log('fillNewMenuFormAnd(parentNode,newItemPosition) called');
-	console.log([parentNode,newItemPosition]);
+	// console.log('fillNewMenuFormAnd(parentNode,newItemPosition) called');
+	// console.log([parentNode,newItemPosition]);
+}
+
+function deletePage(itemNode, deleteSubtree){
+	var hierarchyItemId = itemNode.data.id;
+	console.log(itemNode);
+	
+	var confirmationMessage = "Do you realy want to delete this page and all its language versions?\nThis process cannot be undone.";
+	if(deleteSubtree){
+	    confirmationMessage = "You are about to delete this whole subtree consisting of more than one page.\n Do you realy want to delete this page and all its sub-pages?\nThis process cannot be undone.";
+	}
+    
+    if(confirm(confirmationMessage)){
+        jQuery.ajax({
+            url: ajaxDeleteHierarchyItemWithContent,
+            data : {
+                hierarchyItemId : hierarchyItemId
+            },
+            dataType: 'json',
+            success: function(result){
+                if(result.result == 'success'){
+                    //add child
+                    var fancyTreeInstance = $("#menuHierarchyTree").fancytree("getTree");
+                    console.log(itemNode);
+                    itemNode.remove();
+                    alert("The item has been deleted successfully");
+                } else {
+                    alert(result.message);
+                }
+            }
+        });
+    }
 }
 
 function performAjaxCallForNewMenu(){
@@ -189,7 +226,7 @@ function performAjaxCallForNewMenu(){
 	position = $("#position").val();
 	language = $("#language").val();
 	
-	console.log("sending ajax request for values: parent="+parentHierarchyItemId+", name="+newMenuName+", position= "+position+", lang="+language);
+	// console.log("sending ajax request for values: parent="+parentHierarchyItemId+", name="+newMenuName+", position= "+position+", lang="+language);
 	
 	jQuery.ajax({
 		url: ajaxCreateNewHierarchyItemAndMenuUrl,
@@ -201,8 +238,7 @@ function performAjaxCallForNewMenu(){
 		},
 		dataType: 'json',
 		success: function(result){
-			console.log(result);
-		
+			// console.log(result);
 			if(result.result == 'success'){
 				//add child
 				fancyTreeInstance = $("#menuHierarchyTree").fancytree("getTree");
@@ -226,8 +262,8 @@ function setPosition(treeNodeKey,direction){
 	fancyTreeInstance = $("#menuHierarchyTree").fancytree("getTree");
 	itemNode = fancyTreeInstance.getNodeByKey(''+treeNodeKey);
 		
-	console.log('setPosition(treeNodeKey,direction)');
-	console.log([treeNodeKey,direction]);
+	// console.log('setPosition(treeNodeKey,direction)');
+	// console.log([treeNodeKey,direction]);
 	
 	if(direction == 'up'){
 		newPosition = itemNode.getIndex(); //index is 0 based
@@ -246,7 +282,7 @@ function setPosition(treeNodeKey,direction){
 		},
 		dataType: 'json',
 		success: function(result){
-			console.log(result);
+			// console.log(result);
 			if(result.result == 'success'){
 				$('#moveDownLink'+itemNode.key).removeClass('invisible');
 				$('#moveUpLink'+itemNode.key).removeClass('invisible');
@@ -296,7 +332,7 @@ function setPosition(treeNodeKey,direction){
 
 
 function updateHierarchyItemDisplayState(itemId,newState){
-	console.log('updateHierarchyItemDisplayState('+itemId+','+newState+') called');
+	// console.log('updateHierarchyItemDisplayState('+itemId+','+newState+') called');
 		
 	if(isNaN(itemId)){
 		alert('number required as first parameter of updateHierarchyItemDisplayState(...)');
@@ -310,7 +346,7 @@ function updateHierarchyItemDisplayState(itemId,newState){
 		},
 		dataType: 'json',
 		success: function(result){
-			console.log(result);
+			// console.log(result);
 			if(result.result == 'success'){
 				$('#adminSetVisibleLink'+itemId).removeClass('icon-inactive');
 				$('#adminSetHiddenLink'+itemId).removeClass('icon-inactive');
@@ -490,6 +526,12 @@ $(function(){
 			//node.editCreateNode("after", "New node");
 			fillNewMenuFormAnd(node,node.getIndex()+2);
 			break;
+		case "deletePage":
+			deletePage(node, false);
+			break;
+		case "deleteSubtree":
+			deletePage(node, true);
+			break;	
 		default:
 			alert("Unhandled command: " + data.cmd);
 			return;
@@ -503,9 +545,7 @@ $(function(){
     } else if( e.which === $.ui.keyCode.SPACE && e.ctrlKey ) {
       cmd = "addSibling";
     } else if( e.which === $.ui.keyCode.DELETE ) {
-      cmd = "remove";
-    } else if( e.which === $.ui.keyCode.F2 ) {
-      cmd = "rename";
+      cmd = "deletePage";
     }
     if( cmd ){
       $(this).trigger("nodeCommand", {cmd: cmd});
@@ -521,19 +561,35 @@ $(function(){
           {title: "new page after", cmd: "addSibling", uiIcon: "ui-icon-pencil", disabled: false},
           //{title: "----"},
           {title: "set visibilty to...", children: [
-			{title: "visible", cmd: "display_state_visible", uiIcon: "ui-icon-unlocked", },
+		    {title: "visible", cmd: "display_state_visible", uiIcon: "ui-icon-unlocked", },
             {title: "hidden&nbsp;(still&nbsp;searchable)", cmd: "display_state_hidden", uiIcon: "ui-icon-search", },
             {title: "deactivated", cmd: "display_state_deactivated", uiIcon: "ui-icon-locked", }
-            ]}
-          ],
+		    ]
+          },
+          {title: "delete page", cmd: "deletePage", uiIcon: "ui-icon-trash", disabled: false},
+          {title: "delete subtree with all pages", cmd: "deleteSubtree", uiIcon: "ui-icon-trash", disabled: false},
+      ],
       beforeOpen: function(event, ui) {
         var node = $.ui.fancytree.getNode(ui.target);
+        if(node.key == rootHierarchyNodeId){
+            $('.ui-menu-item').eq(6).hide();
+            $('.ui-menu-item').eq(7).hide();
+        } else if( node.children ){
+            $('.ui-menu-item').eq(6).hide();
+            $('.ui-menu-item').eq(7).show();
+        //     $('.ui-menu-item').eq(6).addClass('ui-state-disabled'); 
+        } else {
+            $('.ui-menu-item').eq(6).show();
+            $('.ui-menu-item').eq(7).hide();
+        //     $('.ui-menu-item').eq(6).prop('disabled', false);
+        //     $('.ui-menu-item').eq(6).removeClass('ui-state-disabled');
+        }
         node.setActive();
       },
       select: function(event, ui) {
         var node = $.ui.fancytree.getNode(ui.target);
 		if(ui.cmd){
-			console.log(node.data.id);
+			// console.log(node.data.id);
 			if(ui.cmd == 'display_state_visible'){
 				updateHierarchyItemDisplayState(Number(node.data.id),displayStatusVisible);
 			} else if(ui.cmd == 'display_state_hidden'){
@@ -544,6 +600,8 @@ $(function(){
 				$(this).trigger("nodeCommand", {cmd: ui.cmd});
 			} else if(ui.cmd == 'addSibling'){
 				$(this).trigger("nodeCommand", {cmd: ui.cmd});
+			} else if(ui.cmd == 'deletePage' || ui.cmd == 'deleteSubtree'){
+				$(this).trigger("nodeCommand", {cmd: ui.cmd});
 			}
 		}
       }
@@ -551,5 +609,5 @@ $(function(){
 });
 JS;
 
-$this->registerJs ( $pageTreeScript, View::POS_END, 'cmsTreeViewScriptAdmin' );
+$this->registerJs($pageTreeScript, View::POS_END, 'cmsTreeViewScriptAdmin');
 ?>

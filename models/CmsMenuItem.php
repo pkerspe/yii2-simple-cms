@@ -228,4 +228,26 @@ class CmsMenuItem extends \yii\db\ActiveRecord
         else
             return $this->direct_url;
     }
+
+    /**
+     * delete the menu item and its page content if any
+     *
+     * @return bool
+     */
+    public function delete()
+    {
+        $transaction = static::getDb()->beginTransaction();
+        //delete page content entry if any and then delete menu item itself
+        $pageContent = $this->getPageContent()->one();
+        if (parent::delete()){
+            if (!empty($pageContent)){
+                $pageContent->delete();
+            }
+            $transaction->commit();
+            return true;
+        } else {
+            $transaction->rollBack();
+            return false;
+        }
+    }
 }
