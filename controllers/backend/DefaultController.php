@@ -773,7 +773,7 @@ class DefaultController extends Controller
 }
 
 /**
- * internal helper class for slim representation of an hierarhcy item
+ * internal helper class for slim representation of an hierarchy item
  *
  * @author Paul Kerspe
  *

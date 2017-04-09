@@ -9,83 +9,81 @@
  */
 namespace schallschlucker\simplecms\widgets;
 
+use schallschlucker\simplecms\models\CmsHierarchyItem;
+use schallschlucker\simplecms\models\CmsMenuItem;
+use schallschlucker\simplecms\models\CmsPageContent;
 use Yii;
 use yii\base\Widget;
-use yii\helpers\Html;
-use schallschlucker\simplecms\controllers\backend\CmsHierarchyController;
-use schallschlucker\simplecms\controllers\backend\DefaultController;
-use yii\helpers\Url;
-use schallschlucker\simplecms\controllers\frontend\NavigationController;
-use schallschlucker\simplecms\models\SimpleHierarchyItem;
-use schallschlucker\simplecms\Frontend;
-use schallschlucker\simplecms\models\CmsMenuItem;
-use schallschlucker\simplecms\models\CmsHierarchyItem;
-use schallschlucker\simplecms\models\CmsPageContent;
+
 /**
  * A widget to render a tabular listing of subpage teasers (sub pages (if any) of the menu item id given in the parameter).
  * The following parameters are supported:
- * @param $cmsHierarchyItem CmsHierarchyItem required: the hierarchy item to render the subpage teasers for
+ *
+ * @param $cmsHierarchyItem   CmsHierarchyItem required: the hierarchy item to render the subpage teasers for
  * @param $propertiesToRender string optional: a comma separated list of property names to render for each subpage. Will be displayed in the order of appearance in the csv-string. If not provided a default set of properies will be rendered
  */
-class CmsSubpageTeaserWidget extends Widget {
+class CmsSubpageTeaserWidget extends Widget
+{
 
-	public $propertiesToRender = null;
-	/* @var $cmsHierarchyItem CmsHierarchyItem */
-	public $cmsHierarchyItem = null;
-	public $renderCreationDate = false;
+    public $propertiesToRender = null;
+    /* @var $cmsHierarchyItem CmsHierarchyItem */
+    public $cmsHierarchyItem = null;
+    public $renderCreationDate = false;
 
-	public function init() {
-		parent::init ();
-	}
+    public function init()
+    {
+        parent::init();
+    }
 
-	public function renderSubpageTeasers(&$widgetHtml){
-		/* @var $cmsHierarchyItem CmsHierarchyItem */
-		$cmsHierarchyItem = $this->cmsHierarchyItem;
-		$cmsChildHierarchyItems = $cmsHierarchyItem->getCmsHierarchyItems()->where(['display_state' => CmsHierarchyItem::DISPLAYSTATE_PUBLISHED_VISIBLE_IN_NAVIGATION])->orderBy("position asc")->all();
+    public function renderSubpageTeasers(&$widgetHtml)
+    {
+        /* @var $cmsHierarchyItem CmsHierarchyItem */
+        $cmsHierarchyItem = $this->cmsHierarchyItem;
+        $cmsChildHierarchyItems = $cmsHierarchyItem->getCmsHierarchyItems()->where(['display_state' => CmsHierarchyItem::DISPLAYSTATE_PUBLISHED_VISIBLE_IN_NAVIGATION])->with('cmsMenus')->orderBy("position asc")->all();
 
-		if(count($cmsChildHierarchyItems) > 0){
-			$widgetHtml .= '<ul class="cms-subpage-teaser-list">'.PHP_EOL;
+        if (count($cmsChildHierarchyItems) > 0) {
+            $widgetHtml .= '<ul class="cms-subpage-teaser-list">' . PHP_EOL;
 
-			foreach ($cmsChildHierarchyItems as $child){
-				/* @var $child CmsHierarchyItem */
-				$cmsMenus = $child->getCmsMenus()->all();  //TODO: probably need to determine proper lang version here by applying a where filter
-				if(count($cmsMenus) > 0){
-					/* @var $cmsMenuItem CmsMenuItem */
-					$cmsMenuItem = $cmsMenus[0];
-					/* @var $pageContent CmsPageContent */
-					$pageContent = $cmsMenuItem->getPageContent()->one();
-					$widgetHtml .= '<li class="cms-subpage-teaser-item">'.PHP_EOL;
-					if($this->renderCreationDate) {
-						$widgetHtml .= '<span class="cms-subpage-teaser-item-date"><a href="' . $cmsMenus[0]->getFormattedUrl() . '">' . date_format(date_create($pageContent->created_datetime), "d.m.Y") . '</a></span>';
-					}
-					$widgetHtml .= '<span class="cms-subpage-teaser-item-title"><a href="'.$cmsMenus[0]->getFormattedUrl().'">'.$cmsMenuItem->name.'</a></span>';
-                    if(!empty($pageContent)) {
-                        if(!empty($pageContent->teaser_image_id)){
-                            $widgetHtml .= '<span class="cms-subpage-teaser-item-image"><img src="/media_manager/media/get-media?mediaItemId=' . $pageContent->teaser_image_id . '"></span>';
-                        }
-
-                        if(!empty($pageContent->teaser_text)){
-                            $widgetHtml .= '<span class="cms-subpage-teaser-item-description">' . $pageContent->teaser_text . '</span>';
-                        } else {
-                            $widgetHtml .= '<span class="cms-subpage-teaser-item-description">' . $pageContent->description . '</span>';
-                        }
+            foreach ($cmsChildHierarchyItems as $child) {
+                /* @var $child CmsHierarchyItem */
+                $cmsMenus = $child->cmsMenus;  //TODO: probably need to determine proper lang version here by applying a where filter
+                if (count($cmsMenus) > 0) {
+                    /* @var $cmsMenuItem CmsMenuItem */
+                    $cmsMenuItem = $cmsMenus[0];
+                    /* @var $pageContent CmsPageContent */
+                    $pageContent = $cmsMenuItem->getPageContent()->one();
+                    $widgetHtml .= '<li class="cms-subpage-teaser-item">' . PHP_EOL;
+                    if ($this->renderCreationDate) {
+                        $widgetHtml .= '<span class="cms-subpage-teaser-item-date"><a href="' . $cmsMenus[0]->getFormattedUrl() . '">' . date_format(date_create($pageContent->created_datetime), "d.m.Y") . '</a></span>';
                     }
-					$widgetHtml .= '<span class="cms-subpage-teaser-item-morelink"><a href="'.$cmsMenus[0]->getFormattedUrl().'">'.Yii::t('simplecms', 'read more...').'</a></span>';
-					$widgetHtml .= '</li>'.PHP_EOL;
-				}
-			}
 
-			$widgetHtml .= '</ul>'.PHP_EOL;
-		}
-		return $widgetHtml;
-	}
+                    $displayName = (!empty($pageContent) && !empty($pageContent->teaser_name)) ? $pageContent->teaser_name : $cmsMenuItem->name;
+                    $displayDescription = (!empty($pageContent) && !empty($pageContent->teaser_text)) ? $pageContent->teaser_text : (!empty($pageContent)) ? $pageContent->description : "";
 
-	public function run() {
-		$widgetHtml = '<div class="cms-subpage-teasers">'.PHP_EOL;
+                    $widgetHtml .= '<span class="cms-subpage-teaser-item-title"><a href="' . $cmsMenus[0]->getFormattedUrl() . '">' . $displayName . '</a></span>';
 
-		$this->renderSubpageTeasers($widgetHtml);
+                    if (!empty($pageContent) && !empty($pageContent->teaser_image_id)) {
+                        $widgetHtml .= '<span class="cms-subpage-teaser-item-image"><img src="/media_manager/media/get-media?mediaItemId=' . $pageContent->teaser_image_id . '"></span>';
+                    }
 
-		$widgetHtml .= '</div>'.PHP_EOL;
-		return $widgetHtml;
-	}
+                    $widgetHtml .= ' <span class="cms-subpage-teaser-item-description">' . $displayDescription . '</span>';
+                    $widgetHtml .= ' <span class="cms-subpage-teaser-item-morelink"><a href="' . $cmsMenus[0]->getFormattedUrl() . '">' . Yii::t('simplecms', 'read more...') . '</a></span>';
+                    $widgetHtml .= '</li>' . PHP_EOL;
+                }
+            }
+
+            $widgetHtml .= '</ul>' . PHP_EOL;
+        }
+        return $widgetHtml;
+    }
+
+    public function run()
+    {
+        $widgetHtml = '<div class="cms-subpage-teasers">' . PHP_EOL;
+
+        $this->renderSubpageTeasers($widgetHtml);
+
+        $widgetHtml .= '</div>' . PHP_EOL;
+        return $widgetHtml;
+    }
 }
