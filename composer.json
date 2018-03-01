@@ -11,7 +11,7 @@
   ],
   "type": "yii2-extension",
   "homepage": "https://github.com/pkerspe/yii2-simple-cms/wiki",
-  "license": "APACHE 2.0",
+  "license": "Apache-2.0",
   "support": {
     "issues": "https://github.com/pkerspe/yii2-simple-cms/issues",
     "wiki": "https://github.com/pkerspe/yii2-simple-cms/wiki",
